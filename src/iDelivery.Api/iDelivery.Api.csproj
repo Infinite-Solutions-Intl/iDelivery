@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\iDelivery.Application\iDelivery.Application.csproj" />
+    <ProjectReference Include="..\iDelivery.Contracts\iDelivery.Contracts.csproj" />
     <ProjectReference Include="..\iDelivery.Infrastructure\iDelivery.Infrastructure.csproj" />
   </ItemGroup>
 
