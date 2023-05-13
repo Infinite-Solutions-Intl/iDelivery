@@ -1,6 +1,6 @@
 ﻿namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
-public class PhoneNumber : ValueObject
+public sealed class PhoneNumber : ValueObject
 {
     private readonly int _number;
     private readonly int _countryIdentifier;
