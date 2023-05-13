@@ -24,14 +24,6 @@ public class PasswordTests
     [Fact]
     public void Password_ShouldNotBeNullOrEmpty()
     {
-        try
-        {
-            var password = Password.Create("");
-            Assert.True(false);
-        }
-        catch (PasswordNotStrongEnoughtException)
-        {
-            Assert.True(true);
-        }
+        Assert.Throws<PasswordNotStrongEnoughtException>(() => { Password.Create(""); });
     }
 }

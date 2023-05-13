@@ -4,7 +4,7 @@ using System.Text;
 
 namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
-public class Password : ValueObject
+public sealed class Password : ValueObject
 {
     private static readonly string _salt;
     public string Value { get; set; }
@@ -12,7 +12,16 @@ public class Password : ValueObject
     static Password()
     {
         _salt = string.Empty;
-        // A recuperer depuis un fichier de configurations
+        try
+        {
+            // A recuperer depuis un fichier de configurations
+            if (File.Exists(Constants.ConfigFilePath))
+                _salt = File.ReadAllText(Constants.ConfigFilePath);
+        }
+        catch (Exception)
+        {
+            _salt = string.Empty;
+        }
     }
 
     private Password(string hash)
