@@ -1,8 +1,7 @@
-﻿using iDelivery.Domain.Common.Models;
+﻿namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
-namespace iDelivery.Domain.AccountAggregate.ValueObjects;
-
-public class UserId : ValueObject
+#pragma warning disable CA1067 // Override Object.Equals(object) when implementing IEquatable<T>
+public class UserId : ValueObject, IEquatable<UserId>
 {
     public Guid Id { get; protected set; }
 
@@ -23,4 +22,11 @@ public class UserId : ValueObject
     {
         yield return Id;
     }
+
+    public bool Equals(UserId? other)
+    {
+        if (other is null) return false;
+        return Id.Equals(other.Id);
+    }
 }
+#pragma warning restore CA1067 // Override Object.Equals(object) when implementing IEquatable<T>

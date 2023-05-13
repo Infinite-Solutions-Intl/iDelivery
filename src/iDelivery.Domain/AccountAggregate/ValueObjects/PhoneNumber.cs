@@ -5,6 +5,9 @@ public class PhoneNumber : ValueObject
     private readonly int _number;
     private readonly int _countryIdentifier;
 
+    public int Value => _number;
+    public int CountryIdentifier => _countryIdentifier;
+
     private PhoneNumber(int phoneNumber, int? countryIdentifier)
     {
         _number = phoneNumber;

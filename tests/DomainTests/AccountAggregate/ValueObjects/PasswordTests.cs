@@ -1,12 +1,12 @@
 using iDelivery.Domain.AccountAggregate.Exceptions;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 
-namespace DomainTests.ValueObjects;
+namespace DomainTests.AccountAggregate.ValueObjects;
 
 public class PasswordTests
 {
     [Fact]
-    public void Passwords_Hashes_ShouldBeEqualsWhenClearValuesAreSame()
+    public void PasswordsHashes_ShouldBeEqualsWhenClearValuesAreSame()
     {
         var firstPassword = Password.Create("le tonton");
         var secondPassword = Password.Create("le tonton");
@@ -14,7 +14,7 @@ public class PasswordTests
     }
 
     [Fact]
-    public void Passwords_Hashes_ShouldNotBeEqualsWhenClearValuesAreDifferent()
+    public void PasswordsHashes_ShouldNotBeEqualsWhenClearValuesAreDifferent()
     {
         var firstPassword = Password.Create("le tonton");
         var secondPassword = Password.Create("le tonton ");
