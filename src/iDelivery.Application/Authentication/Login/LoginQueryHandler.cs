@@ -8,13 +8,13 @@ using MediatR;
 
 namespace iDelivery.Application.Authentication.Login;
 
-internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandResponse>
+internal class LoginQueryHandler : IRequestHandler<LoginQuery, LoginQueryResponse>
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _tokenGenerator;
     private readonly IMapper _mapper;
 
-    public LoginCommandHandler(
+    public LoginQueryHandler(
         IUserRepository userRepository,
         IJwtTokenGenerator tokenGenerator,
         IMapper mapper)
@@ -24,7 +24,7 @@ internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandR
         _mapper = mapper;
     }
 
-    public async Task<LoginCommandResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginQueryResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         // Get the specified User
         User user = await _userRepository.FindUserAsync(Email.Create(request.Email), Password.Create(request.Password));
@@ -39,6 +39,6 @@ internal class LoginCommandHandler : IRequestHandler<LoginCommand, LoginCommandR
 
         string token = _tokenGenerator.GenerateToken(claims);
 
-        return _mapper.Map<LoginCommandResponse>((user, token));
+        return _mapper.Map<LoginQueryResponse>((user, token));
     }
 }

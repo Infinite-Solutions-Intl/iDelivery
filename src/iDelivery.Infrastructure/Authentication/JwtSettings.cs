@@ -2,8 +2,9 @@ namespace iDelivery.Infrastructure.Authentication;
 
 public sealed class JwtSettings
 {
-    public string Issuer { get; set; } = null!;
-    public string Audience { get; set; } = null!;
-    public int ExpirationInDays { get; set; }
-    public string SecretKey { get; set; } = null!;
+    public static string SectionName => nameof(JwtSettings);
+    public string Issuer { get; init; } = null!;
+    public string Audience { get; init; } = null!;
+    public int ExpirationInDays { get; init; }
+    public string SecretKey { get; init; } = null!;
 }
