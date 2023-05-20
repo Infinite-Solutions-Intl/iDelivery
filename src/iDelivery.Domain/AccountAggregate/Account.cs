@@ -10,20 +10,23 @@ public sealed class Account : AggregateRoot<AccountId>
     public AccountType Type { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
+    public string ApiKey { get; set; }
 
     private Account(
-        AccountId id, 
-        Email email, 
-        Password password, 
-        AccountType type, 
-        string name, 
-        PhoneNumber phoneNumber) : base(id)
+        AccountId id,
+        Email email,
+        Password password,
+        AccountType type,
+        string name,
+        PhoneNumber phoneNumber,
+        string apiKey) : base(id)
     {
         Email = email;
         Password = password;
         Type = type;
         Name = name;
         PhoneNumber = phoneNumber;
+        ApiKey = apiKey;
     }
 
     public static Account Create(
@@ -31,7 +34,8 @@ public sealed class Account : AggregateRoot<AccountId>
         string password,
         AccountType type,
         string name,
-        int phoneNumber)
+        int phoneNumber,
+        string apiKey)
     {
         return new Account(
             AccountId.CreateUnique(),
@@ -39,6 +43,7 @@ public sealed class Account : AggregateRoot<AccountId>
             Password.Create(password),
             type,
             name,
-            PhoneNumber.Create(phoneNumber));
+            PhoneNumber.Create(phoneNumber),
+            apiKey);
     }
 }

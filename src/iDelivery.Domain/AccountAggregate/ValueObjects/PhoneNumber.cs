@@ -25,4 +25,9 @@ public sealed class PhoneNumber : ValueObject
         yield return _number;
         yield return _countryIdentifier;
     }
+
+    public override string ToString()
+    {
+        return $"{CountryIdentifier} {Value}";
+    }
 }
