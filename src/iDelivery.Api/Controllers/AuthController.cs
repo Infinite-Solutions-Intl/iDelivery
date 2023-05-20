@@ -1,24 +1,35 @@
+using FluentResults;
+using iDelivery.Api.Controllers.Common;
 using iDelivery.Application.Authentication.Register;
+using iDelivery.Contracts.Authentication;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDelivery.Api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class AuthController : ControllerBase
+public class AuthController : ApiBaseController
 {
     private readonly ISender _sender;
+    private readonly IMapper _mapper;
 
-    public AuthController(ISender sender)
+    public AuthController(
+        ISender sender,
+        IMapper mapper)
     {
         _sender = sender;
+        _mapper = mapper;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Register(RegisterCommand request)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequestDto request)
     {
-        RegisterCommandResponse response = await _sender.Send(request);
-        return Ok(response);
+        RegisterCommand command = _mapper.Map<RegisterCommand>(request);
+        Result<RegisterCommandResponse> result = await _sender.Send(command);
+        
+        if(result.IsFailed)
+            return Problem();
+        
+        return Ok(result.Value);
     }
 }

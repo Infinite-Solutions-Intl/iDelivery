@@ -1,14 +1,11 @@
-using System.Security.Claims;
+using FluentResults;
 using iDelivery.Application.Authentication.Services;
-using iDelivery.Application.Repositories;
-using iDelivery.Domain.AccountAggregate.Entities;
-using iDelivery.Domain.AccountAggregate.ValueObjects;
-using MapsterMapper;
-using MediatR;
+using iDelivery.Application.Common.Errors;
+using System.Security.Claims;
 
 namespace iDelivery.Application.Authentication.Login;
 
-internal class LoginQueryHandler : IRequestHandler<LoginQuery, LoginQueryResponse>
+internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQueryResponse>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _tokenGenerator;
@@ -24,10 +21,12 @@ internal class LoginQueryHandler : IRequestHandler<LoginQuery, LoginQueryRespons
         _mapper = mapper;
     }
 
-    public async Task<LoginQueryResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
+    public async Task<Result<LoginQueryResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         // Get the specified User
-        User user = await _userRepository.FindUserAsync(Email.Create(request.Email), Password.Create(request.Password));
+        User? user = await _userRepository.FindUserAsync(Email.Create(request.Email), Password.Create(request.Password));
+        if(user is null)
+            return Result.Fail<LoginQueryResponse>(new UserNotFoundError());
 
         // Generate the JWT Token
         var claims = new []

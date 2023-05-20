@@ -1,5 +1,6 @@
-using System.Reflection;
+using iDelivery.Application.Authentication.Common;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace iDelivery.Application;
 
@@ -11,6 +12,9 @@ public static class DependencyInjection
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
+        
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         return services;
     }
 }

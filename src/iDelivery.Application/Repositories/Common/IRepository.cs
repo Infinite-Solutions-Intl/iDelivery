@@ -7,6 +7,6 @@ public interface IRepository<TEntity, TId>
     where TId : notnull
 {
     Task<IReadOnlyList<TEntity>> GetAll(CancellationToken? cancellationToken = default);
-    Task<TEntity> GetByIdAsync(TId id, CancellationToken? cancellationToken = default);
+    Task<TEntity?> GetByIdAsync(TId id, CancellationToken? cancellationToken = default);
     Task<TEntity> AddAsync(TEntity entity, CancellationToken? cancellationToken = default);
 }

@@ -1,5 +1,5 @@
-using MediatR;
+using FluentResults;
 
 namespace iDelivery.Application.Authentication.Login;
 
-public record LoginQuery(string Email, string Password) : IRequest<LoginQueryResponse>;
+public record LoginQuery(string Email, string Password) : IRequest<Result<LoginQueryResponse>>;

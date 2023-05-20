@@ -31,9 +31,9 @@ public sealed class AccountRepository : IAccountRepository
         return Task.FromResult(accounts);
     }
 
-    public Task<Account> GetByIdAsync(AccountId id, CancellationToken? cancellationToken = null)
+    public Task<Account?> GetByIdAsync(AccountId id, CancellationToken? cancellationToken = null)
     {
-        var account = _accounts.First(a => a.Id == id);
+        var account = _accounts.FirstOrDefault(a => a.Id == id);
         return Task.FromResult(account);
     }
 }

@@ -1,6 +1,4 @@
 using iDelivery.Application.Repositories.Common;
-using iDelivery.Domain.AccountAggregate;
-using iDelivery.Domain.AccountAggregate.ValueObjects;
 
 namespace iDelivery.Application.Repositories;
 

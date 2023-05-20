@@ -13,9 +13,9 @@ public sealed class UserRepository : IUserRepository
         return Task.FromResult(entity);
     }
 
-    public Task<User> FindUserAsync(Email email, Password password)
+    public Task<User?> FindUserAsync(Email email, Password password)
     {
-        var user = _users.First(u => u.Email == email && u.Password == password);
+        var user = _users.FirstOrDefault(u => u.Email == email && u.Password == password);
         return Task.FromResult(user);
     }
 
@@ -25,9 +25,9 @@ public sealed class UserRepository : IUserRepository
         return Task.FromResult(users);
     }
 
-    public Task<User> GetByIdAsync(UserId id, CancellationToken? cancellationToken = null)
+    public Task<User?> GetByIdAsync(UserId id, CancellationToken? cancellationToken = null)
     {
-        var user = _users.First(u => u.Id == id);
+        var user = _users.FirstOrDefault(u => u.Id == id);
         return Task.FromResult(user);
     }
 }
