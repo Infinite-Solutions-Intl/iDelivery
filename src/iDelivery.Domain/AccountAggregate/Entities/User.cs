@@ -9,21 +9,24 @@ public class User : Entity<UserId>
     public Password Password { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
-    public UserRole Role { get; set; }
+    public string Role { get; set; }
+    public AccountId AccountId { get; set; }
 
-    private User(
+    protected User(
         UserId id,
         Email email,
         Password password,
         string name,
         PhoneNumber phoneNumber,
-        UserRole role) : base(id)
+        string role,
+        AccountId accountId) : base(id)
     {
         Email = email;
         Password = password;
         Name = name;
         PhoneNumber = phoneNumber;
         Role = role;
+        AccountId = accountId;
     }
 
     public static User Create(
@@ -31,7 +34,8 @@ public class User : Entity<UserId>
         string password,
         string name,
         int phoneNumber,
-        UserRole role)
+        string role,
+        AccountId accountId)
     {
         return new User(
             UserId.CreateUnique(),
@@ -39,6 +43,7 @@ public class User : Entity<UserId>
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
-            role);
+            role,
+            accountId);
     }
 }
