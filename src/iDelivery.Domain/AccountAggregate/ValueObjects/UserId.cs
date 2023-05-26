@@ -5,7 +5,7 @@ public class UserId : ValueObject, IEquatable<UserId>
 {
     public Guid Id { get; protected set; }
 
-    private UserId(Guid id)
+    protected UserId(Guid id)
     {
         Id = id;
     }

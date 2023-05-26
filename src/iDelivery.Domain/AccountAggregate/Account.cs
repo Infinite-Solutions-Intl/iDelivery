@@ -5,11 +5,13 @@ namespace iDelivery.Domain.AccountAggregate;
 
 public sealed class Account : AggregateRoot<AccountId>
 {
+    private readonly List<UserId> _userIds = new();
     public Email Email { get; set; }
     public Password Password { get; set; }
     public AccountType Type { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
+    public IReadOnlyList<UserId> UserIds => _userIds.AsReadOnly();
 
     private Account(
         AccountId id, 

@@ -1,8 +1,11 @@
 using iDelivery.Domain.PlanAggregate.ValueObjects;
+using iDelivery.Domain.SubscriptionAggregate.ValueObjects;
 
 namespace iDelivery.Domain.PlanAggregate;
 public sealed class Plan : AggregateRoot<PlanId>
 {
+    private readonly List<SubscriptionId> _subscriptionIds = new();
+    public IReadOnlyList<SubscriptionId> SubscriptionIds => _subscriptionIds.AsReadOnly();
     public string Name {get; set;}
     public TimeSpan Duration {get; private set;}
     public Decimal Price {get; private set;}

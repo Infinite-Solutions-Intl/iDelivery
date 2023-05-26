@@ -1,9 +1,11 @@
+using iDelivery.Domain.PlanAggregate.ValueObjects;
 using iDelivery.Domain.SubscriptionAggregate.Enums;
 using iDelivery.Domain.SubscriptionAggregate.ValueObjects;
 
 namespace iDelivery.Domain.SubscriptionAggregate;
 public sealed class Subscription : AggregateRoot<SubscriptionId>
 {
+    public PlanId PlanId{get; set;}
     public DateTime ValidTo {get; private set;} // permet de modifier les propriété de la classe uniquement à l'interieur
     public bool IsValid {get; private set;}
     public DateTime CreatedDate {get; private set;}
