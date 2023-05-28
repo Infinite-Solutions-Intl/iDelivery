@@ -1,17 +1,17 @@
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 
 namespace iDelivery.Domain.Common.ValueObjects;
-public sealed class ComplaintId : UserId
+public sealed class ReaderId : UserId
 {
-    private ComplaintId(Guid id) : base(id)
+    private ReaderId(Guid id) : base(id)
     {
         Id = id;
     }
-    public static new ComplaintId Create(Guid id)
+    public static new ReaderId Create(Guid id)
     {
         return new(id);
     }
-    public static new ComplaintId CreateUnique()
+    public static new ReaderId CreateUnique()
     {
         return new(Guid.NewGuid());
     }

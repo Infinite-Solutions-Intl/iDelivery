@@ -35,6 +35,10 @@ public class User : Entity<UserId>
     {
     }
 
+    public User(UserId id) : base(id)
+    {
+    }
+
     public static User Create(
         string email,
         string password,
