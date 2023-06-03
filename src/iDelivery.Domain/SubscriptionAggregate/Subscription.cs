@@ -17,20 +17,23 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
         bool isValid,
         DateTime createdDate,
         SubscriptionType type,
-        PaymentMode paymentMode) : base(id) 
+        PaymentMode paymentMode,
+        PlanId planId) : base(id) 
     {
         ValidTo= validTo ;
         IsValid = IsValid;
-        this.CreatedDate = createdDate;
+        CreatedDate = createdDate;
         Type = type;
         PaymentMode = paymentMode;
+        PlanId = planId;
     }
     public static Subscription Create(
         DateTime validTo,
         bool isValid,
         DateTime createdDate,
         SubscriptionType type,
-        PaymentMode paymentMode)
+        PaymentMode paymentMode,
+        PlanId planId)
         {
             return new(
                 SubscriptionId.CreateUnique(),
@@ -38,7 +41,8 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
                 isValid,
                 createdDate,
                 type,
-                paymentMode
+                paymentMode,
+                planId
             );
         } 
 

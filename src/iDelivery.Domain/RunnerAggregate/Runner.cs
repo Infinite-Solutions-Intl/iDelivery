@@ -29,7 +29,11 @@ public sealed class Runner : User
             PhoneNumber = phoneNumber;
             SupervisorId = supervisorId; 
             }
+<<<<<<< HEAD
     public static Runner Create(
+=======
+    public static Runner Create (
+>>>>>>> 6ba0013 (corrections)
         string email,
         string password,
         string name,

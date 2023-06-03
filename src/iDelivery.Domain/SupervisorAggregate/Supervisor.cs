@@ -10,7 +10,11 @@ public sealed class Supervisor : User
 {
     private readonly List<RunnerId> _runnerIds = new();
     public IReadOnlyList<RunnerId> RunnerIds => _runnerIds.AsReadOnly();
+<<<<<<< HEAD
     protected Supervisor(
+=======
+    private Supervisor(
+>>>>>>> 6ba0013 (corrections)
         SupervisorId id,
         Email email,
         Password password,

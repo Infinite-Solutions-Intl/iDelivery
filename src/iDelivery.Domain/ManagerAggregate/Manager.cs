@@ -1,12 +1,21 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+<<<<<<< HEAD
+=======
+using iDelivery.Domain.Common.ValueObjects;
+>>>>>>> 6ba0013 (corrections)
 using iDelivery.Domain.ManagerAggregate.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate;
 
 public sealed class Manager : User
 {
+<<<<<<< HEAD
+=======
+    private readonly List <ComplaintId> _complaintIds = new();
+    public IReadOnlyList <ComplaintId> ComplaintIds => _complaintIds.AsReadOnly ();
+>>>>>>> 6ba0013 (corrections)
     private Manager(
         ManagerId id,
         Email email,

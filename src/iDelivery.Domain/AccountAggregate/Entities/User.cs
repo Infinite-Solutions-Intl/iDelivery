@@ -5,7 +5,10 @@ namespace iDelivery.Domain.AccountAggregate.Entities;
 
 public class User : Entity<UserId>
 {
+<<<<<<< HEAD
     private SupervisorId supervisorId;
+=======
+>>>>>>> 6ba0013 (corrections)
 
     public Email Email { get; set; }
     public Password Password { get; set; }
@@ -22,6 +25,7 @@ public class User : Entity<UserId>
         AccountId = accountId;
     }
 
+<<<<<<< HEAD
     public User(UserId id, Email email, Password password, string name, PhoneNumber phoneNumber, SupervisorId supervisorId) : base(id)
     {
         Email = email;
@@ -31,12 +35,21 @@ public class User : Entity<UserId>
         this.supervisorId = supervisorId;
     }
 
+=======
+>>>>>>> 6ba0013 (corrections)
     public User(UserId id, Email email, Password password, string name, PhoneNumber phoneNumber) : base(id)
     {
     }
 
     public User(UserId id) : base(id)
     {
+<<<<<<< HEAD
+=======
+    }
+
+    public User(UserId id, Email email, Password password, string name, PhoneNumber phoneNumber, SupervisorId supervisorId) : this(id, email, password, name, phoneNumber)
+    {
+>>>>>>> 6ba0013 (corrections)
     }
 
     public static User Create(
