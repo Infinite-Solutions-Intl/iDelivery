@@ -1,5 +1,6 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;
 using iDelivery.Domain.ManagerAggregate.ValueObjects;
 
@@ -15,12 +16,14 @@ public sealed class Manager : User
         Password password,
         string name,
         PhoneNumber phoneNumber,
+        string role,
         AccountId accountId) : base(
             id,
             email,
             password,
             name,
             phoneNumber,
+            role,
             accountId)
     {
     }
@@ -30,6 +33,7 @@ public sealed class Manager : User
         string password,
         string name,
         int phoneNumber,
+        string role,
         Guid accountId)
     {
         return new Manager(
@@ -38,6 +42,7 @@ public sealed class Manager : User
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
+            Roles.Manager,
             AccountId.Create(accountId));
     }
 }

@@ -1,6 +1,7 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate;
@@ -14,6 +15,7 @@ public sealed class Reader : User
         Password password,
         string name,
         PhoneNumber phoneNumber,
+        string role,
         AccountId accountId,
         string poBox) : base(
             id,
@@ -21,13 +23,14 @@ public sealed class Reader : User
             password,
             name,
             phoneNumber,
+            role,
             accountId)
     {
         PoBox = poBox;   
     }
 
 
-    public static Reader Create(
+    public static new Reader Create(
         string email,
         string password,
         string name,
@@ -41,6 +44,7 @@ public sealed class Reader : User
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
+            Roles.Reader,
             AccountId.Create(accountId),
             poBox);
     }

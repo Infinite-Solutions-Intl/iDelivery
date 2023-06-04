@@ -1,5 +1,6 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.RunnerAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
@@ -15,6 +16,7 @@ public sealed class Supervisor : User
         Email email,
         Password password,
         string name,
+        string role,
         PhoneNumber phoneNumber,
         AccountId accountId) : base(
             id,
@@ -22,11 +24,12 @@ public sealed class Supervisor : User
             password,
             name,
             phoneNumber,
+            role,
             accountId)
     {
     }
 
-    public static new Supervisor Create(
+    public static Supervisor Create(
         string email,
         string password,
         string name,
@@ -38,6 +41,7 @@ public sealed class Supervisor : User
             Email.Create(email),
             Password.Create(password),
             name,
+            Roles.Supervisor,
             PhoneNumber.Create(phoneNumber),
             AccountId.Create(accountId));
     }

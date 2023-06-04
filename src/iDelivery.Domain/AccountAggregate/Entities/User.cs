@@ -43,7 +43,7 @@ public class User : Entity<UserId>
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
-            AccountId.Create(accountId),
-            role);
+            role,
+            AccountId.Create(accountId));
     }
 }

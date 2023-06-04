@@ -1,6 +1,7 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.RunnerAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
@@ -14,6 +15,7 @@ public sealed class Runner : User
         Email email,
         Password password,
         string name,
+        string role,
         PhoneNumber phoneNumber,
         SupervisorId supervisorId,
         AccountId accountId) : base(
@@ -22,6 +24,7 @@ public sealed class Runner : User
             password,
             name,
             phoneNumber,
+            role,
             accountId)
     {
         SupervisorId = supervisorId; 
@@ -40,6 +43,7 @@ public sealed class Runner : User
             Email.Create(email),
             Password.Create(password),
             name,
+            Roles.Runner,
             PhoneNumber.Create(phoneNumber),
             SupervisorId.Create(supervisorId),
             AccountId.Create(accountId));
