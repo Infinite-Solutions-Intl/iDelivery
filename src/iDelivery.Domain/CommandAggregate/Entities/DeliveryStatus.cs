@@ -11,14 +11,14 @@ namespace iDelivery.Domain.CommandAggregate.Entities;
 
      public DeliveryStatus(DeliveryStatusId id,
      int status,
-     string fileblob,
+     string fileBlob,
      string filetype,
-     DateTime createddate) : base(id)
+     DateTime createdDate) : base(id)
     {
         Status = status;
-        FileBlob = fileblob;
+        FileBlob = fileBlob;
         FileType = filetype;
-        CreatedDate = createddate;
+        CreatedDate = createdDate;
     }
     public static DeliveryStatus Create(
         int status,

@@ -9,36 +9,31 @@ namespace iDelivery.Domain.AccountAggregate;
 public sealed class Runner : User
 {
     public SupervisorId SupervisorId{get; set;}
-    protected Runner(
+    private Runner(
         RunnerId id,
         Email email,
         Password password,
         string name,
         PhoneNumber phoneNumber,
-        SupervisorId supervisorId) : base(
+        SupervisorId supervisorId,
+        AccountId accountId) : base(
             id,
             email,
             password,
             name,
             phoneNumber,
-            supervisorId)
-            {
-               Email = email;
-            Password = password;
-            Name = name;
-            PhoneNumber = phoneNumber;
-            SupervisorId = supervisorId; 
-            }
-<<<<<<< HEAD
-    public static Runner Create(
-=======
+            accountId)
+    {
+        SupervisorId = supervisorId; 
+    }
+
     public static Runner Create (
->>>>>>> 6ba0013 (corrections)
         string email,
         string password,
         string name,
         int phoneNumber,
-        Guid supervisorId)
+        Guid supervisorId,
+        Guid accountId)
     {
         return new Runner(
             RunnerId.CreateUnique(),
@@ -46,6 +41,7 @@ public sealed class Runner : User
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
-            SupervisorId.Create(supervisorId));
+            SupervisorId.Create(supervisorId),
+            AccountId.Create(accountId));
     }
 }

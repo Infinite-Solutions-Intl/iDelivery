@@ -7,57 +7,41 @@ namespace iDelivery.Domain.AccountAggregate;
 
 public sealed class Reader : User
 {
-<<<<<<< HEAD
-=======
     public string PoBox {get; set;}
->>>>>>> 6ba0013 (corrections)
-    protected Reader(
+    private Reader(
         ReaderId id,
         Email email,
         Password password,
         string name,
-<<<<<<< HEAD
-        PhoneNumber phoneNumber) : base(
-=======
         PhoneNumber phoneNumber,
+        AccountId accountId,
         string poBox) : base(
->>>>>>> 6ba0013 (corrections)
             id,
             email,
             password,
             name,
-            phoneNumber)
-            {
-               Email = email;
-                Password = password;
-                Name = name;
-                PhoneNumber = phoneNumber; 
-<<<<<<< HEAD
-=======
-                PoBox = poBox;
->>>>>>> 6ba0013 (corrections)
-            }
+            phoneNumber,
+            accountId)
+    {
+        PoBox = poBox;   
+    }
+
+
     public static Reader Create(
         string email,
         string password,
         string name,
-<<<<<<< HEAD
-        int phoneNumber)
-=======
         int phoneNumber,
-        string poBox)
->>>>>>> 6ba0013 (corrections)
+        string poBox,
+        Guid accountId)
     {
         return new Reader(
             ReaderId.CreateUnique(),
             Email.Create(email),
             Password.Create(password),
             name,
-<<<<<<< HEAD
-            PhoneNumber.Create(phoneNumber));
-=======
             PhoneNumber.Create(phoneNumber),
+            AccountId.Create(accountId),
             poBox);
->>>>>>> 6ba0013 (corrections)
     }
 }

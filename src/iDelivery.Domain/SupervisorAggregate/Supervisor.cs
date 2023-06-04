@@ -1,5 +1,4 @@
 using iDelivery.Domain.AccountAggregate.Entities;
-using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.RunnerAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
@@ -10,38 +9,36 @@ public sealed class Supervisor : User
 {
     private readonly List<RunnerId> _runnerIds = new();
     public IReadOnlyList<RunnerId> RunnerIds => _runnerIds.AsReadOnly();
-<<<<<<< HEAD
-    protected Supervisor(
-=======
+
     private Supervisor(
->>>>>>> 6ba0013 (corrections)
         SupervisorId id,
         Email email,
         Password password,
         string name,
-        PhoneNumber phoneNumber) : base(
+        PhoneNumber phoneNumber,
+        AccountId accountId) : base(
             id,
             email,
             password,
             name,
-            phoneNumber)
-            {
-               Email = email;
-                Password = password;
-                Name = name;
-                PhoneNumber = phoneNumber; 
-            }
-    public static Supervisor Create(
+            phoneNumber,
+            accountId)
+    {
+    }
+
+    public static new Supervisor Create(
         string email,
         string password,
         string name,
-        int phoneNumber)
+        int phoneNumber,
+        Guid accountId)
     {
         return new Supervisor(
             SupervisorId.CreateUnique(),
             Email.Create(email),
             Password.Create(password),
             name,
-            PhoneNumber.Create(phoneNumber));
+            PhoneNumber.Create(phoneNumber),
+            AccountId.Create(accountId));
     }
 }
