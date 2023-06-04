@@ -1,4 +1,5 @@
-﻿using iDelivery.Domain.AccountAggregate.ValueObjects;
+﻿using iDelivery.Domain.AccountAggregate.Enums;
+using iDelivery.Domain.AccountAggregate.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate.Entities;
 
@@ -8,7 +9,8 @@ public class User : Entity<UserId>
     public Password Password { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
-    public AccountId AccountId{get; set;}
+    public string Role { get; set; }
+    public AccountId AccountId { get; set; }
 
     protected User(
         UserId id,
@@ -16,12 +18,14 @@ public class User : Entity<UserId>
         Password password,
         string name,
         PhoneNumber phoneNumber,
+        string role,
         AccountId accountId) : base(id)
     {
         Email = email;
         Password = password;
         Name = name;
         PhoneNumber = phoneNumber;
+        Role = role;
         AccountId = accountId;
     }
 
@@ -30,6 +34,7 @@ public class User : Entity<UserId>
         string password,
         string name,
         int phoneNumber,
+        string role,
         Guid accountId)
     {
         return new User(
@@ -38,6 +43,7 @@ public class User : Entity<UserId>
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
-            AccountId.Create(accountId));
+            AccountId.Create(accountId),
+            role);
     }
 }
