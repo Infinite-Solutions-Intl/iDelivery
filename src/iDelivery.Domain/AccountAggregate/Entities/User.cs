@@ -35,7 +35,7 @@ public class User : Entity<UserId>
         string name,
         int phoneNumber,
         string role,
-        AccountId accountId)
+        Guid accountId)
     {
         return new User(
             UserId.CreateUnique(),
@@ -43,7 +43,7 @@ public class User : Entity<UserId>
             Password.Create(password),
             name,
             PhoneNumber.Create(phoneNumber),
-            role,
-            accountId);
+            AccountId.Create(accountId),
+            role);
     }
 }
