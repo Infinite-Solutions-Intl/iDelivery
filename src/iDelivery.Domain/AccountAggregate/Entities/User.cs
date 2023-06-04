@@ -8,26 +8,36 @@ public class User : Entity<UserId>
     public Password Password { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
+    public AccountId AccountId{get; set;}
 
-    private User(UserId id, Email email, Password password, string name, PhoneNumber phoneNumber) : base(id)
+    protected User(
+        UserId id,
+        Email email,
+        Password password,
+        string name,
+        PhoneNumber phoneNumber,
+        AccountId accountId) : base(id)
     {
         Email = email;
         Password = password;
         Name = name;
         PhoneNumber = phoneNumber;
+        AccountId = accountId;
     }
 
     public static User Create(
         string email,
         string password,
         string name,
-        int phoneNumber)
+        int phoneNumber,
+        Guid accountId)
     {
         return new User(
             UserId.CreateUnique(),
             Email.Create(email),
             Password.Create(password),
             name,
-            PhoneNumber.Create(phoneNumber));
+            PhoneNumber.Create(phoneNumber),
+            AccountId.Create(accountId));
     }
 }
