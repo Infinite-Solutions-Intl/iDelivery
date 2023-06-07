@@ -26,12 +26,11 @@ public sealed class SuperAdmin : User
     {
     }
 
-    public static new SuperAdmin Create(
+    public static SuperAdmin Create(
         string email,
         string password,
         string name,
         int phoneNumber,
-        string role,
         Guid accountId)
     {
         return new SuperAdmin(

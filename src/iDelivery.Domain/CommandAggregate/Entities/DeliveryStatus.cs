@@ -3,13 +3,12 @@ using iDelivery.Domain.CommandAggregate.ValueObjects;
 namespace iDelivery.Domain.CommandAggregate.Entities;
  public sealed class DeliveryStatus : Entity<DeliveryStatusId>
  {
+    public int Status { get; }
+    public string FileBlob { get; }
+    public string FileType { get; }
+    public DateTime CreatedDate { get; }
 
-    public int Status {get; private set;}
-    public string FileBlob {get; private set;}
-    public string FileType {get; private set;}
-    public DateTime CreatedDate {get; private set;}
-
-     public DeliveryStatus(DeliveryStatusId id,
+    public DeliveryStatus(DeliveryStatusId id,
      int status,
      string fileBlob,
      string filetype,
@@ -22,15 +21,15 @@ namespace iDelivery.Domain.CommandAggregate.Entities;
     }
     public static DeliveryStatus Create(
         int status,
-        string fileblob,
+        string fileBlob,
         string filetype,
-        DateTime createddate)
+        DateTime createdDate)
     {
         return new DeliveryStatus(
             DeliveryStatusId.CreateUnique(),
             status,
-            fileblob,
+            fileBlob,
             filetype,
-            createddate);
+            createdDate);
     }
  }

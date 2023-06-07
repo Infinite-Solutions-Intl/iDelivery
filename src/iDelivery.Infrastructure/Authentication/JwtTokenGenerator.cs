@@ -21,10 +21,10 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
 
         var token = new JwtSecurityToken(
-            issuer:_jwtSettings.Issuer,
+            issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
-            expires: DateTime.Now.AddDays(_jwtSettings.ExpirationInDays),
             claims: claims,
+            expires: DateTime.Now.AddDays(_jwtSettings.ExpirationInDays),
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
 

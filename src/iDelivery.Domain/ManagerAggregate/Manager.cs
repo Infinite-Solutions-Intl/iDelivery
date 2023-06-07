@@ -28,12 +28,11 @@ public sealed class Manager : User
     {
     }
 
-    public static new Manager Create(
+    public static Manager Create(
         string email,
         string password,
         string name,
         int phoneNumber,
-        string role,
         Guid accountId)
     {
         return new Manager(

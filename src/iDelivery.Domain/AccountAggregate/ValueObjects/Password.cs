@@ -14,7 +14,7 @@ public sealed class Password : ValueObject
         _salt = string.Empty;
         try
         {
-            // A recuperer depuis un fichier de configurations
+            // To gather from a config file
             if (File.Exists(Constants.ConfigFilePath))
                 _salt = File.ReadAllText(Constants.ConfigFilePath);
         }
@@ -31,9 +31,9 @@ public sealed class Password : ValueObject
 
     public static Password Create(string password)
     {
-        if (!IsValid(password, out var hint)) 
-            throw new PasswordNotStrongEnoughtException(hint);
-        
+        if (!IsValid(password, out var hint))
+            throw new PasswordNotStrongEnoughException(hint);
+
         var hash = HashPassword(password);
         return new Password(hash);
     }

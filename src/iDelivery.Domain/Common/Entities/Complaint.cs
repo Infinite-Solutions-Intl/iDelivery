@@ -35,13 +35,13 @@ public sealed class Complaint
         string message,
         CommandId commandId,
         ManagerId managerId,
-        string? pictureBlob = null)
+        string? pictureBlob)
     {
         return new Complaint(
             objet,
             message,
             commandId,
             managerId,
-            pictureBlob = null);
+            pictureBlob);
     }
 }
