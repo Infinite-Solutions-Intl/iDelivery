@@ -15,7 +15,16 @@ public sealed class UserRepository : IUserRepository
 
     public Task<User?> FindUserAsync(Email email, Password password)
     {
-        var user = _users.FirstOrDefault(u => u.Email == email && u.Password == password);
+        User? user = null;
+        try
+        {
+            user = _users.Find(u => u.Email == email && u.Password == password);
+        }
+        catch (Exception)
+        {
+            user = null;
+            throw;
+        }
         return Task.FromResult(user);
     }
 
@@ -27,7 +36,16 @@ public sealed class UserRepository : IUserRepository
 
     public Task<User?> GetByIdAsync(UserId id, CancellationToken? cancellationToken = null)
     {
-        var user = _users.FirstOrDefault(u => u.Id == id);
+        User? user = null;
+        try
+        {
+            user = _users.Find(u => u.Id == id);
+        }
+        catch (Exception)
+        {
+            user = null;
+            throw;
+        }
         return Task.FromResult(user);
     }
 }

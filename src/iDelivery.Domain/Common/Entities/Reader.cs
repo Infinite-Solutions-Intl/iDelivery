@@ -26,9 +26,8 @@ public sealed class Reader : User
             role,
             accountId)
     {
-        PoBox = poBox;   
+        PoBox = poBox;
     }
-
 
     public static new Reader Create(
         string email,

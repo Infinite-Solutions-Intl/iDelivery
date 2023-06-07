@@ -15,14 +15,31 @@ public sealed class AccountRepository : IAccountRepository
 
     public bool Exists(Email email)
     {
-        var account = _accounts.FirstOrDefault(a => a.Email == email);
+        Account? account = null;
+        try
+        {
+            account = _accounts.Find(a => a.Email == email);
+        }
+        catch (Exception)
+        {
+            account = null;
+        }
         return account is not null;
     }
 
     public Task<bool> ExistsAsync(Email email, CancellationToken? cancellationToken = null)
     {
-        var exists = _accounts.FirstOrDefault(a => a.Email == email) is not null;
-        return Task.FromResult(exists);
+        Account? account = null;
+        try
+        {
+            account = _accounts.Find(a => a.Email == email);
+        }
+        catch (Exception)
+        {
+            account = null;
+            throw;
+        }
+        return Task.FromResult(account is not null);
     }
 
     public Task<IReadOnlyList<Account>> GetAll(CancellationToken? cancellationToken = null)
@@ -33,7 +50,16 @@ public sealed class AccountRepository : IAccountRepository
 
     public Task<Account?> GetByIdAsync(AccountId id, CancellationToken? cancellationToken = null)
     {
-        var account = _accounts.FirstOrDefault(a => a.Id == id);
+        Account? account = null;
+        try
+        {
+            account = _accounts.Find(a => a.Id == id);
+        }
+        catch (Exception)
+        {
+            account = null;
+            throw;
+        }
         return Task.FromResult(account);
     }
 }

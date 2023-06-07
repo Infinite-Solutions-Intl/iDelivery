@@ -27,7 +27,7 @@ public sealed class Runner : User
             role,
             accountId)
     {
-        SupervisorId = supervisorId; 
+        SupervisorId = supervisorId;
     }
 
     public static Runner Create (

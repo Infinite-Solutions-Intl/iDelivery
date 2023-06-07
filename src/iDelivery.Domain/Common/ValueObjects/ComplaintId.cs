@@ -15,7 +15,7 @@ public sealed class ComplaintId : UserId
     {
         return new(Guid.NewGuid());
     }
-    
+
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Id;

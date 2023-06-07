@@ -6,11 +6,11 @@ namespace iDelivery.Domain.SubscriptionAggregate;
 public sealed class Subscription : AggregateRoot<SubscriptionId>
 {
     public PlanId PlanId{ get; set; }
-    public DateTime ValidTo { get; private set; }
-    public bool IsValid { get; private set; }
-    public DateTime CreatedDate { get; private set; }
-    public SubscriptionType Type { get; private set; }
-    public PaymentMode PaymentMode { get; private set; }
+    public DateTime ValidTo { get; }
+    public bool IsValid { get; }
+    public DateTime CreatedDate { get; }
+    public SubscriptionType Type { get; }
+    public PaymentMode PaymentMode { get; }
     private Subscription(
         SubscriptionId id,
         DateTime validTo,
@@ -18,10 +18,10 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
         DateTime createdDate,
         SubscriptionType type,
         PaymentMode paymentMode,
-        PlanId planId) : base(id) 
+        PlanId planId) : base(id)
     {
         ValidTo= validTo ;
-        IsValid = IsValid;
+        IsValid = isValid;
         CreatedDate = createdDate;
         Type = type;
         PaymentMode = paymentMode;
@@ -44,7 +44,5 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
                 paymentMode,
                 planId
             );
-        } 
-
+        }
 }
-

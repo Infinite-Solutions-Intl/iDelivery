@@ -6,5 +6,4 @@ namespace iDelivery.Api.Controllers.Common;
 [Route("[controller]")]
 public abstract class ApiBaseController : ControllerBase
 {
-
 }

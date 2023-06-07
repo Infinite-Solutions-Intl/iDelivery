@@ -7,7 +7,7 @@ namespace iDelivery.Infrastructure.Authentication;
 
 public sealed class ApiKeyGenerator : IApiKeyGenerator
 {
-    private static int _keySize = 128;
+    private const int _keySize = 128;
 
     public string GenerateApiKey(IEnumerable<Claim> claims)
     {
@@ -20,8 +20,7 @@ public sealed class ApiKeyGenerator : IApiKeyGenerator
 
         // Encrypt the API key using AES encryption
 
-        string encryptedApiKey = EncryptKey(apiKey);
-        return encryptedApiKey;
+        return EncryptKey(apiKey);
     }
 
     private static string GenerateRandomApiKey()
@@ -29,10 +28,10 @@ public sealed class ApiKeyGenerator : IApiKeyGenerator
         var keyBytes = new byte[_keySize / 8];
         RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
         randomNumberGenerator.GetBytes(keyBytes);
-        
+
         return Convert.ToBase64String(keyBytes);
     }
-    
+
     private static string EncryptKey(string apiKey)
     {
         // Copied from Google
@@ -52,8 +51,6 @@ public sealed class ApiKeyGenerator : IApiKeyGenerator
         csEncrypt.FlushFinalBlock();
 
         var encryptedKeyBytes = msEncrypt.ToArray();
-        var encryptedApiKey = Convert.ToBase64String(encryptedKeyBytes);
-
-        return encryptedApiKey;
+        return Convert.ToBase64String(encryptedKeyBytes);
     }
 }

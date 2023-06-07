@@ -13,7 +13,7 @@ public static class DependencyInjection
     {
         // Add Authentication Support
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => 
+            .AddJwtBearer(options =>
             {
                 var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>();
                 options.TokenValidationParameters = new TokenValidationParameters()
@@ -25,29 +25,17 @@ public static class DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
                 };
             });
-        
-        services.AddAuthorization(options => 
+
+        services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.SuperAdminOnly, policy =>
-            {
-                policy.RequireRole(Roles.SuperAdmin);
-            });
-            options.AddPolicy(Policies.AdminOnly, policy =>
-            {
-                policy.RequireRole(Roles.Admin);
-            });
-            options.AddPolicy(Policies.SupervisorOnly, policy =>
-            {
-                policy.RequireRole(Roles.Supervisor);
-            });
-            options.AddPolicy(Policies.RunnerOnly, policy =>
-            {
-                policy.RequireRole(Roles.Runner);
-            });
+            options.AddPolicy(Policies.SuperAdminOnly, policy => policy.RequireRole(Roles.SuperAdmin));
+            options.AddPolicy(Policies.AdminOnly, policy => policy.RequireRole(Roles.Admin));
+            options.AddPolicy(Policies.SupervisorOnly, policy => policy.RequireRole(Roles.Supervisor));
+            options.AddPolicy(Policies.RunnerOnly, policy => policy.RequireRole(Roles.Runner));
         });
-        
+
         services.AddControllers();
-        
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
