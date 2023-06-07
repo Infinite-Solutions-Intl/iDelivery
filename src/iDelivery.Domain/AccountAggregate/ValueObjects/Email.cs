@@ -18,7 +18,6 @@ public sealed class Email : ValueObject
     private static bool IsValid(string email)
     {
         // Email validation here
-
         return !string.IsNullOrEmpty(email);
     }
 
