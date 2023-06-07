@@ -26,10 +26,10 @@ public class AuthController : ApiBaseController
     {
         RegisterCommand command = _mapper.Map<RegisterCommand>(request);
         Result<RegisterCommandResponse> result = await _sender.Send(command);
-        
+
         if(result.IsFailed)
             return Problem();
-        
+
         return Ok(result.Value);
     }
 }

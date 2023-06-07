@@ -2,17 +2,14 @@
 
 public sealed class PhoneNumber : ValueObject
 {
-    private readonly int _number;
-    private readonly int _countryIdentifier;
-
-    public int Value => _number;
-    public int CountryIdentifier => _countryIdentifier;
+    public int Value { get; }
+    public int CountryIdentifier { get; }
 
     private PhoneNumber(int phoneNumber, int? countryIdentifier)
     {
-        _number = phoneNumber;
+        Value = phoneNumber;
         if (countryIdentifier is not null)
-            _countryIdentifier = (int)countryIdentifier;
+            CountryIdentifier = (int)countryIdentifier;
     }
 
     public static PhoneNumber Create(int phoneNumber, int? countryIdentifier = 237)
@@ -22,8 +19,8 @@ public sealed class PhoneNumber : ValueObject
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return _number;
-        yield return _countryIdentifier;
+        yield return Value;
+        yield return CountryIdentifier;
     }
 
     public override string ToString()

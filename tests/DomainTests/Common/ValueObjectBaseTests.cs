@@ -40,7 +40,7 @@ public class ValueObjectBaseTests
     private UserId _userId = UserId.CreateUnique();
     private AccountId _accountId = AccountId.CreateUnique();
     private Email _email = Email.Create("djoufson@gmail.com");
-    private Password _password = Password.Create("Le tonton");
+    private Password _password = Password.Create("Unknown");
     private PhoneNumber _phoneNumber = PhoneNumber.Create(4);
     private ValueObject1 obj1 = null!;
     private ValueObject1 obj2 = null!;
@@ -53,7 +53,7 @@ public class ValueObjectBaseTests
     }
 
     [Fact]
-    public void ValueObjectsOfSameType_ShouldHaveSameEqualityComponentsLenght()
+    public void ValueObjectsOfSameType_ShouldHaveSameEqualityComponentsLength()
     {
         SetUp();
         Assert.Equal(obj1.GetEqualityComponents().Count(), obj2.GetEqualityComponents().Count());
@@ -82,7 +82,7 @@ public class ValueObjectBaseTests
         Assert.Equal(_accountId, AccountId.Create(_accountId.Id));
         Assert.Equal(_email, Email.Create(_email.Value));
         Assert.Equal(_phoneNumber, PhoneNumber.Create(_phoneNumber.Value, _phoneNumber.CountryIdentifier));
-        Assert.Equal(_password, Password.Create("Le tonton"));
+        Assert.Equal(_password, Password.Create("Unknown"));
     }
 
     void SetUp()
@@ -90,7 +90,7 @@ public class ValueObjectBaseTests
         _userId = UserId.CreateUnique();
         _accountId = AccountId.CreateUnique();
         _email = Email.Create("djoufson@gmail.com");
-        _password = Password.Create("Le tonton");
+        _password = Password.Create("Unknown");
         _phoneNumber = PhoneNumber.Create(699254549);
 
         obj1 = new ValueObject1(

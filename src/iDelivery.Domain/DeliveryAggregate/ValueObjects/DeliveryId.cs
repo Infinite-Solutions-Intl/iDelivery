@@ -1,7 +1,7 @@
 namespace iDelivery.Domain.DeliveryAggregate.ValueObjects;
 public sealed class DeliveryId : ValueObject
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; }
     private DeliveryId(Guid id)
     {
         Id = id;

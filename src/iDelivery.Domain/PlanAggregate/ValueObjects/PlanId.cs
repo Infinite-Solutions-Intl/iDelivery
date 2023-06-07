@@ -1,7 +1,7 @@
 namespace iDelivery.Domain.PlanAggregate.ValueObjects;
 public sealed class PlanId : ValueObject
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; }
     private PlanId(Guid id)
     {
         Id = id;

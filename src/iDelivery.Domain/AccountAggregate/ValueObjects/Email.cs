@@ -4,7 +4,7 @@ namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
 public sealed class Email : ValueObject
 {
-    public string Value { get; private set; }
+    public string Value { get; }
     private Email(string value)
     {
         Value = value;
@@ -19,7 +19,7 @@ public sealed class Email : ValueObject
     {
         // Email validation here
 
-        return true;
+        return !string.IsNullOrEmpty(email);
     }
 
     public override IEnumerable<object> GetEqualityComponents()

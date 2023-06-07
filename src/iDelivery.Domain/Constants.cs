@@ -1,6 +1,6 @@
 ﻿namespace iDelivery.Domain;
 
-internal class Constants
+internal static class Constants
 {
-    public static readonly string ConfigFilePath = @"config.txt";
+    public static readonly string ConfigFilePath = "config.txt";
 }
