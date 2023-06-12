@@ -1,5 +1,4 @@
-﻿using iDelivery.Domain.AccountAggregate.Enums;
-using iDelivery.Domain.AccountAggregate.ValueObjects;
+﻿using iDelivery.Domain.AccountAggregate.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate.Entities;
 
@@ -30,20 +29,20 @@ public class User : Entity<UserId>
     }
 
     public static User Create(
-        string email,
-        string password,
+        Email email,
+        Password password,
         string name,
-        int phoneNumber,
+        PhoneNumber phoneNumber,
         string role,
-        Guid accountId)
+        AccountId accountId)
     {
         return new User(
             UserId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             name,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             role,
-            AccountId.Create(accountId));
+            accountId);
     }
 }

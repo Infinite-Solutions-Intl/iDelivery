@@ -10,6 +10,13 @@ public sealed class Email : ValueObject
         Value = value;
     }
 
+    #pragma warning disable CS8618
+    private Email()
+    {
+        
+    }
+    #pragma warning restore CS8618
+
     public static Email Create(string email)
     {
         return IsValid(email) ? new Email(email) : throw new EmailNotValidException();

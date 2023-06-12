@@ -11,6 +11,10 @@ public sealed class AccountId : ValueObject
         Id = id;
     }
 
+    private AccountId()
+    {
+        
+    }
     public static AccountId CreateUnique()
     {
         return new AccountId(Guid.NewGuid());

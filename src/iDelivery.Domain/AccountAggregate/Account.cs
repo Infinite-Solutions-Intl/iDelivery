@@ -14,6 +14,12 @@ public sealed class Account : AggregateRoot<AccountId>
     public string ApiKey { get; set; }
     public IReadOnlyList<UserId> UserIds => _userIds.AsReadOnly();
 
+    #pragma warning disable CS8618
+    private Account()
+    {
+
+    }
+    #pragma warning restore CS8618
     private Account(
         AccountId id,
         Email email,
@@ -32,20 +38,25 @@ public sealed class Account : AggregateRoot<AccountId>
     }
 
     public static Account Create(
-        string email,
-        string password,
+        Email email,
+        Password password,
         AccountType type,
         string name,
-        int phoneNumber,
+        PhoneNumber phoneNumber,
         string apiKey)
     {
         return new Account(
             AccountId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             type,
             name,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             apiKey);
+    }
+
+    public void AddUser(UserId userId)
+    {
+        _userIds.Add(userId);
     }
 }

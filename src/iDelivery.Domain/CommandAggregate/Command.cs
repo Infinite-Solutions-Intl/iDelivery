@@ -1,3 +1,4 @@
+using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 using iDelivery.Domain.Common.ValueObjects;
 
@@ -6,6 +7,7 @@ public sealed class Command : AggregateRoot<CommandId>
 {
     private readonly List <ComplaintId> _complaintIds = new();
     public IReadOnlyList <ComplaintId> ComplaintIds => _complaintIds.AsReadOnly ();
+    public DeliveryStatus DeliveryStatus { get; }
     public string RefNum { get; }
     public string Intitule { get; }
     public string City { get; }
@@ -24,6 +26,7 @@ public sealed class Command : AggregateRoot<CommandId>
         string quarter,
         long latitude,
         long longitude,
+        DeliveryStatus deliveryStatus,
         DateTime createdDate,
         DateTime preferredDate,
         DateTime preferredTime) : base(id)
@@ -37,6 +40,7 @@ public sealed class Command : AggregateRoot<CommandId>
             CreatedDate = createdDate;
             PreferredDate = preferredDate;
             PreferredTime = preferredTime;
+            DeliveryStatus = deliveryStatus;
         }
 
     public static Command Create(
@@ -46,6 +50,7 @@ public sealed class Command : AggregateRoot<CommandId>
         string quarter,
         long latitude,
         long longitude,
+        DeliveryStatus deliveryStatus,
         DateTime createdDate,
         DateTime preferredDate,
         DateTime preferredTime)
@@ -58,6 +63,7 @@ public sealed class Command : AggregateRoot<CommandId>
                 quarter,
                 latitude,
                 longitude,
+                deliveryStatus,
                 createdDate,
                 preferredDate,
                 preferredTime

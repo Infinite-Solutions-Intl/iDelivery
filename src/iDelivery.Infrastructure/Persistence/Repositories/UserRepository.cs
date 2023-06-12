@@ -2,7 +2,7 @@ using iDelivery.Application.Repositories;
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 
-namespace iDelivery.Infrastructure.Repositories;
+namespace iDelivery.Infrastructure.Persistence.Repositories;
 
 public sealed class UserRepository : IUserRepository
 {

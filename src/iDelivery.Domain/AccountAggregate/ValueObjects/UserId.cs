@@ -10,6 +10,10 @@ public class UserId : ValueObject, IEquatable<UserId>
         Id = id;
     }
 
+    protected UserId()
+    {
+        
+    }
     public static UserId CreateUnique()
     {
         return new UserId(Guid.NewGuid());

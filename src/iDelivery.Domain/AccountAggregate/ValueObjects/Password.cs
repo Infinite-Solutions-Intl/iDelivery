@@ -29,6 +29,13 @@ public sealed class Password : ValueObject
         Value = hash;
     }
 
+    #pragma warning disable CS8618
+    private Password()
+    {
+        
+    }
+    #pragma warning restore CS8618
+
     public static Password Create(string password)
     {
         if (!IsValid(password, out var hint))

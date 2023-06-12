@@ -1,18 +1,18 @@
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CommandAggregate.Entities;
- public sealed class DeliveryStatus : Entity<DeliveryStatusId>
- {
+public sealed class DeliveryStatus : Entity<DeliveryStatusId>
+{
     public int Status { get; }
     public string FileBlob { get; }
     public string FileType { get; }
     public DateTime CreatedDate { get; }
 
     public DeliveryStatus(DeliveryStatusId id,
-     int status,
-     string fileBlob,
-     string filetype,
-     DateTime createdDate) : base(id)
+        int status,
+        string fileBlob,
+        string filetype,
+        DateTime createdDate) : base(id)
     {
         Status = status;
         FileBlob = fileBlob;

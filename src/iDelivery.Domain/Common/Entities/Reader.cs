@@ -29,7 +29,7 @@ public sealed class Reader : User
         PoBox = poBox;
     }
 
-    public static new Reader Create(
+    public static Reader Create(
         string email,
         string password,
         string name,

@@ -1,4 +1,5 @@
 using iDelivery.Application.Authentication.Services;
+using iDelivery.Domain.AccountAggregate.Enums;
 using System.Security.Claims;
 
 namespace iDelivery.Application.Authentication.Register;
@@ -35,14 +36,20 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 
         string key = _keyGenerator.GenerateApiKey(claims);
 
-        Account account = _mapper.Map<Account>((request, key));
+        Account account = Account.Create(
+            Email.Create(request.Email),
+            Password.Create(request.Password),
+            AccountType.Premium,
+            request.Name,
+            PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
+            key);
 
         // Save the new Account
         _ = await _accountRepository.AddAsync(account, cancellationToken);
 
         // TODO: Raise the AccountCreatedEvent
 
-        // Return 
-        return _mapper.Map<RegisterCommandResponse>(account);
+        // return _mapper.Map<RegisterCommandResponse>(account);
+        return new RegisterCommandResponse(account.ApiKey);
     }
 }
