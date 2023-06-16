@@ -28,6 +28,11 @@ public sealed class Manager : User
     {
     }
 
+    private Manager()
+    {
+
+    }
+
     public static Manager Create(
         string email,
         string password,

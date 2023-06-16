@@ -45,9 +45,9 @@ public sealed class AccountRepository : IAccountRepository
         return account;
     }
 
-    public async Task<bool> AddUserAsync(Account account, UserId userId)
+    public async Task<bool> AddUserAsync(Account account, User user, CancellationToken? cancellationToken = default)
     {
-        account.AddUser(userId);
+        account.AddUser(user);
         int records = await _dbContext.SaveChangesAsync();
         return records > 0;
     }

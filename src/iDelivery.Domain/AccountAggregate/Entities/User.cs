@@ -28,6 +28,13 @@ public class User : Entity<UserId>
         AccountId = accountId;
     }
 
+    #pragma warning disable CS8618
+    protected User()
+    {
+
+    }
+    #pragma warning restore CS8618
+
     public static User Create(
         Email email,
         Password password,

@@ -1,25 +1,24 @@
-namespace iDelivery.Domain.PlanAggregate.ValueObjects;
-public sealed class PlanId : ValueObject
+namespace iDelivery.Domain.Common.ValueObjects;
+public sealed class SubscriptionId : ValueObject
 {
     public Guid Value { get; }
-    private PlanId(Guid value)
+    private SubscriptionId(Guid value)
     {
         Value = value;
     }
-
-    private PlanId()
+    private SubscriptionId()
     {
-        
+
     }
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
-    public static PlanId CreateUnique()
+    public static SubscriptionId CreateUnique()
     {
         return new(Guid.NewGuid());
     }
-    public static PlanId Create(Guid value)
+    public static SubscriptionId Create(Guid value)
     {
         return new(value);
     }

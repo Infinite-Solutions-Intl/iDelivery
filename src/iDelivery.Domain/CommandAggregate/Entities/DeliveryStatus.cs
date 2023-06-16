@@ -8,7 +8,7 @@ public sealed class DeliveryStatus : Entity<DeliveryStatusId>
     public string FileType { get; }
     public DateTime CreatedDate { get; }
 
-    public DeliveryStatus(DeliveryStatusId id,
+    private DeliveryStatus(DeliveryStatusId id,
         int status,
         string fileBlob,
         string filetype,
@@ -19,6 +19,14 @@ public sealed class DeliveryStatus : Entity<DeliveryStatusId>
         FileType = filetype;
         CreatedDate = createdDate;
     }
+
+    #pragma warning disable CS8618
+    private DeliveryStatus()
+    {
+
+    }
+    #pragma warning restore CS8618
+
     public static DeliveryStatus Create(
         int status,
         string fileBlob,

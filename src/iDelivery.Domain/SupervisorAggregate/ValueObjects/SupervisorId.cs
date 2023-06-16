@@ -3,13 +3,13 @@ using iDelivery.Domain.AccountAggregate.ValueObjects;
 namespace iDelivery.Domain.SupervisorAggregate.ValueObjects;
 public sealed class SupervisorId : UserId
 {
-    private SupervisorId(Guid id) : base(id)
+    private SupervisorId(Guid value) : base(value)
     {
-        Id = id;
+        Value = value;
     }
-    public static new SupervisorId Create(Guid id)
+    public static new SupervisorId Create(Guid value)
     {
-        return new(id);
+        return new(value);
     }
     public static new SupervisorId CreateUnique()
     {
@@ -18,6 +18,6 @@ public sealed class SupervisorId : UserId
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
+        yield return Value;
     }
 }

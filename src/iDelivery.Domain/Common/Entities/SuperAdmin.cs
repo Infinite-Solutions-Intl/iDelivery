@@ -1,5 +1,4 @@
 using iDelivery.Domain.AccountAggregate.Entities;
-using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;

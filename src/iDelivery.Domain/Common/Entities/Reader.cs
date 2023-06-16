@@ -1,5 +1,4 @@
 using iDelivery.Domain.AccountAggregate.Entities;
-using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;
@@ -8,7 +7,7 @@ namespace iDelivery.Domain.AccountAggregate;
 
 public sealed class Reader : User
 {
-    public string PoBox {get; set;}
+    public string PoBox {get; private set;}
     private Reader(
         ReaderId id,
         Email email,

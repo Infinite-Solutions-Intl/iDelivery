@@ -5,7 +5,11 @@ public sealed class ComplaintId : UserId
 {
     private ComplaintId(Guid id) : base(id)
     {
-        Id = id;
+        Value = id;
+    }
+    private ComplaintId()
+    {
+
     }
     public static new ComplaintId Create(Guid id)
     {
@@ -18,6 +22,6 @@ public sealed class ComplaintId : UserId
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
+        yield return Value;
     }
 }

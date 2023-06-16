@@ -3,7 +3,7 @@
 public sealed class PhoneNumber : ValueObject
 {
     // public string Value => $"+{CountryIdentifier} {Number}";
-    public string Value { get; }
+    public string Value { get; private set;}
     private readonly int _number;
     private readonly int _countryIdentifier;
 

@@ -7,7 +7,7 @@ namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 public sealed class Password : ValueObject
 {
     private static readonly string _salt;
-    public string Value { get; set; }
+    public string Value { get; private set; }
 
     static Password()
     {

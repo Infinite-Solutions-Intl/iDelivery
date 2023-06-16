@@ -1,22 +1,22 @@
+using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
-using iDelivery.Domain.Common.ValueObjects;
 
 namespace iDelivery.Domain.CommandAggregate;
 public sealed class Command : AggregateRoot<CommandId>
 {
-    private readonly List <ComplaintId> _complaintIds = new();
-    public IReadOnlyList <ComplaintId> ComplaintIds => _complaintIds.AsReadOnly ();
-    public DeliveryStatus DeliveryStatus { get; }
-    public string RefNum { get; }
-    public string Intitule { get; }
-    public string City { get; }
-    public string Quarter { get; }
-    public long Latitude { get; }
-    public long Longitude { get; }
-    public DateTime CreatedDate { get; }
-    public DateTime PreferredDate { get; }
-    public DateTime PreferredTime { get; }
+    private readonly List <Complaint> _complaints = new();
+    public IReadOnlyList <Complaint> Complaints => _complaints.AsReadOnly ();
+    public DeliveryStatus DeliveryStatus { get; private set; }
+    public string RefNum { get; private set; }
+    public string Intitule { get; private set; }
+    public string City { get; private set; }
+    public string Quarter { get; private set; }
+    public long Latitude { get; private set; }
+    public long Longitude { get; private set; }
+    public DateTime CreatedDate { get; private set; }
+    public DateTime PreferredDate { get; private set; }
+    public DateTime PreferredTime { get; private set; }
 
     private Command(
         CommandId id,
@@ -43,6 +43,12 @@ public sealed class Command : AggregateRoot<CommandId>
             DeliveryStatus = deliveryStatus;
         }
 
+    #pragma warning disable CS8618
+    private Command()
+    {
+
+    }
+    #pragma warning restore CS8618
     public static Command Create(
         string refNum,
         string intitule,

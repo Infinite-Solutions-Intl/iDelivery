@@ -1,17 +1,17 @@
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 
-namespace iDelivery.Domain.Common.ValueObjects;
-public sealed class ReaderId : UserId
+namespace iDelivery.Domain.CourierAggregate.ValueObjects;
+public sealed class CourierId : UserId
 {
-    private ReaderId(Guid value) : base(value)
+    private CourierId(Guid value) : base(value)
     {
         Value = value;
     }
-    public static new ReaderId Create(Guid value)
+    public static new CourierId Create(Guid value)
     {
         return new(value);
     }
-    public static new ReaderId CreateUnique()
+    public static new CourierId CreateUnique()
     {
         return new(Guid.NewGuid());
     }

@@ -3,13 +3,13 @@ using iDelivery.Domain.AccountAggregate.ValueObjects;
 namespace iDelivery.Domain.ManagerAggregate.ValueObjects;
 public sealed class ManagerId : UserId
 {
-    private ManagerId(Guid id) : base(id)
+    private ManagerId(Guid value) : base(value)
     {
-        Id = id;
+        Value = value;
     }
-    public static new ManagerId Create(Guid id)
+    public static new ManagerId Create(Guid value)
     {
-        return new(id);
+        return new(value);
     }
     public static new ManagerId CreateUnique()
     {
@@ -18,6 +18,6 @@ public sealed class ManagerId : UserId
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
+        yield return Value;
     }
 }
