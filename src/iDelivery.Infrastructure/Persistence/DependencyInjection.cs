@@ -12,7 +12,7 @@ internal static class DependencyInjection
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AppDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SqlServerDb")));
+        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
         services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IUserRepository,UserRepository>();

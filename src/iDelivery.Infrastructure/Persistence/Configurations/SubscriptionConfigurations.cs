@@ -11,6 +11,7 @@ internal class SubscriptionConfigurations : IEntityTypeConfiguration<Subscriptio
 {
     public void Configure(EntityTypeBuilder<Subscription> builder)
     {
+        builder.ToTable("Subscriptions");
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id)
             .ValueGeneratedNever()

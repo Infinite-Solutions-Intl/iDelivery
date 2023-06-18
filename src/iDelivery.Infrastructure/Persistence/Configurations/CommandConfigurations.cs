@@ -24,7 +24,11 @@ internal class CommandConfigurations : IEntityTypeConfiguration<Command>
                 id => id.Value,
                 value => CommandId.Create(value)
             );
-
+        builder.HasIndex(c => c.RefNum);
+        builder.HasIndex(c => c.City);
+        builder.HasIndex(c => c.Latitude);
+        builder.HasIndex(c => c.Longitude);
+        builder.HasIndex(c => c.Quarter);
         builder.OwnsMany(c => c.Complaints, cb => 
         {
             cb.ToTable("Complaints");
@@ -59,7 +63,7 @@ internal class CommandConfigurations : IEntityTypeConfiguration<Command>
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 
-    private void ConfigureDeliveryStatusTable(EntityTypeBuilder<Command> builder)
+    private static void ConfigureDeliveryStatusTable(EntityTypeBuilder<Command> builder)
     {
         builder.OwnsOne(c => c.DeliveryStatus, dsb => 
         {
