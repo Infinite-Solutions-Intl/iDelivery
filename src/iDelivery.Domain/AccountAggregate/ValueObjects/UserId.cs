@@ -1,32 +1,28 @@
 ﻿namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
-#pragma warning disable CA1067 // Override Object.Equals(object) when implementing IEquatable<T>
-public class UserId : ValueObject, IEquatable<UserId>
+public class UserId : ValueObject
 {
-    public Guid Id { get; protected set; }
+    public Guid Value { get; protected set; }
 
-    protected UserId(Guid id)
+    protected UserId(Guid value)
     {
-        Id = id;
+        Value = value;
     }
 
+    protected UserId()
+    {
+        
+    }
     public static UserId CreateUnique()
     {
         return new UserId(Guid.NewGuid());
     }
-    public static UserId Create(Guid id)
+    public static UserId Create(Guid value)
     {
-        return new UserId(id);
+        return new UserId(value);
     }
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
-    }
-
-    public bool Equals(UserId? other)
-    {
-        if (other is null) return false;
-        return Id.Equals(other.Id);
+        yield return Value;
     }
 }
-#pragma warning restore CA1067 // Override Object.Equals(object) when implementing IEquatable<T>

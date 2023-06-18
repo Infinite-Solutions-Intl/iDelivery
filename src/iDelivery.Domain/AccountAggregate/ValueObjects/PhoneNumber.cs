@@ -2,29 +2,48 @@
 
 public sealed class PhoneNumber : ValueObject
 {
-    public int Value { get; }
-    public int CountryIdentifier { get; }
+    // public string Value => $"+{CountryIdentifier} {Number}";
+    public string Value { get; private set;}
+    private readonly int _number;
+    private readonly int _countryIdentifier;
 
     private PhoneNumber(int phoneNumber, int? countryIdentifier)
     {
-        Value = phoneNumber;
+        _number = phoneNumber;
         if (countryIdentifier is not null)
-            CountryIdentifier = (int)countryIdentifier;
+            _countryIdentifier = (int)countryIdentifier;
+        Value = $"+{_countryIdentifier} {_number}";
     }
+    private PhoneNumber(string fullNumber)
+    {
+        Value = fullNumber;
+    }
+
+    #pragma warning disable CS8618
+    public PhoneNumber()
+    {
+        
+    }
+    #pragma warning restore CS8618
 
     public static PhoneNumber Create(int phoneNumber, int? countryIdentifier = 237)
     {
         return new PhoneNumber(phoneNumber, countryIdentifier);
     }
+    
+    public static PhoneNumber Create(string fullNumber)
+    {
+        return new PhoneNumber(fullNumber);
+    }
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Value;
-        yield return CountryIdentifier;
+        yield return _number;
+        yield return _countryIdentifier;
     }
 
     public override string ToString()
     {
-        return $"{CountryIdentifier} {Value}";
+        return $"{_countryIdentifier} {_number}";
     }
 }

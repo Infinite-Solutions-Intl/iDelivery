@@ -1,17 +1,16 @@
 using iDelivery.Domain.AccountAggregate.Entities;
-using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
-using iDelivery.Domain.RunnerAggregate.ValueObjects;
+using iDelivery.Domain.CourierAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
-namespace iDelivery.Domain.AccountAggregate;
+namespace iDelivery.Domain.CourierAggregate;
 
-public sealed class Runner : User
+public sealed class Courier : User
 {
-    public SupervisorId SupervisorId{get; set;}
-    private Runner(
-        RunnerId id,
+    public SupervisorId SupervisorId{ get; private set; }
+    private Courier(
+        CourierId id,
         Email email,
         Password password,
         string name,
@@ -30,22 +29,29 @@ public sealed class Runner : User
         SupervisorId = supervisorId;
     }
 
-    public static Runner Create (
-        string email,
-        string password,
-        string name,
-        int phoneNumber,
-        Guid supervisorId,
-        Guid accountId)
+    #pragma warning disable CS8618
+    private Courier()
     {
-        return new Runner(
-            RunnerId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+
+    }
+    #pragma warning restore CS8618
+
+    public static Courier Create (
+        Email email,
+        Password password,
+        string name,
+        PhoneNumber phoneNumber,
+        Guid supervisorId,
+        AccountId accountId)
+    {
+        return new Courier(
+            CourierId.CreateUnique(),
+            email,
+            password,
             name,
             Roles.Runner,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             SupervisorId.Create(supervisorId),
-            AccountId.Create(accountId));
+            accountId);
     }
 }

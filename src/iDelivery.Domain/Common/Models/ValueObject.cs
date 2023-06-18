@@ -3,7 +3,6 @@
 public abstract class ValueObject : IEquatable<ValueObject>
 {
     public abstract IEnumerable<object> GetEqualityComponents();
-
     public override bool Equals(object? obj)
     {
         if (obj is null) return false;
@@ -12,7 +11,6 @@ public abstract class ValueObject : IEquatable<ValueObject>
         return GetEqualityComponents()
             .SequenceEqual(other.GetEqualityComponents());
     }
-
     public override int GetHashCode()
     {
         return GetEqualityComponents()

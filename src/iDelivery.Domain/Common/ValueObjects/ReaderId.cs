@@ -3,13 +3,13 @@ using iDelivery.Domain.AccountAggregate.ValueObjects;
 namespace iDelivery.Domain.Common.ValueObjects;
 public sealed class ReaderId : UserId
 {
-    private ReaderId(Guid id) : base(id)
+    private ReaderId(Guid value) : base(value)
     {
-        Id = id;
+        Value = value;
     }
-    public static new ReaderId Create(Guid id)
+    public static new ReaderId Create(Guid value)
     {
-        return new(id);
+        return new(value);
     }
     public static new ReaderId CreateUnique()
     {
@@ -18,6 +18,6 @@ public sealed class ReaderId : UserId
 
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
+        yield return Value;
     }
 }

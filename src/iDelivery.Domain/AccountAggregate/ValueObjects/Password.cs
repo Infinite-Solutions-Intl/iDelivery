@@ -7,7 +7,7 @@ namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 public sealed class Password : ValueObject
 {
     private static readonly string _salt;
-    public string Value { get; set; }
+    public string Value { get; private set; }
 
     static Password()
     {
@@ -28,6 +28,13 @@ public sealed class Password : ValueObject
     {
         Value = hash;
     }
+
+    #pragma warning disable CS8618
+    private Password()
+    {
+        
+    }
+    #pragma warning restore CS8618
 
     public static Password Create(string password)
     {

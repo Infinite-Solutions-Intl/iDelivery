@@ -1,19 +1,28 @@
-﻿using iDelivery.Domain.AccountAggregate.Enums;
+﻿using iDelivery.Domain.AccountAggregate.Entities;
+using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate;
 
 public sealed class Account : AggregateRoot<AccountId>
 {
-    private readonly List<UserId> _userIds = new();
+    private readonly List<User> _users = new();
+    private readonly List<Subscription> _subscriptions = new();
     public Email Email { get; set; }
     public Password Password { get; set; }
     public AccountType Type { get; set; }
     public string Name { get; set; }
     public PhoneNumber PhoneNumber { get; set; }
     public string ApiKey { get; set; }
-    public IReadOnlyList<UserId> UserIds => _userIds.AsReadOnly();
+    public IReadOnlyList<User> Users => _users.AsReadOnly();
+    public IReadOnlyList<Subscription> Subscriptions => _subscriptions.AsReadOnly();
 
+    #pragma warning disable CS8618
+    private Account()
+    {
+
+    }
+    #pragma warning restore CS8618
     private Account(
         AccountId id,
         Email email,
@@ -32,20 +41,25 @@ public sealed class Account : AggregateRoot<AccountId>
     }
 
     public static Account Create(
-        string email,
-        string password,
+        Email email,
+        Password password,
         AccountType type,
         string name,
-        int phoneNumber,
+        PhoneNumber phoneNumber,
         string apiKey)
     {
         return new Account(
             AccountId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             type,
             name,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             apiKey);
+    }
+
+    public void AddUser(User user)
+    {
+        _users.Add(user);
     }
 }

@@ -1,26 +1,28 @@
-﻿using System.Security.Principal;
-
-namespace iDelivery.Domain.AccountAggregate.ValueObjects;
+﻿namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
 public sealed class AccountId : ValueObject
 {
-    public Guid Id { get; set; }
+    public Guid Value { get; private set; }
 
-    private AccountId(Guid id)
+    private AccountId(Guid value)
     {
-        Id = id;
+        Value = value;
     }
 
+    private AccountId()
+    {
+        
+    }
     public static AccountId CreateUnique()
     {
         return new AccountId(Guid.NewGuid());
     }
-    public static AccountId Create(Guid id)
+    public static AccountId Create(Guid value)
     {
-        return new AccountId(id);
+        return new AccountId(value);
     }
     public override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Id;
+        yield return Value;
     }
 }

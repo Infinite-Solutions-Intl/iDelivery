@@ -1,7 +1,6 @@
 ﻿using iDelivery.Application.Authentication.Services;
-using iDelivery.Application.Repositories;
 using iDelivery.Infrastructure.Authentication;
-using iDelivery.Infrastructure.Repositories;
+using iDelivery.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,9 +14,7 @@ public static class DependencyInjection
     {
         services.AddSingleton(_ => configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>());
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
-        services.AddSingleton<IAccountRepository, AccountRepository>();
-        services.AddSingleton<IUserRepository,UserRepository>();
+        services.AddPersistence(configuration);
         return services;
     }
 }

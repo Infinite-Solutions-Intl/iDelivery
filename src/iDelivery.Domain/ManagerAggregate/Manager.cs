@@ -4,12 +4,12 @@ using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;
 using iDelivery.Domain.ManagerAggregate.ValueObjects;
 
-namespace iDelivery.Domain.AccountAggregate;
+namespace iDelivery.Domain.ManagerAggregate;
 
 public sealed class Manager : User
 {
-    private readonly List <ComplaintId> _complaintIds = new();
-    public IReadOnlyList <ComplaintId> ComplaintIds => _complaintIds.AsReadOnly();
+    private readonly List<ComplaintId> _complaintIds = new();
+    public IReadOnlyList<ComplaintId> ComplaintIds => _complaintIds.AsReadOnly();
     private Manager(
         ManagerId id,
         Email email,
@@ -26,6 +26,11 @@ public sealed class Manager : User
             role,
             accountId)
     {
+    }
+
+    private Manager()
+    {
+
     }
 
     public static Manager Create(

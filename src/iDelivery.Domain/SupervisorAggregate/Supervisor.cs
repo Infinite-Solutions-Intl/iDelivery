@@ -1,18 +1,18 @@
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
-using iDelivery.Domain.RunnerAggregate.ValueObjects;
+using iDelivery.Domain.CourierAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
-namespace iDelivery.Domain.AccountAggregate;
+namespace iDelivery.Domain.SupervisorAggregate;
 
 public sealed class Supervisor : User
 {
-    private readonly List<RunnerId> _runnerIds = new();
-    public IReadOnlyList<RunnerId> RunnerIds => _runnerIds.AsReadOnly();
+    private readonly List<CourierId> _courierIds = new();
+    public IReadOnlyList<CourierId> CourierIds => _courierIds.AsReadOnly();
 
     private Supervisor(
-        SupervisorId id,
+        UserId id,
         Email email,
         Password password,
         string name,
@@ -27,6 +27,11 @@ public sealed class Supervisor : User
             role,
             accountId)
     {
+    }
+
+    private Supervisor()
+    {
+
     }
 
     public static Supervisor Create(
