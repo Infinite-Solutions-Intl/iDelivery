@@ -10,7 +10,6 @@ internal class UserConfigurations : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.ToTable("Users");
-        // builder.WithOwner().HasForeignKey(u => u.AccountId);
         builder.HasKey(u => u.Id);
         builder.Property(u => u.Id)
             .ValueGeneratedNever()
@@ -29,7 +28,6 @@ internal class UserConfigurations : IEntityTypeConfiguration<User>
                 email => email.Value,
                 value => Email.Create(value)
             );
-        builder.HasIndex(u => u.Email);
         builder.Property(u => u.PhoneNumber)
             .HasConversion(
                 phone => phone.Value,
@@ -42,5 +40,7 @@ internal class UserConfigurations : IEntityTypeConfiguration<User>
                 id => id.Value,
                 value => AccountId.Create(value)
             );
+        builder.HasIndex(u => u.Email);
+        builder.HasIndex(u => u.PhoneNumber);
     }
 }

@@ -18,8 +18,9 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Command> Commands { get; set; } = null!;
     public DbSet<Manager> Managers { get; set; } = null!;
-    // public DbSet<Supervisor> Supervisors { get; set; } = null!;
-    // public DbSet<Courier> Couriers { get; set; } = null!;
+    public DbSet<Supervisor> Supervisors { get; set; } = null!;
+    public DbSet<Courier> Couriers { get; set; } = null!;
+    public DbSet<Complaint> Complaints { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

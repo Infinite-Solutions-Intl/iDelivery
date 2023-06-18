@@ -34,8 +34,6 @@ internal class AccountConfigurations : IEntityTypeConfiguration<Account>
                 email => email.Value,
                 value => Email.Create(value)
             );
-        builder.HasIndex(a => a.Email);
-        builder.HasIndex(a => a.ApiKey);
         builder.Property(a => a.PhoneNumber)
             .HasConversion(
                 phone => phone.Value,
@@ -43,6 +41,9 @@ internal class AccountConfigurations : IEntityTypeConfiguration<Account>
             );
         builder.Property(a => a.Name)
             .HasMaxLength(100);
+        builder.HasIndex(a => a.Email);
+        builder.HasIndex(a => a.ApiKey);
+        builder.HasIndex(u => u.PhoneNumber);
     }
 
     private static void ConfigureUsersTable(EntityTypeBuilder<Account> builder)

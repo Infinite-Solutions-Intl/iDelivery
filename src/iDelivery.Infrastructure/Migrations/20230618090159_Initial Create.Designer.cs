@@ -11,7 +11,7 @@ using iDelivery.Infrastructure.Persistence;
 namespace iDelivery.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230618083120_Initial Create")]
+    [Migration("20230618090159_Initial Create")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,6 +54,8 @@ namespace iDelivery.Infrastructure.Migrations
                     b.HasIndex("ApiKey");
 
                     b.HasIndex("Email");
+
+                    b.HasIndex("PhoneNumber");
 
                     b.ToTable("Accounts", (string)null);
                 });
@@ -132,6 +134,8 @@ namespace iDelivery.Infrastructure.Migrations
 
                     b.HasIndex("Email");
 
+                    b.HasIndex("PhoneNumber");
+
                     b.ToTable("Users", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
@@ -202,6 +206,16 @@ namespace iDelivery.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Plans", (string)null);
+                });
+
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Courier", b =>
+                {
+                    b.HasBaseType("iDelivery.Domain.AccountAggregate.Entities.User");
+
+                    b.Property<Guid>("SupervisorId")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Courier");
                 });
 
             modelBuilder.Entity("iDelivery.Domain.ManagerAggregate.Manager", b =>

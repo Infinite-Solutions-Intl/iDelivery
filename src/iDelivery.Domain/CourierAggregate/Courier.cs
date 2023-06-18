@@ -8,7 +8,7 @@ namespace iDelivery.Domain.CourierAggregate;
 
 public sealed class Courier : User
 {
-    // public SupervisorId SupervisorId{ get; private set; }
+    public SupervisorId SupervisorId{ get; private set; }
     private Courier(
         CourierId id,
         Email email,
@@ -16,7 +16,7 @@ public sealed class Courier : User
         string name,
         string role,
         PhoneNumber phoneNumber,
-        // SupervisorId supervisorId,
+        SupervisorId supervisorId,
         AccountId accountId) : base(
             id,
             email,
@@ -26,7 +26,7 @@ public sealed class Courier : User
             role,
             accountId)
     {
-        // SupervisorId = supervisorId;
+        SupervisorId = supervisorId;
     }
 
     #pragma warning disable CS8618
@@ -41,7 +41,7 @@ public sealed class Courier : User
         Password password,
         string name,
         PhoneNumber phoneNumber,
-        // Guid supervisorId,
+        Guid supervisorId,
         AccountId accountId)
     {
         return new Courier(
@@ -51,7 +51,7 @@ public sealed class Courier : User
             name,
             Roles.Runner,
             phoneNumber,
-            // SupervisorId.Create(supervisorId),
+            SupervisorId.Create(supervisorId),
             accountId);
     }
 }

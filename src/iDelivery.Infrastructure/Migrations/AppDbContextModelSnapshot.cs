@@ -52,6 +52,8 @@ namespace iDelivery.Infrastructure.Migrations
 
                     b.HasIndex("Email");
 
+                    b.HasIndex("PhoneNumber");
+
                     b.ToTable("Accounts", (string)null);
                 });
 
@@ -129,6 +131,8 @@ namespace iDelivery.Infrastructure.Migrations
 
                     b.HasIndex("Email");
 
+                    b.HasIndex("PhoneNumber");
+
                     b.ToTable("Users", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
@@ -199,6 +203,16 @@ namespace iDelivery.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Plans", (string)null);
+                });
+
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Courier", b =>
+                {
+                    b.HasBaseType("iDelivery.Domain.AccountAggregate.Entities.User");
+
+                    b.Property<Guid>("SupervisorId")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Courier");
                 });
 
             modelBuilder.Entity("iDelivery.Domain.ManagerAggregate.Manager", b =>

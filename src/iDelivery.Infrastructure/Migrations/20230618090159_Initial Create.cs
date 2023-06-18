@@ -74,7 +74,8 @@ namespace iDelivery.Infrastructure.Migrations
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     Role = table.Column<string>(type: "TEXT", nullable: false),
                     AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false)
+                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
+                    SupervisorId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -213,6 +214,11 @@ namespace iDelivery.Infrastructure.Migrations
                 column: "Email");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Accounts_PhoneNumber",
+                table: "Accounts",
+                column: "PhoneNumber");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ComplaintIds_ManagerId",
                 table: "ComplaintIds",
                 column: "ManagerId");
@@ -252,6 +258,11 @@ namespace iDelivery.Infrastructure.Migrations
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PhoneNumber",
+                table: "Users",
+                column: "PhoneNumber");
         }
 
         /// <inheritdoc />
