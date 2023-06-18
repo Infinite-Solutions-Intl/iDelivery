@@ -1,6 +1,6 @@
 ﻿namespace iDelivery.Domain.AccountAggregate.ValueObjects;
 
-public class UserId : ValueObject, IEquatable<UserId>
+public class UserId : ValueObject
 {
     public Guid Value { get; protected set; }
 
@@ -24,11 +24,5 @@ public class UserId : ValueObject, IEquatable<UserId>
     public override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
-    }
-
-    public bool Equals(UserId? other)
-    {
-        if (other is null) return false;
-        return Value.Equals(other.Value);
     }
 }

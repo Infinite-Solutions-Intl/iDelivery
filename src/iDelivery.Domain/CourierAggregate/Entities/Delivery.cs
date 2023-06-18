@@ -3,21 +3,21 @@ using iDelivery.Domain.CourierAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CourierAggregate.Entities;
 
-public sealed class Course : AggregateRoot<CourseId>
+public sealed class Delivery : AggregateRoot<DeliveryId>
 {
     private readonly List<CommandId> _commandIds = new();
     public IReadOnlyList<CommandId> CommandIds => _commandIds.AsReadOnly();
-    private  Course(CourseId courseId) : base(courseId)
+    private  Delivery(DeliveryId courseId) : base(courseId)
     {
 
     }
 
-    private Course()
+    private Delivery()
     {
     }
 
-    public static Course Create()
+    public static Delivery Create()
     {
-        return new Course(CourseId.CreateUnique());
+        return new Delivery(DeliveryId.CreateUnique());
     }
 }

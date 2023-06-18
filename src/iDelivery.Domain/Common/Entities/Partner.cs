@@ -5,10 +5,10 @@ using iDelivery.Domain.Common.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate;
 
-public sealed class Reader : User
+public sealed class Partner : User
 {
     public string PoBox {get; private set;}
-    private Reader(
+    private Partner(
         ReaderId id,
         Email email,
         Password password,
@@ -28,7 +28,7 @@ public sealed class Reader : User
         PoBox = poBox;
     }
 
-    public static Reader Create(
+    public static Partner Create(
         string email,
         string password,
         string name,
@@ -36,7 +36,7 @@ public sealed class Reader : User
         string poBox,
         Guid accountId)
     {
-        return new Reader(
+        return new Partner(
             ReaderId.CreateUnique(),
             Email.Create(email),
             Password.Create(password),

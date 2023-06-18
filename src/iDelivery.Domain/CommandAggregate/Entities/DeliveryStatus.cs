@@ -3,10 +3,10 @@ using iDelivery.Domain.CommandAggregate.ValueObjects;
 namespace iDelivery.Domain.CommandAggregate.Entities;
 public sealed class DeliveryStatus : Entity<DeliveryStatusId>
 {
-    public int Status { get; }
-    public string FileBlob { get; }
-    public string FileType { get; }
-    public DateTime CreatedDate { get; }
+    public int Status { get; private set; }
+    public string FileBlob { get; private set; }
+    public string FileType { get; private set; }
+    public DateTime CreatedDate { get; private set; }
 
     private DeliveryStatus(DeliveryStatusId id,
         int status,

@@ -28,7 +28,7 @@ public sealed class Courier : User
     {
         // SupervisorId = supervisorId;
     }
-    
+
     #pragma warning disable CS8618
     private Courier()
     {
@@ -37,21 +37,21 @@ public sealed class Courier : User
     #pragma warning restore CS8618
 
     public static Courier Create (
-        string email,
-        string password,
+        Email email,
+        Password password,
         string name,
-        int phoneNumber,
+        PhoneNumber phoneNumber,
         // Guid supervisorId,
-        Guid accountId)
+        AccountId accountId)
     {
         return new Courier(
             CourierId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             name,
             Roles.Runner,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             // SupervisorId.Create(supervisorId),
-            AccountId.Create(accountId));
+            accountId);
     }
 }

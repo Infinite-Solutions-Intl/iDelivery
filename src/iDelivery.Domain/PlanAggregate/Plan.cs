@@ -7,7 +7,7 @@ public sealed class Plan : AggregateRoot<PlanId>
     private readonly List<Subscription> _subscriptions = new();
     public string Name { get; private set; }
     public TimeSpan Duration { get; private set; }
-    public Decimal Price { get; private set; }
+    public decimal Price { get; private set; }
     public string Currency { get; private set; }
     public IReadOnlyList<Subscription> Subscriptions => _subscriptions.AsReadOnly();
 
@@ -15,13 +15,13 @@ public sealed class Plan : AggregateRoot<PlanId>
         PlanId id,
         string name,
         TimeSpan duration,
-        Decimal price,
+        decimal price,
         string currency): base(id)
     {
-        Name=name;
-        Duration=duration;
-        Price=price;
-        Currency=currency;
+        Name = name;
+        Duration = duration;
+        Price = price;
+        Currency = currency;
     }
 
     #pragma warning disable CS8618
@@ -33,7 +33,7 @@ public sealed class Plan : AggregateRoot<PlanId>
     public static Plan Create(
         string name,
         TimeSpan duration,
-        Decimal price,
+        decimal price,
         string currency)
     {
         return new(
