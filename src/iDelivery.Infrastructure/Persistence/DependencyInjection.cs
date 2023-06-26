@@ -10,12 +10,20 @@ namespace iDelivery.Infrastructure.Persistence;
 
 internal static class DependencyInjection
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddPersistence(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        bool isDevelopment)
     {
-        services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
+        if(isDevelopment)
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Database"));
+        else
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
+        
         services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IUserRepository,UserRepository>();
+        services.AddScoped<ICommandRepository, CommandRepository>();
         return services;
     }
 }

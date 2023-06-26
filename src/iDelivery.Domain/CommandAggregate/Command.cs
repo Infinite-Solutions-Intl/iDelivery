@@ -1,5 +1,6 @@
 using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
+using iDelivery.Domain.CommandAggregate.Enums;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CommandAggregate;
@@ -75,4 +76,29 @@ public sealed class Command : AggregateRoot<CommandId>
                 preferredTime
             );
         }
+
+    public void Update(
+        string? city,
+        string? quarter,
+        long? latitude,
+        long? longitude,
+        DateTime? preferredDate,
+        DateTime? preferredTime)
+    {
+        City = city ?? City;
+        Quarter = quarter ?? Quarter;
+        Latitude = latitude ?? Latitude;
+        Longitude = longitude ?? Longitude;
+        PreferredDate = preferredDate ?? PreferredDate;
+        PreferredTime = preferredTime ?? PreferredTime;
+    }
+
+    public void UpdateStatus(Status status)
+    {
+        DeliveryStatus = DeliveryStatus.Create(
+            status,
+            DeliveryStatus.FileBlob,
+            DeliveryStatus.FileType,
+            DateTime.Now);
+    }
 }

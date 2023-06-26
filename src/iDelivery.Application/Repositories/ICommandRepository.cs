@@ -7,6 +7,6 @@ namespace iDelivery.Application.Repositories;
 
 public interface ICommandRepository : IRepository<Command, CommandId>
 {
-    Task<Command> UpdateStatusAsync(CommandId id, Status status);
-    Task<Command> UpdateCommandAsync(Command command);
+    Task<Command> UpdateStatusAsync(Command command, Status status, CancellationToken cancellationToken = default);
+    Task<Command> UpdateCommandAsync(Command command, CancellationToken cancellationToken = default);
 }

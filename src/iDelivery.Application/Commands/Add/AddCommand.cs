@@ -1,6 +1,6 @@
-namespace iDelivery.Contracts.Commands;
+namespace iDelivery.Application.Commands.Add;
 
-public record AddCommandRequest(
+public sealed record AddCommand(
     string RefNum,
     string Intitule,
     string City,
@@ -9,4 +9,4 @@ public record AddCommandRequest(
     long Latitude,
     DateTime PreferredDate,
     DateTime PreferredTime
-);
+) : IRequest<Result<CommandResponse>>;

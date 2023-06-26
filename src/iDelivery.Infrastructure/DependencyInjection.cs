@@ -10,11 +10,12 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        bool isDevelopment)
     {
         services.AddSingleton(_ => configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>());
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        services.AddPersistence(configuration);
+        services.AddPersistence(configuration, isDevelopment);
         return services;
     }
 }
