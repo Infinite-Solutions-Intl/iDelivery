@@ -1,4 +1,4 @@
-namespace iDelivery.Application.Commands.UpdateCommands;
+namespace iDelivery.Application.Commands.Update;
 public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result<UpdateCommandResponse>>
 {
     public Task<Result<UpdateCommandResponse>> Handle(UpdateCommand request, CancellationToken cancellationToken)

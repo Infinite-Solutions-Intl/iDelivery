@@ -1,17 +1,18 @@
+using iDelivery.Domain.CommandAggregate.Enums;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CommandAggregate.Entities;
 public sealed class DeliveryStatus : Entity<DeliveryStatusId>
 {
-    public int Status { get; private set; }
-    public string FileBlob { get; private set; }
-    public string FileType { get; private set; }
+    public Status Status { get; private set; }
+    public string? FileBlob { get; private set; }
+    public string? FileType { get; private set; }
     public DateTime CreatedDate { get; private set; }
 
     private DeliveryStatus(DeliveryStatusId id,
-        int status,
-        string fileBlob,
-        string filetype,
+        Status status,
+        string? fileBlob,
+        string? filetype,
         DateTime createdDate) : base(id)
     {
         Status = status;
@@ -20,17 +21,15 @@ public sealed class DeliveryStatus : Entity<DeliveryStatusId>
         CreatedDate = createdDate;
     }
 
-    #pragma warning disable CS8618
     private DeliveryStatus()
     {
 
     }
-    #pragma warning restore CS8618
 
     public static DeliveryStatus Create(
-        int status,
-        string fileBlob,
-        string filetype,
+        Status status,
+        string? fileBlob,
+        string? filetype,
         DateTime createdDate)
     {
         return new DeliveryStatus(
