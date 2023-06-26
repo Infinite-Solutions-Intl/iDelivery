@@ -24,22 +24,20 @@ namespace iDelivery.Api.Controllers;
         return Ok (response);
     }
 
-    [HttpPut("{id}/{ref_num}")]
-    public async Task<IActionResult> PutCommand(int id, int ref_num, UpdateCommandRequest updateCommand)
+    [HttpPut("{id}/{refNum}")]
+    public IActionResult PutCommand(Guid id, string refNum, [FromBody]UpdateCommandRequest updateCommand)
     {
-        UpdateCommand command = new UpdateCommand(1);
-        var response = await _sender.Send(command);
         return Ok (updateCommand);
     }
 
     [HttpPut("{id}")]
-    public IActionResult PutCommand(int id, UpdateCommand request)
+    public IActionResult PutCommand(Guid id, string refNum, [FromBody]UpdateDeliveryStatus request)
     {
-        return Ok(request);
+        return Ok (request);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCommand(DisplayCommandRequest displayCommand)
+    public async Task<IActionResult> GetCommand()
     {
         GetCommand command = new GetCommand();
         var result = await _sender.Send(command);

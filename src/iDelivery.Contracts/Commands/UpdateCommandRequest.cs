@@ -1,7 +1,7 @@
 namespace iDelivery.Contracts.Commands;
 
 public record UpdateCommandRequest(
-    string Intitule,
+    Guid CommandId,
     string City,
     string Quarter,
     long Longitude,
