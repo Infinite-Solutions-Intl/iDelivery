@@ -21,7 +21,7 @@ public class AuthController : ApiBaseController
         _mapper = mapper;
     }
 
-    [HttpPost("register")]
+    [HttpPost("register")] 
     public async Task<IActionResult> Register(RegisterRequestDto request)
     {
         RegisterCommand command = _mapper.Map<RegisterCommand>(request);
