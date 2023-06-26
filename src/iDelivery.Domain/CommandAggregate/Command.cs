@@ -77,18 +77,20 @@ public sealed class Command : AggregateRoot<CommandId>
             );
         }
 
-    public void Update(Command command)
+    public void Update(
+        string? city,
+        string? quarter,
+        long? latitude,
+        long? longitude,
+        DateTime? preferredDate,
+        DateTime? preferredTime)
     {
-        RefNum = command.RefNum;
-        Intitule = command.Intitule;
-        City = command.City;
-        Quarter = command.Quarter;
-        Latitude = command.Latitude;
-        Longitude = command.Longitude;
-        CreatedDate = command.CreatedDate;
-        PreferredDate = command.PreferredDate;
-        PreferredTime = command.PreferredTime;
-        DeliveryStatus = command.DeliveryStatus;
+        City = city ?? City;
+        Quarter = quarter ?? Quarter;
+        Latitude = latitude ?? Latitude;
+        Longitude = longitude ?? Longitude;
+        PreferredDate = preferredDate ?? PreferredDate;
+        PreferredTime = preferredTime ?? PreferredTime;
     }
 
     public void UpdateStatus(Status status)

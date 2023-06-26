@@ -38,6 +38,8 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
         try
         {
             await _commandRepository.AddAsync(command, cancellationToken);
+
+            // TODO: Publier une nouvelle commande a ete ajoutee
             return new CommandResponse(
                 command.Id.Value,
                 command.RefNum,

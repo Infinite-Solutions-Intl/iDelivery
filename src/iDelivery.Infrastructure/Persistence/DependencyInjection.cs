@@ -2,7 +2,6 @@ using iDelivery.Application.Authentication.Services;
 using iDelivery.Application.Repositories;
 using iDelivery.Infrastructure.Authentication;
 using iDelivery.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,13 +16,10 @@ internal static class DependencyInjection
         bool isDevelopment)
     {
         if(isDevelopment)
-        {
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Database"));
-        }
         else
-        {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
-        }
+        
         services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IUserRepository,UserRepository>();

@@ -13,19 +13,17 @@ public sealed class CommandRepository : Repository<Command, CommandId>, ICommand
     {
     }
 
-    public async Task<Command> UpdateCommandAsync(Command command)
+    public async Task<Command> UpdateCommandAsync(Command command, CancellationToken cancellationToken = default)
     {
-        var cmd = await _dbContext.Commands.FirstAsync(c => c.Id == command.Id);
-        cmd.Update(command);
-        await _dbContext.SaveChangesAsync();
-        return cmd;
+        _dbContext.Update(command);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return command;
     }
 
-    public async Task<Command> UpdateStatusAsync(CommandId id, Status status)
+    public async Task<Command> UpdateStatusAsync(Command command, Status status, CancellationToken cancellationToken = default)
     {
-        var command = await _dbContext.Commands.FirstAsync(c => c.Id == id);
         command.UpdateStatus(status);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return command;
     }
 }
