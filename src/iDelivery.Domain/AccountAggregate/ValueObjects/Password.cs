@@ -38,6 +38,11 @@ public sealed class Password : ValueObject
 
     public static Password Create(string password)
     {
+        return new Password(password);
+    }
+
+    public static Password CreateHash(string password)
+    {
         if (!IsValid(password, out var hint))
             throw new PasswordNotStrongEnoughException(hint);
 

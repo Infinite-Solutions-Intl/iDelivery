@@ -1,5 +1,6 @@
 using FluentResults;
 using iDelivery.Api.Controllers.Common;
+using iDelivery.Application.Authentication.Login;
 using iDelivery.Application.Authentication.Register;
 using iDelivery.Contracts.Authentication;
 using MapsterMapper;
@@ -26,6 +27,18 @@ public class AuthController : ApiBaseController
     {
         RegisterCommand command = _mapper.Map<RegisterCommand>(request);
         Result<RegisterCommandResponse> result = await _sender.Send(command);
+
+        if(result.IsFailed)
+            return Problem();
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("login")] 
+    public async Task<IActionResult> Login(LoginREquestDto request)
+    {
+        LoginQuery command = _mapper.Map<LoginQuery>(request);
+        Result<LoginQueryResponse> result = await _sender.Send(command);
 
         if(result.IsFailed)
             return Problem();

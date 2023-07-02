@@ -16,6 +16,7 @@ public static class DependencyInjection
         services.AddSingleton(_ => configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>());
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddPersistence(configuration, isDevelopment);
+        services.AddAuthentication(configuration);
         return services;
     }
 }
