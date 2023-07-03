@@ -1,10 +1,11 @@
 using iDelivery.Api.Controllers.Common;
-using iDelivery.Api.Filters;
+using iDelivery.Domain.Common.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDelivery.Api.Controllers;
 
-[JwtAuthorize(Roles = "admin")]
+[Authorize(Policy = Policies.AdminOnly)]
 public class UsersController : ApiBaseController
 {
     [HttpGet("secret")]
