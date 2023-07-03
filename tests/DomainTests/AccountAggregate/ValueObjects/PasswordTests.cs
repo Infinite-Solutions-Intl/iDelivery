@@ -24,6 +24,6 @@ public class PasswordTests
     [Fact]
     public void Password_ShouldNotBeNullOrEmpty()
     {
-        Assert.Throws<PasswordNotStrongEnoughException>(() => Password.Create(""));
+        Assert.Throws<PasswordNotStrongEnoughException>(() => Password.CreateHash(""));
     }
 }
