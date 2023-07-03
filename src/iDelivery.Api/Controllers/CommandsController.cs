@@ -1,12 +1,19 @@
 using iDelivery.Api.Controllers.Common;
+using iDelivery.Api.Filters;
+using iDelivery.Api.Utilities;
 using iDelivery.Application.Commands.Add;
 using iDelivery.Application.Commands.Get;
 using iDelivery.Application.Commands.Update.Commands;
 using iDelivery.Contracts.Commands;
 using iDelivery.Domain.CommandAggregate.Enums;
+using iDelivery.Domain.Common.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace iDelivery.Api.Controllers;
+
+[ApiKeyAuthorize]
+[Authorize]
 public class CommandsController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -19,7 +26,7 @@ public class CommandsController : ApiBaseController
     [HttpGet]
     public async Task<IActionResult> GetCommands()
     {
-        GetQuery query = new();
+        GetCommandQuery query = new();
         var result = await _sender.Send(query);
         return Ok(result.Value);
     }
@@ -45,7 +52,7 @@ public class CommandsController : ApiBaseController
     }
 
     [HttpPut("{id}/{refNum}")]
-    public async Task<IActionResult> PutCommand(Guid id, string refNum, [FromBody] UpdateCommandRequest request)
+    public async Task<IActionResult> UpdateCommandDetails(Guid id, string refNum, [FromBody] UpdateCommandRequest request)
     {
         var command = new UpdateCommand(
             id,
@@ -63,7 +70,8 @@ public class CommandsController : ApiBaseController
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutCommand(Guid id, [FromBody] UpdateDeliveryStatus request)
+    [Authorize(Policy = Policies.RunnerOnly)]
+    public async Task<IActionResult> UpdateCommandStatus(Guid id, [FromBody] UpdateDeliveryStatus request)
     {
         var command = new UpdateDeliveryStatusCommand(id, (Status) request.Status);
         var response = await _sender.Send(command);

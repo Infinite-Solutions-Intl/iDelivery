@@ -19,7 +19,6 @@ public sealed class ApiKeyGenerator : IApiKeyGenerator
             apiKey += $"|{claim.Value}";
 
         // Encrypt the API key using AES encryption
-
         return EncryptKey(apiKey);
     }
 

@@ -1,24 +1,24 @@
 using iDelivery.Application.Authentication.Services;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.Common.Utilities;
+using iDelivery.Domain.CourierAggregate;
+using iDelivery.Domain.SupervisorAggregate;
+using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 using System.Security.Claims;
 
 namespace iDelivery.Application.Authentication.Register;
 
 internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterCommandResponse>>
 {
-    private readonly IMapper _mapper;
     private readonly IApiKeyGenerator _keyGenerator;
     private readonly IAccountRepository _accountRepository;
     private readonly IUserRepository _usersRepository;
 
     public RegisterCommandHandler(
-        IMapper mapper,
         IApiKeyGenerator keyGenerator,
         IAccountRepository accountRepository,
         IUserRepository usersRepository)
     {
-        _mapper = mapper;
         _keyGenerator = keyGenerator;
         _accountRepository = accountRepository;
         _usersRepository = usersRepository;
@@ -27,7 +27,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
     public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         // Check if the email already exists
-        if(await _accountRepository.ExistsAsync(Email.Create(request.Email), cancellationToken))
+        if (await _accountRepository.ExistsAsync(Email.Create(request.Email), cancellationToken))
             return Result.Fail<RegisterCommandResponse>(new EmailAlreadyExistsError());
 
         // Generate the API Key

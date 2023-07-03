@@ -32,4 +32,13 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
         int records = await _dbContext.SaveChangesAsync();
         return records > 0;
     }
+
+    public async Task<(bool success, Guid accountId)> IsValidKeyAsync(string key)
+    {
+        await Task.CompletedTask;
+        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ApiKey == key);
+        if(account is null)
+            return (false, Guid.Empty);
+        return (true, account.Id.Value);
+    }
 }
