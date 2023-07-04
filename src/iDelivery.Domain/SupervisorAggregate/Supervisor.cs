@@ -35,19 +35,19 @@ public sealed class Supervisor : User
     }
 
     public static Supervisor Create(
-        string email,
-        string password,
+        Email email,
+        Password password,
         string name,
-        int phoneNumber,
-        Guid accountId)
+        PhoneNumber phoneNumber,
+        AccountId accountId)
     {
         return new Supervisor(
             SupervisorId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             name,
             Roles.Supervisor,
-            PhoneNumber.Create(phoneNumber),
-            AccountId.Create(accountId));
+            phoneNumber,
+            accountId);
     }
 }

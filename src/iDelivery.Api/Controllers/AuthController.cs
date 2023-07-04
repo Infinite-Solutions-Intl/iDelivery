@@ -1,5 +1,4 @@
 using FluentResults;
-using iDelivery.Api.Controllers.Common;
 using iDelivery.Application.Authentication.Login;
 using iDelivery.Application.Authentication.Register;
 using iDelivery.Contracts.Authentication;
@@ -9,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace iDelivery.Api.Controllers;
 
-public class AuthController : ApiBaseController
+[ApiController]
+[Route("[controller]")]
+public class AuthController : ControllerBase
 {
     private readonly ISender _sender;
     private readonly IMapper _mapper;

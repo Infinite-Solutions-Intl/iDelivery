@@ -41,7 +41,7 @@ public sealed class Courier : User
         Password password,
         string name,
         PhoneNumber phoneNumber,
-        Guid supervisorId,
+        SupervisorId supervisorId,
         AccountId accountId)
     {
         return new Courier(
@@ -51,7 +51,7 @@ public sealed class Courier : User
             name,
             Roles.Runner,
             phoneNumber,
-            SupervisorId.Create(supervisorId),
+            supervisorId,
             accountId);
     }
 }

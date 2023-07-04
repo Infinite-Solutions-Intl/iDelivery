@@ -12,10 +12,11 @@ namespace iDelivery.Api.Filters;
 
 public class JwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
+    private const string _bearer = "Bearer";
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var authHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-        if (authHeader is null || !authHeader.StartsWith("Bearer"))
+        var authHeader = context.HttpContext.Request.Headers[HeaderKeys.AuthorizationHeaderKey].FirstOrDefault();
+        if (authHeader is null || !authHeader.StartsWith(_bearer))
         {
             context.Result = new UnauthorizedResult();
             return;
@@ -23,7 +24,7 @@ public class JwtAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
         using var scope = context.HttpContext.RequestServices.CreateScope();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<JwtAuthorizeAttribute>>();
         var jwtSettings = scope.ServiceProvider.GetRequiredService<JwtSettings>();
-        var token = authHeader["Bearer ".Length..];
+        var token = authHeader[$"{_bearer} ".Length..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenValidationParameters = new TokenValidationParameters
         {
