@@ -1,15 +1,20 @@
 using iDelivery.Domain.CommandAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace iDelivery.Application.Commands.Add;
 public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<CommandResponse>>
 {
     private readonly ICommandRepository _commandRepository;
+    private readonly ILogger<AddCommandHandler> _logger;
 
-    public AddCommandHandler(ICommandRepository commandRepository)
+    public AddCommandHandler(
+        ICommandRepository commandRepository,
+        ILogger<AddCommandHandler> logger)
     {
         _commandRepository = commandRepository;
+        _logger = logger;
     }
 
     public async Task<Result<CommandResponse>> Handle(AddCommand request, CancellationToken cancellationToken)
@@ -53,8 +58,9 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
                 request.PreferredTime
             );
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            _logger.LogError("Error: {e}", e);
             return Result.Fail(new AddCommandError());
         }        
     }
