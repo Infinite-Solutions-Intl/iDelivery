@@ -2,10 +2,20 @@ namespace iDelivery.Domain.Common.Utilities;
 
 public sealed class Roles
 {
-    public const string SuperAdmin = "SuperAdmin";
-    public const string Admin = "Admin";
-    public const string Supervisor = "Supervisor";
-    public const string Runner = "Runner";
-    public const string Reader = "Reader";
-    public const string Manager = "Manager";
+    public const string SuperAdmin = "superAdmin";
+    public const string Admin = "admin";
+    public const string Supervisor = "supervisor";
+    public const string Courier = "courier";
+    public const string Partner = "partner";
+    public const string Manager = "manager";
 }
+
+//public enum UserRoles
+//{
+//    SuperAdmin,
+//    Admin,
+//    Supervisor,
+//    Courier,
+//    Partner,
+//    Manager
+//}

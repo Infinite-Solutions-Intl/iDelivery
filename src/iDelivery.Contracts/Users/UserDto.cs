@@ -6,5 +6,7 @@ public sealed record UserDto(
     string Name,
     int PhoneNumber,
     int CountryIdentifier,
-    string Role
+    string Role,
+    Guid? SupervisorId,
+    string? PoBox
 );

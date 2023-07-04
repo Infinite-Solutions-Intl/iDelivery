@@ -34,7 +34,7 @@ public static class DependencyInjection
             options.AddPolicy(Policies.SuperAdminOnly, policy => policy.RequireRole(Roles.SuperAdmin));
             options.AddPolicy(Policies.AdminOnly, policy => policy.RequireRole(Roles.Admin));
             options.AddPolicy(Policies.SupervisorOnly, policy => policy.RequireRole(Roles.Supervisor));
-            options.AddPolicy(Policies.RunnerOnly, policy => policy.RequireRole(Roles.Runner));
+            options.AddPolicy(Policies.RunnerOnly, policy => policy.RequireRole(Roles.Courier));
         });
         return services;
     }

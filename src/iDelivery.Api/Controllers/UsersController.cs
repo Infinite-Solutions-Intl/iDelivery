@@ -1,5 +1,6 @@
 using iDelivery.Api.Controllers.Common;
 using iDelivery.Api.Utilities;
+using iDelivery.Application.Users.Add;
 using iDelivery.Application.Users.Get;
 using iDelivery.Contracts.Users;
 using iDelivery.Domain.Common.Utilities;
@@ -22,7 +23,7 @@ public class UsersController : ApiBaseController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        Guid accountId = (Guid) Auth.GetAccountId(Request.Headers)!;
+        Guid accountId = Auth.GetAccountId(Request.Headers);
         var query= new GetUsersQuery(accountId);
         var result = await _sender.Send(query);
         return Ok(result.Value);
@@ -31,7 +32,19 @@ public class UsersController : ApiBaseController
     [HttpPost]
     public async Task<IActionResult> AddUser(UserDto userDto)
     {
-        await Task.CompletedTask;
-        return Ok(userDto);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        var command = new AddUserCommand(
+            userDto.Email,
+            accountId,
+            userDto.Password,
+            userDto.Name,
+            userDto.PhoneNumber,
+            userDto.CountryIdentifier,
+            userDto.Role,
+            userDto.SupervisorId,
+            userDto.PoBox);
+
+        var result = await _sender.Send(command);
+        return Ok(result.Value);
     }
 }

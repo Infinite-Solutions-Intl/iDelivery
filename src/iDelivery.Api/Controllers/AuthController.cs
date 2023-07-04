@@ -1,4 +1,6 @@
 using FluentResults;
+using iDelivery.Api.Filters;
+using iDelivery.Api.Utilities;
 using iDelivery.Application.Authentication.Login;
 using iDelivery.Application.Authentication.Register;
 using iDelivery.Contracts.Authentication;
@@ -35,10 +37,12 @@ public class AuthController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPost("login")] 
+    [HttpPost("login")]
+    [ApiKeyAuthorize]
     public async Task<IActionResult> Login(LoginREquestDto request)
     {
-        LoginQuery command = _mapper.Map<LoginQuery>(request);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        LoginQuery command = new (accountId, request.Email, request.Password);
         Result<LoginQueryResponse> result = await _sender.Send(command);
 
         if(result.IsFailed)

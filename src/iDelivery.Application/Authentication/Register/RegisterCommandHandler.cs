@@ -1,9 +1,6 @@
 using iDelivery.Application.Authentication.Services;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.Common.Utilities;
-using iDelivery.Domain.CourierAggregate;
-using iDelivery.Domain.SupervisorAggregate;
-using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 using System.Security.Claims;
 
 namespace iDelivery.Application.Authentication.Register;
@@ -12,16 +9,13 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 {
     private readonly IApiKeyGenerator _keyGenerator;
     private readonly IAccountRepository _accountRepository;
-    private readonly IUserRepository _usersRepository;
 
     public RegisterCommandHandler(
         IApiKeyGenerator keyGenerator,
-        IAccountRepository accountRepository,
-        IUserRepository usersRepository)
+        IAccountRepository accountRepository)
     {
         _keyGenerator = keyGenerator;
         _accountRepository = accountRepository;
-        _usersRepository = usersRepository;
     }
 
     public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -60,7 +54,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 
         // Save the new Account
         _ = await _accountRepository.AddAsync(account, cancellationToken);
-        _ = await _usersRepository.AddAsync(user, cancellationToken);
+        _ = await _accountRepository.AddUserAsync(account, user, cancellationToken);
 
         // TODO: Raise the AccountCreatedEvent
 

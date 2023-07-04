@@ -34,19 +34,19 @@ public sealed class Manager : User
     }
 
     public static Manager Create(
-        string email,
-        string password,
+        Email email,
+        Password password,
         string name,
-        int phoneNumber,
-        Guid accountId)
+        PhoneNumber phoneNumber,
+        AccountId accountId)
     {
         return new Manager(
             ManagerId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             name,
-            PhoneNumber.Create(phoneNumber),
+            phoneNumber,
             Roles.Manager,
-            AccountId.Create(accountId));
+            accountId);
     }
 }
