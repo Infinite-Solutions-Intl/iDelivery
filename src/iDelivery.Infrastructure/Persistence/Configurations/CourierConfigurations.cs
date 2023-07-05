@@ -14,5 +14,16 @@ internal class CourierConfigurations : IEntityTypeConfiguration<Courier>
                 id => id.Value,
                 value => SupervisorId.Create(value)
             );
+
+        // builder.OwnsMany(c => c.CommandIds, cib =>
+        // {
+        //     cib.ToTable("CommandId");
+        //     cib.WithOwner().HasForeignKey("CourierId");
+        //     cib.HasKey("Id");
+        // });
+
+        // builder.Navigation(c => c.CommandIds).Metadata.SetField("_commandIds");
+        // builder.Metadata.FindNavigation(nameof(Courier.CommandIds))!
+        //     .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
