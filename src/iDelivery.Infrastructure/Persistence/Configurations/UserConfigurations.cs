@@ -21,7 +21,7 @@ internal class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.Password)
             .HasConversion(
                 pwd => pwd.Value,
-                value => Password.Create(value)
+                value => Password.Restore(value)
             );
         builder.Property(u => u.Email)
             .HasConversion(
@@ -31,7 +31,7 @@ internal class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.PhoneNumber)
             .HasConversion(
                 phone => phone.Value,
-                value => PhoneNumber.Create(value)
+                value => PhoneNumber.Restore(value)
             );
         builder.Property(u => u.Name)
             .HasMaxLength(100);

@@ -81,7 +81,6 @@ public class ValueObjectBaseTests
         Assert.Equal(_userId, UserId.Create(_userId.Value));
         Assert.Equal(_accountId, AccountId.Create(_accountId.Value));
         Assert.Equal(_email, Email.Create(_email.Value));
-        // Assert.Equal(_phoneNumber, PhoneNumber.Create(_phoneNumber.Value, _phoneNumber.CountryIdentifier));
         Assert.Equal(_password, Password.Create("Unknown"));
     }
 

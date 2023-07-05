@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
 
     [HttpPost("login")]
     [ApiKeyAuthorize]
-    public async Task<IActionResult> Login(LoginREquestDto request)
+    public async Task<IActionResult> Login(LoginRequestDto request)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
         LoginQuery command = new (accountId, request.Email, request.Password);

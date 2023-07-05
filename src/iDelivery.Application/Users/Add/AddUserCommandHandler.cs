@@ -9,10 +9,14 @@ namespace iDelivery.Application.Users.Add;
 public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Result<AddUserCommandResponse>>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IUserService _userService;
 
-    public AddUserCommandHandler(IAccountRepository accountRepository)
+    public AddUserCommandHandler(
+        IAccountRepository accountRepository,
+        IUserService userService)
     {
         _accountRepository = accountRepository;
+        _userService = userService;
     }
 
     public async Task<Result<AddUserCommandResponse>> Handle(AddUserCommand request, CancellationToken cancellationToken)
@@ -21,6 +25,12 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         Account? account = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
         if (account is null)
             return Result.Fail(new BaseError(""));
+
+        Email email = Email.Create(request.Email);
+        bool exists = await _userService.ExistsAsync(accountId, email, cancellationToken);
+        if(exists)
+            return Result.Fail(new BaseError("This email is already used by another user"));
+
         User? user = request.Role.ToLower() switch
         {
             Roles.Admin => CreateAdmin(request),
@@ -55,7 +65,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
     {
         return Partner.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             request.PoBox ?? string.Empty,
@@ -66,7 +76,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
     {
         return Manager.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             AccountId.Create(request.AccountId));
@@ -76,7 +86,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
     {
         return Supervisor.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             AccountId.Create(request.AccountId));
@@ -86,7 +96,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
     {
         return User.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             Roles.Admin,
@@ -100,10 +110,10 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
             return null;
         return Courier.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
-            SupervisorId.Create(request.SupervisorId ?? throw new Exception("The supervisor id is mendatory in ode to create a courier")),
+            SupervisorId.Create(request.SupervisorId ?? throw new Exception("The supervisor id is mandatory in ode to create a courier")),
             AccountId.Create(request.AccountId));
     }
     #endregion

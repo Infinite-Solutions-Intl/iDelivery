@@ -1,6 +1,6 @@
 namespace iDelivery.Contracts.Authentication;
 
-public sealed record LoginREquestDto(
+public sealed record LoginRequestDto(
     string Email,
     string Password
 );

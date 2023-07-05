@@ -9,19 +9,23 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 {
     private readonly IApiKeyGenerator _keyGenerator;
     private readonly IAccountRepository _accountRepository;
+    private readonly IUserService _userService;
 
     public RegisterCommandHandler(
         IApiKeyGenerator keyGenerator,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IUserService userService)
     {
         _keyGenerator = keyGenerator;
         _accountRepository = accountRepository;
+        _userService = userService;
     }
 
     public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
+        Email email = Email.Create(request.Email);
         // Check if the email already exists
-        if (await _accountRepository.ExistsAsync(Email.Create(request.Email), cancellationToken))
+        if (await _accountRepository.ExistsAsync(email, cancellationToken))
             return Result.Fail<RegisterCommandResponse>(new EmailAlreadyExistsError());
 
         // Generate the API Key
@@ -29,7 +33,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
         {
             new Claim(ClaimTypes.Email, request.Email),
             new Claim(ClaimTypes.Name, request.Name),
-            new Claim(ClaimTypes.Expired, DateTime.Now.AddMinutes(5).ToString()),
+            // new Claim(ClaimTypes.Expired, DateTime.Now.AddMinutes(5).ToString()),
             new Claim(ClaimTypes.MobilePhone, request.PhoneNumber.ToString())
         };
 
@@ -37,11 +41,14 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 
         Account account = Account.Create(
             Email.Create(request.Email),
-            Password.CreateHash(request.Password),
+            Password.Create(request.Password),
             AccountType.Premium,
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             apiKey);
+
+        if (await _userService.ExistsAsync(account.Id, email, cancellationToken))
+            return Result.Fail<RegisterCommandResponse>(new EmailAlreadyExistsError());
 
         User user = User.Create(
             account.Email,
@@ -58,7 +65,6 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 
         // TODO: Raise the AccountCreatedEvent
 
-        // return _mapper.Map<RegisterCommandResponse>(account);
         return new RegisterCommandResponse(account.ApiKey);
     }
 }

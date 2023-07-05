@@ -10,6 +10,7 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
     public AccountId AccountId { get; private set; }
     public PlanId PlanId{ get; private set; }
     public Plan Plan { get; private set; } = null!;
+    public string ApiKey { get; set; }
     public Account Account { get; private set; } = null!;
     public DateTime ValidTo { get; private set; }
     public bool IsValid { get; private set; }
@@ -24,15 +25,17 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
         DateTime createdDate,
         SubscriptionType type,
         PaymentMode paymentMode,
-        PlanId planId) : base(id)
+        PlanId planId,
+        string apiKey) : base(id)
     {
-        ValidTo= validTo ;
+        ValidTo = validTo;
         IsValid = isValid;
         CreatedDate = createdDate;
         Type = type;
         PaymentMode = paymentMode;
         PlanId = planId;
         AccountId = accountId;
+        ApiKey = apiKey;
     }
 
     #pragma warning disable CS8618
@@ -44,6 +47,7 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
     public static Subscription Create(
         AccountId accountId,
         PlanId planId,
+        string apiKey,
         DateTime validTo,
         bool isValid,
         DateTime createdDate,
@@ -58,7 +62,8 @@ public sealed class Subscription : AggregateRoot<SubscriptionId>
             createdDate,
             type,
             paymentMode,
-            planId
+            planId,
+            apiKey
         );
     }
 }
