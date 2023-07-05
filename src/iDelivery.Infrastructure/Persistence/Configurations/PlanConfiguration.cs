@@ -1,5 +1,3 @@
-using iDelivery.Domain.AccountAggregate.ValueObjects;
-using iDelivery.Domain.Common.ValueObjects;
 using iDelivery.Domain.PlanAggregate;
 using iDelivery.Domain.PlanAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +17,8 @@ internal class PlanConfigurations : IEntityTypeConfiguration<Plan>
                 id => id.Value,
                 value => PlanId.Create(value)
             );
+        builder.Property(p => p.Price)
+            .HasPrecision(18, 2);
         builder.HasMany(p => p.Subscriptions).WithOne(s => s.Plan).HasForeignKey(s => s.PlanId);
     }
 }

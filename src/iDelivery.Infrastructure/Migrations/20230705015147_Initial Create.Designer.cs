@@ -12,8 +12,8 @@ using iDelivery.Infrastructure.Persistence;
 namespace iDelivery.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230626152401_Ajout des colonnes nullables")]
-    partial class Ajoutdescolonnesnullables
+    [Migration("20230705015147_Initial Create")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,21 @@ namespace iDelivery.Infrastructure.Migrations
                     b.ToTable("Commands");
                 });
 
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Entities.Delivery", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourierId");
+
+                    b.ToTable("Deliveries", (string)null);
+                });
+
             modelBuilder.Entity("iDelivery.Domain.PlanAggregate.Plan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -216,6 +231,7 @@ namespace iDelivery.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -351,6 +367,72 @@ namespace iDelivery.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Entities.Delivery", b =>
+                {
+                    b.HasOne("iDelivery.Domain.CourierAggregate.Courier", "Courier")
+                        .WithMany("Deliveries")
+                        .HasForeignKey("CourierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsMany("iDelivery.Domain.CommandAggregate.ValueObjects.CommandId", "CommandIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<Guid>("CourierId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("CourierId");
+
+                            b1.ToTable("DeliveryCommandIds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("CourierId");
+                        });
+
+                    b.Navigation("CommandIds");
+
+                    b.Navigation("Courier");
+                });
+
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Courier", b =>
+                {
+                    b.OwnsMany("iDelivery.Domain.CommandAggregate.ValueObjects.CommandId", "CommandIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<Guid>("CourierId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("CourierId");
+
+                            b1.ToTable("CourierCommandIds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("CourierId");
+                        });
+
+                    b.Navigation("CommandIds");
+                });
+
             modelBuilder.Entity("iDelivery.Domain.ManagerAggregate.Manager", b =>
                 {
                     b.OwnsMany("iDelivery.Domain.Common.ValueObjects.ComplaintId", "ComplaintIds", b1 =>
@@ -371,7 +453,7 @@ namespace iDelivery.Infrastructure.Migrations
 
                             b1.HasIndex("ManagerId");
 
-                            b1.ToTable("ComplaintIds", (string)null);
+                            b1.ToTable("ManagerComplaintIds", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ManagerId");
@@ -400,7 +482,7 @@ namespace iDelivery.Infrastructure.Migrations
 
                             b1.HasIndex("SupervisorId");
 
-                            b1.ToTable("CourierIds", (string)null);
+                            b1.ToTable("SupervisorCourierIds", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("SupervisorId");
@@ -419,6 +501,11 @@ namespace iDelivery.Infrastructure.Migrations
             modelBuilder.Entity("iDelivery.Domain.PlanAggregate.Plan", b =>
                 {
                     b.Navigation("Subscriptions");
+                });
+
+            modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Courier", b =>
+                {
+                    b.Navigation("Deliveries");
                 });
 #pragma warning restore 612, 618
         }

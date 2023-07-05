@@ -55,7 +55,7 @@ namespace iDelivery.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -117,8 +117,8 @@ namespace iDelivery.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    FileBlob = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileBlob = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CommandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -164,7 +164,45 @@ namespace iDelivery.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComplaintIds",
+                name: "CourierCommandIds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourierCommandIds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourierCommandIds_Users_CourierId",
+                        column: x => x.CourierId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Deliveries",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Deliveries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Deliveries_Users_CourierId",
+                        column: x => x.CourierId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ManagerComplaintIds",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -174,9 +212,9 @@ namespace iDelivery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComplaintIds", x => x.Id);
+                    table.PrimaryKey("PK_ManagerComplaintIds", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ComplaintIds_Users_ManagerId",
+                        name: "FK_ManagerComplaintIds_Users_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -184,7 +222,7 @@ namespace iDelivery.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourierIds",
+                name: "SupervisorCourierIds",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -194,11 +232,31 @@ namespace iDelivery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourierIds", x => x.Id);
+                    table.PrimaryKey("PK_SupervisorCourierIds", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourierIds_Users_SupervisorId",
+                        name: "FK_SupervisorCourierIds_Users_SupervisorId",
                         column: x => x.SupervisorId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryCommandIds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourierId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryCommandIds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DeliveryCommandIds_Deliveries_CourierId",
+                        column: x => x.CourierId,
+                        principalTable: "Deliveries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -244,25 +302,35 @@ namespace iDelivery.Infrastructure.Migrations
                 column: "RefNum");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintIds_ManagerId",
-                table: "ComplaintIds",
-                column: "ManagerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Complaints_CommandId",
                 table: "Complaints",
                 column: "CommandId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourierIds_SupervisorId",
-                table: "CourierIds",
-                column: "SupervisorId");
+                name: "IX_CourierCommandIds_CourierId",
+                table: "CourierCommandIds",
+                column: "CourierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Deliveries_CourierId",
+                table: "Deliveries",
+                column: "CourierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryCommandIds_CourierId",
+                table: "DeliveryCommandIds",
+                column: "CourierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeliveryStatuses_CommandId",
                 table: "DeliveryStatuses",
                 column: "CommandId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ManagerComplaintIds_ManagerId",
+                table: "ManagerComplaintIds",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_AccountId",
@@ -273,6 +341,11 @@ namespace iDelivery.Infrastructure.Migrations
                 name: "IX_Subscriptions_PlanId",
                 table: "Subscriptions",
                 column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SupervisorCourierIds_SupervisorId",
+                table: "SupervisorCourierIds",
+                column: "SupervisorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AccountId",
@@ -294,28 +367,37 @@ namespace iDelivery.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ComplaintIds");
-
-            migrationBuilder.DropTable(
                 name: "Complaints");
 
             migrationBuilder.DropTable(
-                name: "CourierIds");
+                name: "CourierCommandIds");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryCommandIds");
 
             migrationBuilder.DropTable(
                 name: "DeliveryStatuses");
 
             migrationBuilder.DropTable(
+                name: "ManagerComplaintIds");
+
+            migrationBuilder.DropTable(
                 name: "Subscriptions");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "SupervisorCourierIds");
+
+            migrationBuilder.DropTable(
+                name: "Deliveries");
 
             migrationBuilder.DropTable(
                 name: "Commands");
 
             migrationBuilder.DropTable(
                 name: "Plans");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

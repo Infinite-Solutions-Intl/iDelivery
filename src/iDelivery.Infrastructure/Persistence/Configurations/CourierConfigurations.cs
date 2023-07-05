@@ -15,15 +15,20 @@ internal class CourierConfigurations : IEntityTypeConfiguration<Courier>
                 value => SupervisorId.Create(value)
             );
 
-        // builder.OwnsMany(c => c.CommandIds, cib =>
-        // {
-        //     cib.ToTable("CommandId");
-        //     cib.WithOwner().HasForeignKey("CourierId");
-        //     cib.HasKey("Id");
-        // });
+        builder.OwnsMany(c => c.CommandIds, cib =>
+        {
+            cib.ToTable("CourierCommandIds");
+            cib.WithOwner().HasForeignKey("CourierId");
+            cib.HasKey("Id");
+        });
 
-        // builder.Navigation(c => c.CommandIds).Metadata.SetField("_commandIds");
-        // builder.Metadata.FindNavigation(nameof(Courier.CommandIds))!
-        //     .SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.HasMany(c => c.Deliveries)
+            .WithOne(d => d.Courier)
+            .HasForeignKey(d => d.CourierId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(c => c.CommandIds).Metadata.SetField("_commandIds");
+        builder.Metadata.FindNavigation(nameof(Courier.CommandIds))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

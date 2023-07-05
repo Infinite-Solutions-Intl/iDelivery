@@ -17,7 +17,7 @@ internal class ManagerConfigurations : IEntityTypeConfiguration<Manager>
             );
         builder.OwnsMany(m => m.ComplaintIds, cib => 
         {
-            cib.ToTable("ComplaintIds");
+            cib.ToTable("ManagerComplaintIds");
             cib.WithOwner().HasForeignKey("ManagerId");
             cib.HasKey("Id");
         });
