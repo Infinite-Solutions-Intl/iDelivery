@@ -1,4 +1,3 @@
-using FluentResults;
 using iDelivery.Application.Authentication.Services;
 using System.Security.Claims;
 
@@ -6,21 +5,26 @@ namespace iDelivery.Application.Authentication.Login;
 
 internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQueryResponse>>
 {
-    private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _tokenGenerator;
+    private readonly IAccountRepository _accountRepository;
 
     public LoginQueryHandler(
-        IUserRepository userRepository,
-        IJwtTokenGenerator tokenGenerator)
+        IJwtTokenGenerator tokenGenerator,
+        IAccountRepository accountRepository)
     {
-        _userRepository = userRepository;
         _tokenGenerator = tokenGenerator;
+        _accountRepository = accountRepository;
     }
 
     public async Task<Result<LoginQueryResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
         // Get the specified User
-        User? user = await _userRepository.FindUserAsync(Email.Create(request.Email), Password.CreateHash(request.Password));
+        AccountId accountId = AccountId.Create(request.AccountId);
+        User? user = await _accountRepository.FindUserAsync(
+            accountId,
+            Email.Create(request.Email),
+            Password.CreateHash(request.Password));
+
         if(user is null)
             return Result.Fail<LoginQueryResponse>(new UserNotFoundError());
 
@@ -36,6 +40,5 @@ internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQuery
         string token = _tokenGenerator.GenerateToken(claims);
 
         return new LoginQueryResponse(token);
-        // return _mapper.Map<LoginQueryResponse>((user, token));
     }
 }

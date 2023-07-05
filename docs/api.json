@@ -476,6 +476,15 @@
           "role": {
             "type": "string",
             "nullable": true
+          },
+          "supervisorId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "poBox": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

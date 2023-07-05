@@ -49,7 +49,7 @@ public sealed class Courier : User
             email,
             password,
             name,
-            Roles.Runner,
+            Roles.Courier,
             phoneNumber,
             supervisorId,
             accountId);

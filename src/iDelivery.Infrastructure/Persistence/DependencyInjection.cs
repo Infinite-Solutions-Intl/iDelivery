@@ -22,7 +22,6 @@ internal static class DependencyInjection
         
         services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
-        services.AddScoped<IUserRepository,UserRepository>();
         services.AddScoped<ICommandRepository, CommandRepository>();
         return services;
     }

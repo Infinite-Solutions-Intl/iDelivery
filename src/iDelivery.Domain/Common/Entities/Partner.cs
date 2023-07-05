@@ -28,22 +28,22 @@ public sealed class Partner : User
         PoBox = poBox;
     }
 
-    public static Partner Create(
-        string email,
-        string password,
+    public static new Partner Create(
+        Email email,
+        Password password,
         string name,
-        int phoneNumber,
+        PhoneNumber phoneNumber,
         string poBox,
-        Guid accountId)
+        AccountId accountId)
     {
         return new Partner(
             ReaderId.CreateUnique(),
-            Email.Create(email),
-            Password.Create(password),
+            email,
+            password,
             name,
-            PhoneNumber.Create(phoneNumber),
-            Roles.Reader,
-            AccountId.Create(accountId),
+            phoneNumber,
+            Roles.Partner,
+            accountId,
             poBox);
     }
 }

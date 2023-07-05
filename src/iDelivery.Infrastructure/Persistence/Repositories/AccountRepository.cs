@@ -9,7 +9,6 @@ namespace iDelivery.Infrastructure.Persistence.Repositories;
 
 public sealed class AccountRepository : Repository<Account, AccountId>, IAccountRepository
 {
-
     public AccountRepository(AppDbContext dbContext) : base(dbContext)
     {
     }
@@ -40,5 +39,22 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
         if(account is null)
             return (false, Guid.Empty);
         return (true, account.Id.Value);
+    }
+
+    public async Task<IReadOnlyList<User>> GetAllUsersAsync(AccountId accountId, CancellationToken cancellationToken)
+    {
+        var users = await _dbContext.Users
+            .Where(u => u.AccountId == accountId)
+            .ToArrayAsync(cancellationToken);
+        return users;
+    }
+
+    public Task<User?> FindUserAsync(AccountId accountId, Email email, Password password)
+    {
+        return _dbContext.Users.FirstOrDefaultAsync(
+            u =>
+                u.AccountId == accountId &&
+                u.Email == email &&
+                u.Password == password);
     }
 }

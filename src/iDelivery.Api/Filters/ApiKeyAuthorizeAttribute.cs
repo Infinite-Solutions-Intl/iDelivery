@@ -24,7 +24,6 @@ public class ApiKeyAuthorizeAttribute : ActionFilterAttribute
 
         context.HttpContext.Request.Headers.Add(HeaderKeys.AccountIdHeaderKey, accountId.ToString());
         await next();
-        return;
     }
 
     private static Task<(bool success, Guid accountId)> IsValidKeyAsync(string key, ActionExecutingContext context)
