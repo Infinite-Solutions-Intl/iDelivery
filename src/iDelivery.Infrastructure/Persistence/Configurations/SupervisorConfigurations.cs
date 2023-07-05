@@ -17,7 +17,7 @@ internal class SupervisorConfigurations : IEntityTypeConfiguration<Supervisor>
 
         builder.OwnsMany(m => m.CourierIds, cib => 
         {
-            cib.ToTable("CourierIds");
+            cib.ToTable("SupervisorCourierIds");
             cib.WithOwner().HasForeignKey("SupervisorId");
             cib.HasKey("Id");
         });

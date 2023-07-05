@@ -10,10 +10,10 @@ namespace iDelivery.Domain.CourierAggregate;
 
 public sealed class Courier : User
 {
-    // private List<Delivery> _deliveries = new();
-    // private List<CommandId> _commandIds = new();
-    // public IReadOnlyList<Delivery> Deliveries => _deliveries.AsReadOnly();
-    // public IReadOnlyList<CommandId> CommandIds => _commandIds.AsReadOnly();
+    private readonly List<Delivery> _deliveries = new();
+    private readonly List<CommandId> _commandIds = new();
+    public IReadOnlyList<Delivery> Deliveries => _deliveries.AsReadOnly();
+    public IReadOnlyList<CommandId> CommandIds => _commandIds.AsReadOnly();
     public SupervisorId SupervisorId{ get; private set; }
     private Courier(
         CourierId id,
@@ -44,11 +44,11 @@ public sealed class Courier : User
 
     public void AddCommand(CommandId commandId)
     {
-        // _commandIds.Add(commandId);
+        _commandIds.Add(commandId);
     }
     public void RemoveCommand(CommandId commandId)
     {
-        // _commandIds.Remove(commandId);
+        _commandIds.Remove(commandId);
     }
 
     public static Courier Create (
