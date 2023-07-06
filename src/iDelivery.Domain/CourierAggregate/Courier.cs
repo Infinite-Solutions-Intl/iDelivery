@@ -46,6 +46,7 @@ public sealed class Courier : User
     {
         _commandIds.Add(commandId);
     }
+
     public void RemoveCommand(CommandId commandId)
     {
         _commandIds.Remove(commandId);

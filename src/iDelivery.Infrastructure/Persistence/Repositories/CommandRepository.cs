@@ -13,6 +13,16 @@ public sealed class CommandRepository : Repository<Command, CommandId>, ICommand
     {
     }
 
+    public Task<bool> AnyAsync()
+    {
+        return _dbContext.Commands.AnyAsync();
+    }
+
+    public IQueryable<Command> CommandsQuery()
+    {
+        return _dbContext.Commands;
+    }
+
     public async Task<Command> UpdateCommandAsync(Command command, CancellationToken cancellationToken = default)
     {
         _dbContext.Update(command);

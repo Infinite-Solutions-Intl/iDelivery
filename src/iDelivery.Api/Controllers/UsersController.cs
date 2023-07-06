@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace iDelivery.Api.Controllers;
 
-[Authorize(Policy = Policies.AdminOnly)]
 public class UsersController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -21,6 +20,7 @@ public class UsersController : ApiBaseController
     }
 
     [HttpGet]
+    [Authorize(Policy = Policies.AdminAndSupervisorOnly)]
     public async Task<IActionResult> GetAll()
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
@@ -30,6 +30,7 @@ public class UsersController : ApiBaseController
     }
 
     [HttpPost]
+    [Authorize(Policy = Policies.AdminOnly)]
     public async Task<IActionResult> AddUser(UserDto userDto)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);

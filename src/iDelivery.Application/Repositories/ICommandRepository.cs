@@ -9,4 +9,6 @@ public interface ICommandRepository : IRepository<Command, CommandId>
 {
     Task<Command> UpdateStatusAsync(Command command, Status status, CancellationToken cancellationToken = default);
     Task<Command> UpdateCommandAsync(Command command, CancellationToken cancellationToken = default);
+    IQueryable<Command> CommandsQuery();
+    Task<bool> AnyAsync();
 }

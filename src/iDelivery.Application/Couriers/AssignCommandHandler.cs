@@ -11,7 +11,8 @@ public class AssignCommandHandler : IRequestHandler<AssignCommand, Result<Courie
         _courierRepository = courierRepository;
     }
     public async Task<Result<CourierResponse>> Handle(AssignCommand request, CancellationToken cancellationToken)
-    { 
+    {
+        AccountId accountId = AccountId.Create(request.AccountId);
         CourierId courierId = CourierId.Create(request.CourierId);
         Courier? courier = await _courierRepository.GetByIdAsync(courierId, cancellationToken);
         if(courier is null)
