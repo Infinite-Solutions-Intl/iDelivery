@@ -19,11 +19,12 @@ internal static class DependencyInjection
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Database"));
         else
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
-        
+
         services.AddScoped<IApiKeyGenerator, ApiKeyGenerator>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICommandRepository, CommandRepository>();
         services.AddScoped<ICourierRepository, CourierRepository>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 }

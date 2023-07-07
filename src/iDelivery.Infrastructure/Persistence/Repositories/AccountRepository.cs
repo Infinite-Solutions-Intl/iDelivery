@@ -19,23 +19,23 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
         return account is not null;
     }
 
-    public async Task<bool> ExistsAsync(Email email, CancellationToken? cancellationToken = null)
+    public async Task<bool> ExistsAsync(Email email, CancellationToken cancellationToken = default)
     {
-        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email);
+        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == email, cancellationToken);
         return account is not null;
     }
 
-    public async Task<bool> AddUserAsync(Account account, User user, CancellationToken? cancellationToken = default)
+    public async Task<bool> AddUserAsync(Account account, User user, CancellationToken cancellationToken = default)
     {
         account.AddUser(user);
-        int records = await _dbContext.SaveChangesAsync();
+        int records = await _dbContext.SaveChangesAsync(cancellationToken);
         return records > 0;
     }
 
-    public async Task<(bool success, Guid accountId)> IsValidKeyAsync(string key)
+    public async Task<(bool success, Guid accountId)> IsValidKeyAsync(string key, CancellationToken cancellationToken = default)
     {
         await Task.CompletedTask;
-        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ApiKey == key);
+        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ApiKey == key, cancellationToken);
         if(account is null)
             return (false, Guid.Empty);
         return (true, account.Id.Value);

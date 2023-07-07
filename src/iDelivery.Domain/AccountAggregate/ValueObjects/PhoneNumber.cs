@@ -14,10 +14,6 @@ public sealed class PhoneNumber : ValueObject
             _countryIdentifier = (int)countryIdentifier;
         Value = $"+{_countryIdentifier} {_number}";
     }
-    private PhoneNumber(string fullNumber)
-    {
-        Value = fullNumber;
-    }
 
     #pragma warning disable CS8618
     public PhoneNumber()
@@ -30,10 +26,16 @@ public sealed class PhoneNumber : ValueObject
     {
         return new PhoneNumber(phoneNumber, countryIdentifier);
     }
-    
-    public static PhoneNumber Create(string fullNumber)
+
+    public static PhoneNumber Restore(string fullNumber)
     {
-        return new PhoneNumber(fullNumber);
+        int[] numbers = fullNumber
+            [1..]
+            .Split(' ')
+            .Select(
+                n => Convert.ToInt32(n))
+            .ToArray();
+        return new PhoneNumber(numbers[1], numbers[0]);
     }
 
     public override IEnumerable<object> GetEqualityComponents()

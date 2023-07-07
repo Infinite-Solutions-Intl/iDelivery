@@ -23,7 +23,7 @@ internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQuery
         User? user = await _accountRepository.FindUserAsync(
             accountId,
             Email.Create(request.Email),
-            Password.CreateHash(request.Password));
+            Password.Create(request.Password));
 
         if(user is null)
             return Result.Fail<LoginQueryResponse>(new UserNotFoundError());

@@ -36,12 +36,12 @@ public sealed class Password : ValueObject
     }
     #pragma warning restore CS8618
 
-    public static Password Create(string password)
+    public static Password Restore(string password)
     {
         return new Password(password);
     }
 
-    public static Password CreateHash(string password)
+    public static Password Create(string password)
     {
         if (!IsValid(password, out var hint))
             throw new PasswordNotStrongEnoughException(hint);
