@@ -1,7 +1,9 @@
 using iDelivery.Api.Controllers.Common;
 using iDelivery.Api.Utilities;
 using iDelivery.Application.Users.Add;
+using iDelivery.Application.Users.Delete;
 using iDelivery.Application.Users.Get;
+using iDelivery.Application.Users.UpdateRole;
 using iDelivery.Contracts.Users;
 using iDelivery.Domain.Common.Utilities;
 using MediatR;
@@ -46,6 +48,39 @@ public class UsersController : ApiBaseController
             userDto.PoBox);
 
         var result = await _sender.Send(command);
+        return Ok(result.Value);
+    }
+
+    [HttpPut("roles/{userId}")]
+    [Authorize(Policy = Policies.AdminOnly)]
+    public async Task<IActionResult> ChangeRole(Guid userId, [FromBody] UpdateRoleRequest updateRoleDto)
+    {
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        var command = new ChangeRoleCommand(
+            accountId,
+            userId,
+            updateRoleDto.PreviousRole,
+            updateRoleDto.NewRole,
+            updateRoleDto.SupervisorId,
+            updateRoleDto.PoBox);
+
+        var result = await _sender.Send(command);
+        if(result.IsFailed)
+            return BadRequest();
+
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Policy = Policies.AdminOnly)]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        var command = new DeleteUserCommand(accountId, id);
+        var result = await _sender.Send(command);
+        if(result.IsFailed)
+            return BadRequest();
+
         return Ok(result.Value);
     }
 }

@@ -9,7 +9,7 @@ public sealed class Partner : User
 {
     public string PoBox {get; private set;}
     private Partner(
-        ReaderId id,
+        PartnerId id,
         Email email,
         Password password,
         string name,
@@ -37,7 +37,27 @@ public sealed class Partner : User
         AccountId accountId)
     {
         return new Partner(
-            ReaderId.CreateUnique(),
+            PartnerId.CreateUnique(),
+            email,
+            password,
+            name,
+            phoneNumber,
+            Roles.Partner,
+            accountId,
+            poBox);
+    }
+
+    internal static Partner Restore(
+        PartnerId partnerId,
+        Email email,
+        Password password,
+        string name,
+        PhoneNumber phoneNumber,
+        string poBox,
+        AccountId accountId)
+    {
+        return new Partner(
+            partnerId,
             email,
             password,
             name,

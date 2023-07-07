@@ -5,6 +5,7 @@ using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.CourierAggregate.Entities;
 using iDelivery.Domain.CourierAggregate.ValueObjects;
 using iDelivery.Domain.SupervisorAggregate.ValueObjects;
+using iDelivery.Domain.ManagerAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CourierAggregate;
 
@@ -62,6 +63,26 @@ public sealed class Courier : User
     {
         return new Courier(
             CourierId.CreateUnique(),
+            email,
+            password,
+            name,
+            Roles.Courier,
+            phoneNumber,
+            supervisorId,
+            accountId);
+    }
+
+    internal static Courier Restore(
+        CourierId courierId,
+        SupervisorId supervisorId,
+        Email email,
+        Password password,
+        string name,
+        PhoneNumber phoneNumber,
+        AccountId accountId)
+    {
+        return new Courier(
+            courierId,
             email,
             password,
             name,

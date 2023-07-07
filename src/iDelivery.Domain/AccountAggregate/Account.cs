@@ -62,4 +62,9 @@ public sealed class Account : AggregateRoot<AccountId>
     {
         _users.Add(user);
     }
+
+    public void RemoveUser(User user)
+    {
+        _users.Remove(user);
+    }
 }

@@ -6,20 +6,17 @@ using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
 namespace iDelivery.Application.Users.Add;
 
-public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Result<AddUserCommandResponse>>
+public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Result<UserResponse>>
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly IUserService _userService;
 
     public AddUserCommandHandler(
-        IAccountRepository accountRepository,
-        IUserService userService)
+        IAccountRepository accountRepository)
     {
         _accountRepository = accountRepository;
-        _userService = userService;
     }
 
-    public async Task<Result<AddUserCommandResponse>> Handle(AddUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserResponse>> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         AccountId accountId = AccountId.Create(request.AccountId);
         Account? account = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
@@ -27,7 +24,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
             return Result.Fail(new BaseError(""));
 
         Email email = Email.Create(request.Email);
-        bool exists = await _userService.ExistsAsync(accountId, email, cancellationToken);
+        bool exists = await _accountRepository.ExistsUserAsync(accountId, email, cancellationToken);
         if(exists)
             return Result.Fail(new BaseError("This email is already used by another user"));
 
@@ -48,7 +45,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         if (!success)
             return Result.Fail(new BaseError("An error occurred while attempting to save the user to the database"));
 
-        return new AddUserCommandResponse(
+        return new UserResponse(
                 user.Id.Value,
                 user.AccountId.Value,
                 user.Email.Value,
@@ -56,6 +53,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
                 user.Name,
                 user.PhoneNumber.Value,
                 user.Role,
+                request.SupervisorId,
                 request.PoBox
             );
     }

@@ -2,6 +2,7 @@ using iDelivery.Application.Repositories;
 using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.Utilities;
 using iDelivery.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,12 +50,66 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
         return users;
     }
 
-    public Task<User?> FindUserAsync(AccountId accountId, Email email, Password password)
+    public Task<User?> FindUserByEmailAsync(AccountId accountId, Email email, Password password, CancellationToken cancellationToken = default)
     {
         return _dbContext.Users.FirstOrDefaultAsync(
             u =>
                 u.AccountId == accountId &&
                 u.Email == email &&
-                u.Password == password);
+                u.Password == password,
+                cancellationToken);
+    }
+
+    public async Task<User?> ChangeRoleAsync(AccountId accountId, UserId userId, string previousRole, string newRole, Guid? supervisorId, string? poBox, CancellationToken cancellationToken = default)
+    {
+        Account? account = await GetByIdAsync(accountId, cancellationToken);
+        User? user = await _dbContext.Users.FirstOrDefaultAsync(
+            u =>
+                u.AccountId == accountId &&
+                u.Id == userId,
+            cancellationToken);
+
+        if (user is null || account is null)
+            return null;
+
+        if (user.Role != previousRole)
+            return null;
+
+        User newUser = newRole switch
+        {
+            Roles.Partner => user.ToPartner(poBox!),
+            Roles.Manager => user.ToManager(),
+            Roles.Supervisor => user.ToSupervisor(),
+            Roles.Courier => user.ToCourier((Guid)supervisorId!),
+            _ => user
+        };
+
+        // _dbContext.Users.Update(user);
+        _dbContext.Users.Remove(user);
+        account.RemoveUser(user);
+        account.AddUser(newUser);
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return newUser;
+    }
+
+    public Task<bool> ExistsUserAsync(AccountId accountId, Email email, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users.AnyAsync(u => u.Email == email && u.AccountId == accountId, cancellationToken);
+    }
+
+    public Task<User?> FindUserAsync(AccountId accountId, UserId userId, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId && u.AccountId == accountId, cancellationToken);
+    }
+
+    public Task<int> DeleteUserAsync(Account account, User user, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users
+            .Where(
+                u => 
+                    u.Id == user.Id &&
+                    u.AccountId == account.Id)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 }

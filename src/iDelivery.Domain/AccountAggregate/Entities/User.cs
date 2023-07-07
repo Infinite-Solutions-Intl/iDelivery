@@ -1,4 +1,11 @@
 ﻿using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.Common.ValueObjects;
+using iDelivery.Domain.CourierAggregate;
+using iDelivery.Domain.CourierAggregate.ValueObjects;
+using iDelivery.Domain.ManagerAggregate;
+using iDelivery.Domain.ManagerAggregate.ValueObjects;
+using iDelivery.Domain.SupervisorAggregate;
+using iDelivery.Domain.SupervisorAggregate.ValueObjects;
 
 namespace iDelivery.Domain.AccountAggregate.Entities;
 
@@ -52,5 +59,25 @@ public class User : Entity<UserId>
             phoneNumber,
             role,
             accountId);
+    }
+
+    public Manager ToManager()
+    {
+        return Manager.Restore(ManagerId.Create(Id.Value), Email, Password, Name, PhoneNumber, AccountId);
+    }
+
+    public Courier ToCourier(Guid supervisorId)
+    {
+        return Courier.Restore(CourierId.Create(Id.Value), SupervisorId.Create(supervisorId), Email, Password, Name, PhoneNumber, AccountId);
+    }
+
+    public Supervisor ToSupervisor()
+    {
+        return Supervisor.Restore(SupervisorId.Create(Id.Value), Email, Password, Name, PhoneNumber, AccountId);
+    }
+
+    public Partner ToPartner(string poBox)
+    {
+        return Partner.Restore(PartnerId.Create(Id.Value), Email, Password, Name, PhoneNumber, poBox, AccountId);
     }
 }

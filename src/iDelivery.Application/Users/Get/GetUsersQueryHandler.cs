@@ -1,22 +1,23 @@
 namespace iDelivery.Application.Users.Get;
 
-public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Result<IReadOnlyList<GetUsersQueryResponse>>>
+public sealed class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, Result<IReadOnlyList<UserResponse>>>
 {
-    private readonly IAccountRepository _accountReository;
-    public GetUsersQueryHandler(IAccountRepository accountReository)
+    private readonly IAccountRepository _accountRepository;
+    public GetUsersQueryHandler(IAccountRepository accountRepository)
     {
-        _accountReository = accountReository;
+        _accountRepository = accountRepository;
     }
 
-    public async Task<Result<IReadOnlyList<GetUsersQueryResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyList<UserResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
         AccountId accountId = AccountId.Create(request.AccountId);
-        var users = await _accountReository.GetAllUsersAsync(accountId, cancellationToken);
+        var users = await _accountRepository.GetAllUsersAsync(accountId, cancellationToken);
         return users
             .Select(
-                u => new GetUsersQueryResponse(
-                    u.Email.Value,
+                u => new UserResponse(
+                    u.Id.Value,
                     u.AccountId.Value,
+                    u.Email.Value,
                     u.Password.Value,
                     u.Name,
                     u.PhoneNumber.Value,

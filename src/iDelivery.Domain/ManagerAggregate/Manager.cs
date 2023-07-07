@@ -3,6 +3,7 @@ using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.Common.ValueObjects;
 using iDelivery.Domain.ManagerAggregate.ValueObjects;
+using iDelivery.Domain.SupervisorAggregate;
 
 namespace iDelivery.Domain.ManagerAggregate;
 
@@ -30,7 +31,6 @@ public sealed class Manager : User
 
     private Manager()
     {
-
     }
 
     public static Manager Create(
@@ -42,6 +42,24 @@ public sealed class Manager : User
     {
         return new Manager(
             ManagerId.CreateUnique(),
+            email,
+            password,
+            name,
+            phoneNumber,
+            Roles.Manager,
+            accountId);
+    }
+
+    internal static Manager Restore(
+        ManagerId managerId,
+        Email email,
+        Password password,
+        string name,
+        PhoneNumber phoneNumber,
+        AccountId accountId)
+    {
+        return new Manager(
+            managerId,
             email,
             password,
             name,

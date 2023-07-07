@@ -140,6 +140,7 @@ namespace iDelivery.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
                     PlanId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ApiKey = table.Column<string>(type: "TEXT", nullable: false),
                     ValidTo = table.Column<DateTime>(type: "TEXT", nullable: false),
                     IsValid = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),

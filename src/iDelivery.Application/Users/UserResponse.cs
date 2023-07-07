@@ -1,8 +1,9 @@
-namespace iDelivery.Application.Users.Get;
+namespace iDelivery.Application.Users;
 
-public sealed record GetUsersQueryResponse(
-    string Email,
+public sealed record UserResponse(
+    Guid Id,
     Guid AccountId,
+    string Email,
     string Password,
     string Name,
     string PhoneNumber,

@@ -9,16 +9,13 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 {
     private readonly IApiKeyGenerator _keyGenerator;
     private readonly IAccountRepository _accountRepository;
-    private readonly IUserService _userService;
 
     public RegisterCommandHandler(
         IApiKeyGenerator keyGenerator,
-        IAccountRepository accountRepository,
-        IUserService userService)
+        IAccountRepository accountRepository)
     {
         _keyGenerator = keyGenerator;
         _accountRepository = accountRepository;
-        _userService = userService;
     }
 
     public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -47,7 +44,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
             apiKey);
 
-        if (await _userService.ExistsAsync(account.Id, email, cancellationToken))
+        if (await _accountRepository.ExistsUserAsync(account.Id, email, cancellationToken))
             return Result.Fail<RegisterCommandResponse>(new EmailAlreadyExistsError());
 
         User user = User.Create(

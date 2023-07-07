@@ -1,5 +1,3 @@
-using iDelivery.Domain.Common.Utilities;
-
 namespace iDelivery.Application.Users.Add;
 
 public sealed record AddUserCommand(
@@ -12,4 +10,4 @@ public sealed record AddUserCommand(
     string Role,
     Guid? SupervisorId,
     string? PoBox
-) : IRequest<Result<AddUserCommandResponse>>;
+) : IRequest<Result<UserResponse>>;

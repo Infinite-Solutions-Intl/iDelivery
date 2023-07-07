@@ -11,7 +11,7 @@ using iDelivery.Infrastructure.Persistence;
 namespace iDelivery.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230705103101_Initial Create")]
+    [Migration("20230707130624_Initial Create")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -66,6 +66,10 @@ namespace iDelivery.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("AccountId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApiKey")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")

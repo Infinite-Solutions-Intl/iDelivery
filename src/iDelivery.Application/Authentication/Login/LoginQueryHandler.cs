@@ -20,10 +20,11 @@ internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQuery
     {
         // Get the specified User
         AccountId accountId = AccountId.Create(request.AccountId);
-        User? user = await _accountRepository.FindUserAsync(
+        User? user = await _accountRepository.FindUserByEmailAsync(
             accountId,
             Email.Create(request.Email),
-            Password.Create(request.Password));
+            Password.Create(request.Password),
+            cancellationToken);
 
         if(user is null)
             return Result.Fail<LoginQueryResponse>(new UserNotFoundError());
