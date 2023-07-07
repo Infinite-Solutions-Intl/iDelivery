@@ -53,7 +53,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
         User user = User.Create(
             account.Email,
             account.Password,
-            account.Name,
+            "Admin",
             account.PhoneNumber,
             Roles.Admin,
             account.Id

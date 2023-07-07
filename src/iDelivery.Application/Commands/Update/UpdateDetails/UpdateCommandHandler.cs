@@ -1,7 +1,6 @@
-using iDelivery.Application.Commands.Update.Commands;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
-namespace iDelivery.Application.Commands.Update.Handlers;
+namespace iDelivery.Application.Commands.Update.UpdateDetails;
 public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result<CommandResponse>>
 {
     private readonly ICommandRepository _commandRepository;
@@ -17,7 +16,7 @@ public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result
         var command = await _commandRepository.GetByIdAsync(id, cancellationToken);
         if (command is null)
             return Result.Fail(new BaseError("The command does not exist"));
-        if(command.RefNum != request.RefNum)
+        if (command.RefNum != request.RefNum)
             return Result.Fail(new BaseError("The command does not exist"));
 
         command.Update(request.City, request.Quarter, request.Latitude, request.Longitude, request.PreferredDate, request.PreferredTime);

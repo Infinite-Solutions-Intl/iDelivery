@@ -1,4 +1,4 @@
-namespace iDelivery.Application.Commands.Update.Commands;
+namespace iDelivery.Application.Commands.Update.UpdateDetails;
 
 public sealed record UpdateCommand(
     Guid Id,

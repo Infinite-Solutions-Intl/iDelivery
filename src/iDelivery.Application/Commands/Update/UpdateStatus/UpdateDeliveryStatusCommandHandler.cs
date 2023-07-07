@@ -1,14 +1,13 @@
-﻿using iDelivery.Application.Commands.Update.Commands;
-using iDelivery.Domain.CommandAggregate;
+﻿using iDelivery.Domain.CommandAggregate;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
-namespace iDelivery.Application.Commands.Update.Handlers;
+namespace iDelivery.Application.Commands.Update.UpdateStatus;
 
-public class UpdateDeliveryStatusCommmandHandler : IRequestHandler<UpdateDeliveryStatusCommand, Result<CommandResponse>>
+public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDeliveryStatusCommand, Result<CommandResponse>>
 {
     private readonly ICommandRepository _commandRepository;
 
-    public UpdateDeliveryStatusCommmandHandler(ICommandRepository commandRepository)
+    public UpdateDeliveryStatusCommandHandler(ICommandRepository commandRepository)
     {
         _commandRepository = commandRepository;
     }
@@ -23,7 +22,7 @@ public class UpdateDeliveryStatusCommmandHandler : IRequestHandler<UpdateDeliver
 
         await _commandRepository.UpdateStatusAsync(command, request.Status, cancellationToken);
 
-        // TODO: Publier le statut d'une commande a ete modifie
+        // TODO: Publish the updated status event
         return new CommandResponse(
             command.Id.Value,
             command.RefNum,

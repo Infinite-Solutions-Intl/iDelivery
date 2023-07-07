@@ -44,7 +44,7 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
         {
             await _commandRepository.AddAsync(command, cancellationToken);
 
-            // TODO: Publier une nouvelle commande a ete ajoutee
+            // TODO: Publish the command added event
             return new CommandResponse(
                 command.Id.Value,
                 command.RefNum,
