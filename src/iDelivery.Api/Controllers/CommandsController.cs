@@ -24,9 +24,24 @@ public class CommandsController : ApiBaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetCommands()
+    public async Task<IActionResult> GetCommands(
+        string? searchTerm,
+        string? sortColumn,
+        string? sortOrder,
+        DateTime? startDate,
+        DateTime? endDate,
+        int? page,
+        int? pageSize)
     {
-        GetCommandQuery query = new();
+        GetCommandQuery query = new(
+            searchTerm,
+            sortColumn,
+            sortOrder,
+            startDate,
+            endDate,
+            page,
+            pageSize);
+
         var result = await _sender.Send(query);
         return Ok(result.Value);
     }

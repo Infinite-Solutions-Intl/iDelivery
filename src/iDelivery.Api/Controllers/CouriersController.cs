@@ -1,11 +1,16 @@
 using iDelivery.Api.Controllers.Common;
+using iDelivery.Api.Utilities;
 using iDelivery.Application.Couriers.Add;
 using iDelivery.Application.Couriers.Delete;
 using iDelivery.Contracts.Couriers;
+using iDelivery.Domain.Common.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iDelivery.Api.Controllers;
+
+[Authorize(Policy = Policies.SupervisorOnly)]
 public class CouriersController : ApiBaseController
 {
     private readonly ISender _sender;
@@ -17,21 +22,24 @@ public class CouriersController : ApiBaseController
     [HttpPost("{courierId}/command/{commandId}")]
     public async Task<IActionResult> PostCourierAsync(Guid courierId, Guid commandId)
     {
-        AssignCommand courier = new (courierId, commandId);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        AssignCommand courier = new (accountId, courierId, commandId);
         var response = await _sender.Send(courier);
         if(response.IsFailed)
             return BadRequest(response.Errors[0].Message);
 
-        return Ok();
+        return Ok(response);
     }
+
     [HttpDelete("{courierId}/delivery/{deliveryId}")]
-    public IActionResult DeleteDeliveryAsync()
+    public async Task<IActionResult> DeleteDeliveryAsync(Guid courierId, Guid deliveryId)
     {
-        /*DeleteCourier courier = new(courierId, deliveryId);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        DeleteCourier courier = new (accountId, courierId, deliveryId);
         var response = await _sender.Send(courier);
         if(response.IsFailed)
             return BadRequest(response.Errors[0].Message);
-        return Ok();*/
-        return Ok();
+
+        return Ok(response);
     }
 }
