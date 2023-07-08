@@ -25,7 +25,6 @@ internal static class DependencyInjection
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICommandRepository, CommandRepository>();
         services.AddScoped<ICourierRepository, CourierRepository>();
-        services.AddScoped<IUserService, UserService>();
         return services;
     }
 }

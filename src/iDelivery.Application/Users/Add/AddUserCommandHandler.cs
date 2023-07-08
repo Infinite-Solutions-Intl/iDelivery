@@ -30,12 +30,12 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
 
         User? user = request.Role.ToLower() switch
         {
-            Roles.Admin => CreateAdmin(request),
-            Roles.Supervisor => CreateSupervisor(request),
-            Roles.Courier => CreateCourier(request),
-            Roles.Manager => CreateManager(request),
-            Roles.Partner => CreatePartner(request),
-            _ => CreatePartner(request)
+            Roles.Admin => await CreateAdminAsync(request),
+            Roles.Supervisor => await CreateSupervisorAsync(request),
+            Roles.Courier => await CreateCourierAsync(request),
+            Roles.Manager => await CreateManagerAsync(request),
+            Roles.Partner => await CreatePartnerAsync(request),
+            _ => await CreatePartnerAsync(request)
         };
 
         if(user is null)
@@ -59,8 +59,9 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
     }
 
     #region Helper methods
-    private static Partner CreatePartner(AddUserCommand request)
+    private static async Task<Partner> CreatePartnerAsync(AddUserCommand request)
     {
+        await Task.CompletedTask;
         return Partner.Create(
             Email.Create(request.Email),
             Password.Create(request.Password),
@@ -70,8 +71,9 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
             AccountId.Create(request.AccountId));
     }
 
-    private static Manager CreateManager(AddUserCommand request)
+    private static async Task<Manager> CreateManagerAsync(AddUserCommand request)
     {
+        await Task.CompletedTask;
         return Manager.Create(
             Email.Create(request.Email),
             Password.Create(request.Password),
@@ -80,8 +82,9 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
             AccountId.Create(request.AccountId));
     }
 
-    private static Supervisor CreateSupervisor(AddUserCommand request)
+    private static async Task<Supervisor> CreateSupervisorAsync(AddUserCommand request)
     {
+        await Task.CompletedTask;
         return Supervisor.Create(
             Email.Create(request.Email),
             Password.Create(request.Password),
@@ -90,8 +93,9 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
             AccountId.Create(request.AccountId));
     }
 
-    private static User CreateAdmin(AddUserCommand request)
+    private static async Task<User> CreateAdminAsync(AddUserCommand request)
     {
+        await Task.CompletedTask;
         return User.Create(
             Email.Create(request.Email),
             Password.Create(request.Password),
@@ -102,17 +106,25 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         );
     }
 
-    private static Courier? CreateCourier(AddUserCommand request)
+    private async Task<Courier?> CreateCourierAsync(AddUserCommand request)
     {
         if (request.SupervisorId is null)
             return null;
+
+        AccountId accountId = AccountId.Create(request.AccountId);
+        SupervisorId supervisorId = SupervisorId.Create(request.SupervisorId ?? throw new Exception("The supervisor id is mandatory in ode to create a courier"));
+        bool exists = await _accountRepository.ExistsUserAsync(accountId, supervisorId);
+
+        if(!exists)
+            throw new Exception("");
+
         return Courier.Create(
             Email.Create(request.Email),
             Password.Create(request.Password),
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
-            SupervisorId.Create(request.SupervisorId ?? throw new Exception("The supervisor id is mandatory in ode to create a courier")),
-            AccountId.Create(request.AccountId));
+            supervisorId,
+            accountId);
     }
     #endregion
 }

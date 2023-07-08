@@ -1,4 +1,5 @@
 using iDelivery.Application.Repositories;
+using iDelivery.Application.Utilities;
 using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
@@ -10,8 +11,12 @@ namespace iDelivery.Infrastructure.Persistence.Repositories;
 
 public sealed class AccountRepository : Repository<Account, AccountId>, IAccountRepository
 {
-    public AccountRepository(AppDbContext dbContext) : base(dbContext)
+    private readonly IHashEngine _hashEngine;
+    public AccountRepository(
+        AppDbContext dbContext,
+        IHashEngine hashEngine) : base(dbContext)
     {
+        _hashEngine = hashEngine;
     }
 
     public bool Exists(Email email)
@@ -35,8 +40,8 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
 
     public async Task<(bool success, Guid accountId)> IsValidKeyAsync(string key, CancellationToken cancellationToken = default)
     {
-        await Task.CompletedTask;
-        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ApiKey == key, cancellationToken);
+        string hash = _hashEngine.Hash(key);
+        Account? account = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.ApiKey == hash, cancellationToken);
         if(account is null)
             return (false, Guid.Empty);
         return (true, account.Id.Value);
@@ -111,5 +116,10 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
                     u.Id == user.Id &&
                     u.AccountId == account.Id)
             .ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public Task<bool> ExistsUserAsync(AccountId accountId, UserId userId, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users.AnyAsync(u => u.AccountId == accountId && u.Id == userId, cancellationToken);
     }
 }

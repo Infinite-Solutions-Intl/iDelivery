@@ -1,4 +1,5 @@
 using iDelivery.Application.Authentication.Services;
+using iDelivery.Application.Utilities;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.Common.Utilities;
 using System.Security.Claims;
@@ -9,13 +10,16 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 {
     private readonly IApiKeyGenerator _keyGenerator;
     private readonly IAccountRepository _accountRepository;
+    private readonly IHashEngine _hashEngine;
 
     public RegisterCommandHandler(
         IApiKeyGenerator keyGenerator,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IHashEngine hashEngine)
     {
         _keyGenerator = keyGenerator;
         _accountRepository = accountRepository;
+        _hashEngine = hashEngine;
     }
 
     public async Task<Result<RegisterCommandResponse>> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -35,6 +39,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
         };
 
         string apiKey = _keyGenerator.GenerateApiKey(claims);
+        string hash = _hashEngine.Hash(apiKey);
 
         Account account = Account.Create(
             Email.Create(request.Email),
@@ -42,7 +47,7 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
             AccountType.Premium,
             request.Name,
             PhoneNumber.Create(request.PhoneNumber, request.CountryIdentifier),
-            apiKey);
+            hash);
 
         if (await _accountRepository.ExistsUserAsync(account.Id, email, cancellationToken))
             return Result.Fail<RegisterCommandResponse>(new EmailAlreadyExistsError());
@@ -62,6 +67,6 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
 
         // TODO: Raise the AccountCreatedEvent
 
-        return new RegisterCommandResponse(account.ApiKey);
+        return new RegisterCommandResponse(apiKey);
     }
 }

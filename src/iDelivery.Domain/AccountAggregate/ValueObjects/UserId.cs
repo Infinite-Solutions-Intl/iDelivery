@@ -11,7 +11,7 @@ public class UserId : ValueObject
 
     protected UserId()
     {
-        
+
     }
     public static UserId CreateUnique()
     {

@@ -11,7 +11,7 @@ using iDelivery.Infrastructure.Persistence;
 namespace iDelivery.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230707130624_Initial Create")]
+    [Migration("20230708124016_Initial-Create")]
     partial class InitialCreate
     {
         /// <inheritdoc />

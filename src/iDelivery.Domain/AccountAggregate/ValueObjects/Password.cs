@@ -17,6 +17,15 @@ public sealed class Password : ValueObject
             // To gather from a config file
             if (File.Exists(Constants.ConfigFilePath))
                 _salt = File.ReadAllText(Constants.ConfigFilePath);
+            else
+            {
+                var stream = File.Create(Constants.ConfigFilePath);
+                string salt = $"{Random.Shared.Next(10000)}-iDelivery";
+                _salt = salt;
+                byte[] buffer = Encoding.UTF8.GetBytes(salt);
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Close();
+            }
         }
         catch (Exception)
         {

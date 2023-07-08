@@ -1,10 +1,12 @@
 ﻿using iDelivery.Application.Authentication.Services;
 using iDelivery.Application.Repositories;
+using iDelivery.Application.Utilities;
 using iDelivery.Domain.CommandAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.Enums;
 using iDelivery.Infrastructure.Authentication;
 using iDelivery.Infrastructure.Persistence;
+using iDelivery.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,7 @@ public static class DependencyInjection
     {
         services.AddSingleton(_ => configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>());
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IHashEngine, HashEngine>();
         services.AddPersistence(configuration, isDevelopment);
         services.AddAuthentication(configuration);
         return services;

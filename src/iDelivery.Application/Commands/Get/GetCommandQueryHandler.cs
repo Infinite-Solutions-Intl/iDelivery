@@ -69,7 +69,6 @@ public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Re
             "quarter" => command => command.Quarter,
             "preferred_date" => command => command.PreferredDate,
             "preferred_time" => command => command.PreferredTime,
-            _ => command => command.Id.Value
+            _ => command => command.Id
         };
-    
 }
