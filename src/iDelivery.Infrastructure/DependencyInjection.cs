@@ -39,17 +39,11 @@ public static class DependencyInjection
         {
             Command.Create(
                 "command1",
-                "commande",
+                "command",
                 "douala",
-                "bepanda",
+                "Bepanda",
                 12,
                 14,
-                DeliveryStatus.Create(
-                    Status.Pending,
-                    null,
-                    null,
-                    DateTime.Now
-                ),
                 new DateTime(2010, 12, 25),
                 new DateTime(2011,08, 11),
                 new DateTime(2011, 04, 06)
@@ -58,15 +52,9 @@ public static class DependencyInjection
                 "print2",
                 "impression",
                 "yaounde",
-                "mokolo",
+                "Mokolo",
                 10,
                 12,
-                DeliveryStatus.Create(
-                    Status.Pending,
-                    null,
-                    null,
-                    DateTime.Now
-                ),
                 new DateTime(1990, 04, 25),
                 new DateTime(2000,08, 11),
                 new DateTime(2006, 04, 06)
@@ -74,16 +62,10 @@ public static class DependencyInjection
             Command.Create(
                 "formatA4",
                 "format",
-                "bafoussam",
+                "Bafoussam",
                 "mbo",
                 12,
                 14,
-                DeliveryStatus.Create(
-                    Status.Pending,
-                    null,
-                    null,
-                    DateTime.Now
-                ),
                 new DateTime(2010, 07, 14),
                 new DateTime(2011,01, 31),
                 new DateTime(2012, 01, 01)

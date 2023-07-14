@@ -1,6 +1,5 @@
 using iDelivery.Domain.CommandAggregate;
-using iDelivery.Domain.CommandAggregate.Entities;
-using iDelivery.Domain.CommandAggregate.Enums;
+using iDelivery.Domain.CommandAggregate.Events;
 using Microsoft.Extensions.Logging;
 
 namespace iDelivery.Application.Commands.Add;
@@ -20,12 +19,6 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
     public async Task<Result<CommandResponse>> Handle(AddCommand request, CancellationToken cancellationToken)
     {
         DateTime dateTime= DateTime.Now;
-        DeliveryStatus deliveryStatus = DeliveryStatus.Create(
-            Status.Pending,
-            null,
-            null,
-            dateTime
-        );
 
         Command command = Command.Create(
             request.RefNum,
@@ -34,7 +27,6 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
             request.Quarter,
             request.Latitude,
             request.Longitude,
-            deliveryStatus,
             dateTime,
             request.PreferredDate,
             request.PreferredTime
@@ -45,6 +37,8 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
             await _commandRepository.AddAsync(command, cancellationToken);
 
             // TODO: Publish the command added event
+            command.RaiseDomainEvent(new CommandCreated(command.Id, command.CreatedDate));
+
             return new CommandResponse(
                 command.Id.Value,
                 command.RefNum,
@@ -53,7 +47,13 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
                 command.Quarter,
                 command.Longitude,
                 command.Latitude,
-                (int)command.DeliveryStatus.Status,
+                command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
+                    ds.Id.Value,
+                    ds.CommandId.Value,
+                    (int) ds.Status,
+                    ds.Date,
+                    ds.Message
+                )).ToArray(),
                 request.PreferredDate,
                 request.PreferredTime
             );

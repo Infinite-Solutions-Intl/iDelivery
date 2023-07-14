@@ -89,6 +89,27 @@ namespace iDelivery.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommandDeliveryStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CommandId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Message = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommandDeliveryStatuses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommandDeliveryStatuses_Commands_CommandId",
+                        column: x => x.CommandId,
+                        principalTable: "Commands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Complaints",
                 columns: table => new
                 {
@@ -105,28 +126,6 @@ namespace iDelivery.Infrastructure.Migrations
                     table.PrimaryKey("PK_Complaints", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Complaints_Commands_CommandId",
-                        column: x => x.CommandId,
-                        principalTable: "Commands",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DeliveryStatuses",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    FileBlob = table.Column<string>(type: "TEXT", nullable: true),
-                    FileType = table.Column<string>(type: "TEXT", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CommandId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeliveryStatuses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeliveryStatuses_Commands_CommandId",
                         column: x => x.CommandId,
                         principalTable: "Commands",
                         principalColumn: "Id",
@@ -278,6 +277,11 @@ namespace iDelivery.Infrastructure.Migrations
                 column: "PhoneNumber");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommandDeliveryStatuses_CommandId",
+                table: "CommandDeliveryStatuses",
+                column: "CommandId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Commands_City",
                 table: "Commands",
                 column: "City");
@@ -323,12 +327,6 @@ namespace iDelivery.Infrastructure.Migrations
                 column: "CourierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeliveryStatuses_CommandId",
-                table: "DeliveryStatuses",
-                column: "CommandId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ManagerComplaintIds_ManagerId",
                 table: "ManagerComplaintIds",
                 column: "ManagerId");
@@ -368,6 +366,9 @@ namespace iDelivery.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CommandDeliveryStatuses");
+
+            migrationBuilder.DropTable(
                 name: "Complaints");
 
             migrationBuilder.DropTable(
@@ -375,9 +376,6 @@ namespace iDelivery.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DeliveryCommandIds");
-
-            migrationBuilder.DropTable(
-                name: "DeliveryStatuses");
 
             migrationBuilder.DropTable(
                 name: "ManagerComplaintIds");
@@ -389,10 +387,10 @@ namespace iDelivery.Infrastructure.Migrations
                 name: "SupervisorCourierIds");
 
             migrationBuilder.DropTable(
-                name: "Deliveries");
+                name: "Commands");
 
             migrationBuilder.DropTable(
-                name: "Commands");
+                name: "Deliveries");
 
             migrationBuilder.DropTable(
                 name: "Plans");

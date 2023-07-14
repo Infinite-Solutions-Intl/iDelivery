@@ -1,14 +1,17 @@
 using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.Enums;
+using iDelivery.Domain.CommandAggregate.Events;
 using iDelivery.Domain.CommandAggregate.ValueObjects;
 
 namespace iDelivery.Domain.CommandAggregate;
 public sealed class Command : AggregateRoot<CommandId>
 {
     private readonly List <Complaint> _complaints = new();
-    public IReadOnlyList <Complaint> Complaints => _complaints.AsReadOnly ();
-    public DeliveryStatus DeliveryStatus { get; private set; }
+    private readonly List <DeliveryStatus> _deliveryStatuses = new();
+
+    public IReadOnlyList <Complaint> Complaints => _complaints.AsReadOnly();
+    public IReadOnlyList<DeliveryStatus> DeliveryStatuses => _deliveryStatuses.AsReadOnly();
     public string RefNum { get; private set; }
     public string Intitule { get; private set; }
     public string City { get; private set; }
@@ -27,22 +30,20 @@ public sealed class Command : AggregateRoot<CommandId>
         string quarter,
         long latitude,
         long longitude,
-        DeliveryStatus deliveryStatus,
         DateTime createdDate,
         DateTime preferredDate,
         DateTime preferredTime) : base(id)
-        {
-            RefNum = refNum;
-            Intitule = intitule;
-            City = city;
-            Quarter = quarter;
-            Latitude = latitude;
-            Longitude = longitude;
-            CreatedDate = createdDate;
-            PreferredDate = preferredDate;
-            PreferredTime = preferredTime;
-            DeliveryStatus = deliveryStatus;
-        }
+    {
+        RefNum = refNum;
+        Intitule = intitule;
+        City = city;
+        Quarter = quarter;
+        Latitude = latitude;
+        Longitude = longitude;
+        CreatedDate = createdDate;
+        PreferredDate = preferredDate;
+        PreferredTime = preferredTime;
+    }
 
     #pragma warning disable CS8618
     private Command()
@@ -57,25 +58,32 @@ public sealed class Command : AggregateRoot<CommandId>
         string quarter,
         long latitude,
         long longitude,
-        DeliveryStatus deliveryStatus,
         DateTime createdDate,
         DateTime preferredDate,
         DateTime preferredTime)
-        {
-            return new(
-                CommandId.CreateUnique(),
-                refNum,
-                intitule,
-                city,
-                quarter,
-                latitude,
-                longitude,
-                deliveryStatus,
-                createdDate,
-                preferredDate,
-                preferredTime
-            );
-        }
+    {
+        Command command = new(
+            CommandId.CreateUnique(),
+            refNum,
+            intitule,
+            city,
+            quarter,
+            latitude,
+            longitude,
+            createdDate,
+            preferredDate,
+            preferredTime
+        );
+        
+        DeliveryStatus deliveryStatus = DeliveryStatus.Create(
+            command.Id,
+            Status.Pending,
+            createdDate
+        );
+        command._deliveryStatuses.Add(deliveryStatus);
+        command.RaiseDomainEvent(new CommandCreated(command.Id, createdDate));
+        return command;
+    }
 
     public void Update(
         string? city,
@@ -95,10 +103,12 @@ public sealed class Command : AggregateRoot<CommandId>
 
     public void UpdateStatus(Status status)
     {
-        DeliveryStatus = DeliveryStatus.Create(
+        DeliveryStatus deliveryStatus = DeliveryStatus.Create(
+            Id,
             status,
-            DeliveryStatus.FileBlob,
-            DeliveryStatus.FileType,
             DateTime.Now);
+        _deliveryStatuses.Add(deliveryStatus);
+
+        RaiseDomainEvent(new CommandStatusUpdated(deliveryStatus));
     }
 }
