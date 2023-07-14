@@ -1,4 +1,4 @@
-namespace iDelivery.Application.Commands.Get;
+namespace iDelivery.Application.Commands.Get.All;
 
 public sealed record GetCommandQuery(
     string? SearchTerm,

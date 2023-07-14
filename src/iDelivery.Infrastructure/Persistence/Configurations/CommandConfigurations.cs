@@ -65,11 +65,11 @@ internal class CommandConfigurations : IEntityTypeConfiguration<Command>
 
     private static void ConfigureDeliveryStatusTable(EntityTypeBuilder<Command> builder)
     {
-        builder.OwnsOne(c => c.DeliveryStatus, dsb => 
+        builder.OwnsMany(c => c.DeliveryStatuses, dsb => 
         {
-            dsb.ToTable("DeliveryStatuses");
+            dsb.ToTable("CommandDeliveryStatuses");
             dsb.HasKey(ds => ds.Id);
-            dsb.WithOwner().HasForeignKey("CommandId");
+            dsb.WithOwner().HasForeignKey(ds => ds.CommandId);
             dsb.Property(ds => ds.Id)
                 .ValueGeneratedNever()
                 .HasConversion(
@@ -77,9 +77,11 @@ internal class CommandConfigurations : IEntityTypeConfiguration<Command>
                     value => DeliveryStatusId.Create(value)
                 );
             dsb.Property(ds => ds.Status);
-            dsb.Property(ds => ds.FileBlob);
-            dsb.Property(ds => ds.FileType);
-            dsb.Property(ds => ds.CreatedDate);
+            dsb.Property(ds => ds.Date);
         });
+        
+        builder.Navigation(a => a.DeliveryStatuses).Metadata.SetField("_deliveryStatuses");
+        builder.Metadata.FindNavigation(nameof(Command.DeliveryStatuses))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

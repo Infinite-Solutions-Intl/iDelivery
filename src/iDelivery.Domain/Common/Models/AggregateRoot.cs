@@ -1,4 +1,6 @@
-﻿namespace iDelivery.Domain.Common.Models;
+﻿using MediatR;
+
+namespace iDelivery.Domain.Common.Models;
 
 public abstract class AggregateRoot<TId> : Entity<TId>
     where TId : notnull

@@ -8,7 +8,7 @@ public sealed record CommandResponse(
     string Quarter,
     long Longitude,
     long Latitude,
-    int Status,
+    DeliveryStatusResponse[] Statuses,
     DateTime PreferredDate,
     DateTime PreferredTime
 );

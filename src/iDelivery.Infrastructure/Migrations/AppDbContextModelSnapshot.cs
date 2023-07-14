@@ -326,7 +326,7 @@ namespace iDelivery.Infrastructure.Migrations
                                 .HasForeignKey("CommandId");
                         });
 
-                    b.OwnsOne("iDelivery.Domain.CommandAggregate.Entities.DeliveryStatus", "DeliveryStatus", b1 =>
+                    b.OwnsMany("iDelivery.Domain.CommandAggregate.Entities.DeliveryStatus", "DeliveryStatuses", b1 =>
                         {
                             b1.Property<Guid>("Id")
                                 .HasColumnType("TEXT");
@@ -334,13 +334,11 @@ namespace iDelivery.Infrastructure.Migrations
                             b1.Property<Guid>("CommandId")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<DateTime>("CreatedDate")
+                            b1.Property<DateTime>("Date")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<string>("FileBlob")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("FileType")
+                            b1.Property<string>("Message")
+                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.Property<int>("Status")
@@ -348,10 +346,9 @@ namespace iDelivery.Infrastructure.Migrations
 
                             b1.HasKey("Id");
 
-                            b1.HasIndex("CommandId")
-                                .IsUnique();
+                            b1.HasIndex("CommandId");
 
-                            b1.ToTable("DeliveryStatuses", (string)null);
+                            b1.ToTable("CommandDeliveryStatuses", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("CommandId");
@@ -359,8 +356,7 @@ namespace iDelivery.Infrastructure.Migrations
 
                     b.Navigation("Complaints");
 
-                    b.Navigation("DeliveryStatus")
-                        .IsRequired();
+                    b.Navigation("DeliveryStatuses");
                 });
 
             modelBuilder.Entity("iDelivery.Domain.CourierAggregate.Entities.Delivery", b =>

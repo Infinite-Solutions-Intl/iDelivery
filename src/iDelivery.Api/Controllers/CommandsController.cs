@@ -2,7 +2,8 @@ using iDelivery.Api.Controllers.Common;
 using iDelivery.Api.Filters;
 using iDelivery.Api.Utilities;
 using iDelivery.Application.Commands.Add;
-using iDelivery.Application.Commands.Get;
+using iDelivery.Application.Commands.Get.All;
+using iDelivery.Application.Commands.Get.Single;
 using iDelivery.Application.Commands.Update.UpdateDetails;
 using iDelivery.Application.Commands.Update.UpdateStatus;
 using iDelivery.Contracts.Commands;
@@ -43,6 +44,14 @@ public class CommandsController : ApiBaseController
             page,
             pageSize);
 
+        var result = await _sender.Send(query);
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetSingleCommands(Guid id)
+    {
+        GetSingleCommandQuery query = new(id);
         var result = await _sender.Send(query);
         return Ok(result.Value);
     }

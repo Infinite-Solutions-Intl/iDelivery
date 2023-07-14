@@ -1,8 +1,12 @@
-﻿namespace iDelivery.Domain.Common.Models;
+﻿using MediatR;
+
+namespace iDelivery.Domain.Common.Models;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>
 	where TId : notnull
 {
+    private readonly List<INotification> _domainEvents = new();
+    public IReadOnlyList<INotification> DomainEvents => _domainEvents.AsReadOnly();
     public TId Id { get; protected set; }
 
 	protected Entity(TId id)
@@ -39,5 +43,10 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     public override int GetHashCode()
     {
         return Id.GetHashCode();
+    }
+
+    public void RaiseDomainEvent(INotification @event)
+    {
+        _domainEvents.Add(@event);
     }
 }

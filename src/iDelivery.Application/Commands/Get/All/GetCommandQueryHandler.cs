@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using iDelivery.Domain.CommandAggregate;
 
-namespace iDelivery.Application.Commands.Get;
+namespace iDelivery.Application.Commands.Get.All;
 public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Result<PageList<CommandResponse>>>
 {
     private readonly ICommandRepository _commandRepository;
@@ -21,7 +21,7 @@ public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Re
                 c.Intitule.Contains(request.SearchTerm));
         }
 
-        if(request.StartDate is not null)
+        if (request.StartDate is not null)
         {
             DateTime end = request.EndDate ?? DateTime.Now;
             query.Where(c =>
@@ -46,7 +46,13 @@ public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Re
             c.Quarter,
             c.Longitude,
             c.Latitude,
-            (int) c.DeliveryStatus.Status,
+            c.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
+                ds.Id.Value,
+                ds.CommandId.Value,
+                (int)ds.Status,
+                ds.Date,
+                ds.Message
+            )).ToArray(),
             c.PreferredDate,
             c.PreferredTime
         ));

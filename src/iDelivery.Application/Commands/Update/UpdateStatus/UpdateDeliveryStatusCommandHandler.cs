@@ -31,7 +31,13 @@ public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDelivery
             command.Quarter,
             command.Longitude,
             command.Latitude,
-            (int)command.DeliveryStatus.Status,
+            command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
+                ds.Id.Value,
+                ds.CommandId.Value,
+                (int) ds.Status,
+                ds.Date,
+                ds.Message
+            )).ToArray(),
             command.PreferredDate,
             command.PreferredTime);
     }
