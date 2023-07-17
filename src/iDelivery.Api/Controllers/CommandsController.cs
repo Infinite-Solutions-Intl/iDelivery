@@ -9,20 +9,22 @@ using iDelivery.Application.Commands.Update.UpdateStatus;
 using iDelivery.Contracts.Commands;
 using iDelivery.Domain.CommandAggregate.Enums;
 using iDelivery.Domain.Common.Utilities;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace iDelivery.Api.Controllers;
 
-[ApiKeyAuthorize]
 [Authorize]
 public class CommandsController : ApiBaseController
 {
     private readonly ISender _sender;
+    private readonly IMapper _mapper;
 
-    public CommandsController(ISender sender)
+    public CommandsController(ISender sender, IMapper mapper)
     {
         _sender = sender;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -51,7 +53,8 @@ public class CommandsController : ApiBaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSingleCommands(Guid id)
     {
-        GetSingleCommandQuery query = new(id);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        GetSingleCommandQuery query = new(id, accountId);
         var result = await _sender.Send(query);
         return Ok(result.Value);
     }
@@ -59,16 +62,8 @@ public class CommandsController : ApiBaseController
     [HttpPost]
     public async Task<IActionResult> PostCommand(AddCommandRequest request)
     {
-        AddCommand command = new (
-            request.RefNum,
-            request.Intitule,
-            request.City,
-            request.Quarter,
-            request.Latitude,
-            request.Longitude,
-            request.PreferredDate,
-            request.PreferredTime
-        );
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        AddCommand command = _mapper.Map<AddCommand>((accountId, request));
         var response = await _sender.Send(command);
         if(response.IsFailed)
             return BadRequest(response.Errors[0].Message);
@@ -79,15 +74,8 @@ public class CommandsController : ApiBaseController
     [HttpPut("{id}/{refNum}")]
     public async Task<IActionResult> UpdateCommandDetails(Guid id, string refNum, [FromBody] UpdateCommandRequest request)
     {
-        var command = new UpdateCommand(
-            id,
-            refNum,
-            request.City,
-            request.Quarter,
-            request.Longitude,
-            request.Latitude,
-            request.PreferredDate,
-            request.PreferredTime);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        UpdateCommand command = _mapper.Map<UpdateCommand>((id, accountId, refNum, request));
         var response = await _sender.Send(command);
         if (response.IsFailed)
             return BadRequest(response.Errors[0].Message);
@@ -98,7 +86,8 @@ public class CommandsController : ApiBaseController
     [Authorize(Policy = Policies.RunnerOnly)]
     public async Task<IActionResult> UpdateCommandStatus(Guid id, [FromBody] UpdateDeliveryStatus request)
     {
-        var command = new UpdateDeliveryStatusCommand(id, (Status) request.Status);
+        Guid accountId = Auth.GetAccountId(Request.Headers);
+        var command = new UpdateDeliveryStatusCommand(id, accountId, (Status)request.Status);
         var response = await _sender.Send(command);
         if(response.IsFailed)
             return BadRequest(response.Errors[0].Message);

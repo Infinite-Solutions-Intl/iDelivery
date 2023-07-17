@@ -1,6 +1,7 @@
 namespace iDelivery.Application.Commands.Add;
 
 public sealed record AddCommand(
+    Guid AccountId,
     string RefNum,
     string Intitule,
     string City,

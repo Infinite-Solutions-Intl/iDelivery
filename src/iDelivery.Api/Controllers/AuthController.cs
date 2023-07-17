@@ -42,7 +42,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login(LoginRequestDto request)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
-        LoginQuery command = new (accountId, request.Email, request.Password);
+        LoginQuery command = _mapper.Map<LoginQuery>((accountId, request));
         Result<LoginQueryResponse> result = await _sender.Send(command);
 
         if(result.IsFailed)
