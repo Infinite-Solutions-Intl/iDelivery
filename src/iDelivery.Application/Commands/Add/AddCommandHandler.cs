@@ -7,13 +7,16 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
 {
     private readonly ICommandRepository _commandRepository;
     private readonly ILogger<AddCommandHandler> _logger;
+    private readonly IMapper _mapper;
 
     public AddCommandHandler(
         ICommandRepository commandRepository,
-        ILogger<AddCommandHandler> logger)
+        ILogger<AddCommandHandler> logger,
+        IMapper mapper)
     {
         _commandRepository = commandRepository;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<Result<CommandResponse>> Handle(AddCommand request, CancellationToken cancellationToken)
@@ -39,24 +42,25 @@ public sealed class AddCommandHandler : IRequestHandler<AddCommand, Result<Comma
             // TODO: Publish the command added event
             command.RaiseDomainEvent(new CommandCreated(command.Id, command.CreatedDate));
 
-            return new CommandResponse(
-                command.Id.Value,
-                command.RefNum,
-                command.Intitule,
-                command.City,
-                command.Quarter,
-                command.Longitude,
-                command.Latitude,
-                command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
-                    ds.Id.Value,
-                    ds.CommandId.Value,
-                    (int) ds.Status,
-                    ds.Date,
-                    ds.Message
-                )).ToArray(),
-                request.PreferredDate,
-                request.PreferredTime
-            );
+            return _mapper.Map<CommandResponse>(command);
+            //return new CommandResponse(
+            //    command.Id.Value,
+            //    command.RefNum,
+            //    command.Intitule,
+            //    command.City,
+            //    command.Quarter,
+            //    command.Longitude,
+            //    command.Latitude,
+            //    command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
+            //        ds.Id.Value,
+            //        ds.CommandId.Value,
+            //        (int) ds.Status,
+            //        ds.Date,
+            //        ds.Message
+            //    )).ToArray(),
+            //    request.PreferredDate,
+            //    request.PreferredTime
+            //);
         }
         catch (Exception e)
         {

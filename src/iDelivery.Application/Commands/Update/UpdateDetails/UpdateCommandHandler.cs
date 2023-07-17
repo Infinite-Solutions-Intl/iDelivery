@@ -4,10 +4,14 @@ namespace iDelivery.Application.Commands.Update.UpdateDetails;
 public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result<CommandResponse>>
 {
     private readonly ICommandRepository _commandRepository;
+    private readonly IMapper _mapper;
 
-    public UpdateCommandHandler(ICommandRepository commandRepository)
+    public UpdateCommandHandler(
+        ICommandRepository commandRepository,
+        IMapper mapper)
     {
         _commandRepository = commandRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<CommandResponse>> Handle(UpdateCommand request, CancellationToken cancellationToken)
@@ -21,22 +25,6 @@ public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result
 
         command.Update(request.City, request.Quarter, request.Latitude, request.Longitude, request.PreferredDate, request.PreferredTime);
         await _commandRepository.UpdateCommandAsync(command, cancellationToken);
-        return new CommandResponse(
-            command.Id.Value,
-            command.RefNum,
-            command.Intitule,
-            command.City,
-            command.Quarter,
-            command.Longitude,
-            command.Latitude,
-            command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
-                ds.Id.Value,
-                ds.CommandId.Value,
-                (int) ds.Status,
-                ds.Date,
-                ds.Message
-            )).ToArray(),
-            command.PreferredDate,
-            command.PreferredTime);
+        return _mapper.Map<CommandResponse>(command);
     }
 }

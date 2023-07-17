@@ -6,10 +6,14 @@ namespace iDelivery.Application.Commands.Update.UpdateStatus;
 public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDeliveryStatusCommand, Result<CommandResponse>>
 {
     private readonly ICommandRepository _commandRepository;
+    private readonly IMapper _mapper;
 
-    public UpdateDeliveryStatusCommandHandler(ICommandRepository commandRepository)
+    public UpdateDeliveryStatusCommandHandler(
+        ICommandRepository commandRepository,
+        IMapper mapper)
     {
         _commandRepository = commandRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<CommandResponse>> Handle(UpdateDeliveryStatusCommand request, CancellationToken cancellationToken)
@@ -23,22 +27,6 @@ public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDelivery
         await _commandRepository.UpdateStatusAsync(command, request.Status, cancellationToken);
 
         // TODO: Publish the updated status event
-        return new CommandResponse(
-            command.Id.Value,
-            command.RefNum,
-            command.Intitule,
-            command.City,
-            command.Quarter,
-            command.Longitude,
-            command.Latitude,
-            command.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
-                ds.Id.Value,
-                ds.CommandId.Value,
-                (int) ds.Status,
-                ds.Date,
-                ds.Message
-            )).ToArray(),
-            command.PreferredDate,
-            command.PreferredTime);
+        return _mapper.Map<CommandResponse>(command);
     }
 }

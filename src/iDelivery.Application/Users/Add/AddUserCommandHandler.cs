@@ -1,3 +1,5 @@
+using iDelivery.Application.Commands;
+using iDelivery.Domain.CommandAggregate;
 using iDelivery.Domain.Common.Utilities;
 using iDelivery.Domain.CourierAggregate;
 using iDelivery.Domain.ManagerAggregate;
@@ -9,11 +11,14 @@ namespace iDelivery.Application.Users.Add;
 public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Result<UserResponse>>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IMapper _mapper;
 
     public AddUserCommandHandler(
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository,
+        IMapper mapper)
     {
         _accountRepository = accountRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<UserResponse>> Handle(AddUserCommand request, CancellationToken cancellationToken)
@@ -45,17 +50,8 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         if (!success)
             return Result.Fail(new BaseError("An error occurred while attempting to save the user to the database"));
 
-        return new UserResponse(
-                user.Id.Value,
-                user.AccountId.Value,
-                user.Email.Value,
-                user.Password.Value,
-                user.Name,
-                user.PhoneNumber.Value,
-                user.Role,
-                request.SupervisorId,
-                request.PoBox
-            );
+
+        return _mapper.Map<UserResponse>(user);
     }
 
     #region Helper methods
