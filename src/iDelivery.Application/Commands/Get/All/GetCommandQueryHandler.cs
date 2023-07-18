@@ -5,7 +5,7 @@ namespace iDelivery.Application.Commands.Get.All;
 public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Result<PageList<CommandResponse>>>
 {
     private readonly ICommandRepository _commandRepository;
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
     public GetCommandQueryHandler(
         ICommandRepository commandRepository,

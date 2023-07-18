@@ -16,8 +16,14 @@ public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result
 
     public async Task<Result<CommandResponse>> Handle(UpdateCommand request, CancellationToken cancellationToken)
     {
+        AccountId accountId = AccountId.Create(request.AccountId);
         var id = CommandId.Create(request.Id);
-        var command = await _commandRepository.GetByIdAsync(id, cancellationToken);
+
+        var command = await _commandRepository.GetByIdAsync(
+            accountId,
+            id,
+            cancellationToken);
+
         if (command is null)
             return Result.Fail(new BaseError("The command does not exist"));
         if (command.RefNum != request.RefNum)

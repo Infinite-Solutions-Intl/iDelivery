@@ -18,9 +18,14 @@ public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDelivery
 
     public async Task<Result<CommandResponse>> Handle(UpdateDeliveryStatusCommand request, CancellationToken cancellationToken)
     {
+        AccountId accountId = AccountId.Create(request.AccountId);
+        CommandId commandId = CommandId.Create(request.CommandId);
+
         Command? command = await _commandRepository.GetByIdAsync(
-            CommandId.Create(request.CommandId),
+            accountId,
+            commandId,
             cancellationToken);
+
         if (command is null)
             return Result.Fail(new BaseError("The command does not exist"));
 

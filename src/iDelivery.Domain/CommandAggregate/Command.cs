@@ -1,4 +1,5 @@
 using iDelivery.Domain.AccountAggregate;
+using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.Enums;
 using iDelivery.Domain.CommandAggregate.Events;
@@ -10,6 +11,8 @@ public sealed class Command : AggregateRoot<CommandId>
     private readonly List <Complaint> _complaints = new();
     private readonly List <DeliveryStatus> _deliveryStatuses = new();
 
+    public AccountId AccountId { get; private set; }
+    public Account Account { get; private set; } = null!;
     public IReadOnlyList <Complaint> Complaints => _complaints.AsReadOnly();
     public IReadOnlyList<DeliveryStatus> DeliveryStatuses => _deliveryStatuses.AsReadOnly();
     public string RefNum { get; private set; }
@@ -24,6 +27,7 @@ public sealed class Command : AggregateRoot<CommandId>
 
     private Command(
         CommandId id,
+        AccountId accountId,
         string refNum,
         string intitule,
         string city,
@@ -43,6 +47,7 @@ public sealed class Command : AggregateRoot<CommandId>
         CreatedDate = createdDate;
         PreferredDate = preferredDate;
         PreferredTime = preferredTime;
+        AccountId = accountId;
     }
 
     #pragma warning disable CS8618
@@ -52,6 +57,7 @@ public sealed class Command : AggregateRoot<CommandId>
     }
     #pragma warning restore CS8618
     public static Command Create(
+        AccountId accountId,
         string refNum,
         string intitule,
         string city,
@@ -64,6 +70,7 @@ public sealed class Command : AggregateRoot<CommandId>
     {
         Command command = new(
             CommandId.CreateUnique(),
+            accountId,
             refNum,
             intitule,
             city,

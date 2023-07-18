@@ -4,19 +4,20 @@ using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Utilities;
-using iDelivery.Infrastructure.Persistence.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace iDelivery.Infrastructure.Persistence.Repositories;
 
-public sealed class AccountRepository : Repository<Account, AccountId>, IAccountRepository
+public sealed class AccountRepository : IAccountRepository
 {
     private readonly IHashEngine _hashEngine;
+    private readonly AppDbContext _dbContext;
     public AccountRepository(
-        AppDbContext dbContext,
-        IHashEngine hashEngine) : base(dbContext)
+        IHashEngine hashEngine,
+        AppDbContext dbContext)
     {
         _hashEngine = hashEngine;
+        _dbContext = dbContext;
     }
 
     public bool Exists(Email email)
@@ -33,6 +34,17 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
 
     public async Task<bool> AddUserAsync(Account account, User user, CancellationToken cancellationToken = default)
     {
+        account.AddUser(user);
+        int records = await _dbContext.SaveChangesAsync(cancellationToken);
+        return records > 0;
+    }
+
+    public async Task<bool> AddUserAsync(AccountId accountId, User user, CancellationToken cancellationToken = default)
+    {
+        Account? account = await _dbContext.FindAsync<Account>(accountId);
+        if(account is null)
+            return false;
+
         account.AddUser(user);
         int records = await _dbContext.SaveChangesAsync(cancellationToken);
         return records > 0;
@@ -67,7 +79,7 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
 
     public async Task<User?> ChangeRoleAsync(AccountId accountId, UserId userId, string previousRole, string newRole, Guid? supervisorId, string? poBox, CancellationToken cancellationToken = default)
     {
-        Account? account = await GetByIdAsync(accountId, cancellationToken);
+        Account? account = await _dbContext.FindAsync<Account>(accountId, cancellationToken);
         User? user = await _dbContext.Users.FirstOrDefaultAsync(
             u =>
                 u.AccountId == accountId &&
@@ -118,8 +130,25 @@ public sealed class AccountRepository : Repository<Account, AccountId>, IAccount
             .ExecuteDeleteAsync(cancellationToken);
     }
 
+    public Task<int> DeleteUserAsync(AccountId accountId, User user, CancellationToken cancellationToken = default)
+    {
+        return _dbContext.Users
+            .Where(
+                u => 
+                    u.Id == user.Id &&
+                    u.AccountId == accountId)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+
     public Task<bool> ExistsUserAsync(AccountId accountId, UserId userId, CancellationToken cancellationToken = default)
     {
         return _dbContext.Users.AnyAsync(u => u.AccountId == accountId && u.Id == userId, cancellationToken);
+    }
+
+    public async Task<Account> CreateAsync(Account account, CancellationToken cancellationToken = default)
+    {
+        _ = await _dbContext.Accounts.AddAsync(account, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return account;
     }
 }

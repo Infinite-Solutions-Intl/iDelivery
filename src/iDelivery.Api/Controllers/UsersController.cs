@@ -6,6 +6,7 @@ using iDelivery.Application.Users.Get;
 using iDelivery.Application.Users.UpdateRole;
 using iDelivery.Contracts.Users;
 using iDelivery.Domain.Common.Utilities;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,14 @@ namespace iDelivery.Api.Controllers;
 public class UsersController : ApiBaseController
 {
     private readonly ISender _sender;
+    private readonly IMapper _mapper;
 
-    public UsersController(ISender sender)
+    public UsersController(
+        ISender sender,
+        IMapper mapper)
     {
         _sender = sender;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -36,16 +41,17 @@ public class UsersController : ApiBaseController
     public async Task<IActionResult> AddUser(UserDto userDto)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
-        var command = new AddUserCommand(
-            userDto.Email,
-            accountId,
-            userDto.Password,
-            userDto.Name,
-            userDto.PhoneNumber,
-            userDto.CountryIdentifier,
-            userDto.Role,
-            userDto.SupervisorId,
-            userDto.PoBox);
+        AddUserCommand command = _mapper.Map<AddUserCommand>((accountId, userDto));
+        // var command = new AddUserCommand(
+        //     userDto.Email,
+        //     accountId,
+        //     userDto.Password,
+        //     userDto.Name,
+        //     userDto.PhoneNumber,
+        //     userDto.CountryIdentifier,
+        //     userDto.Role,
+        //     userDto.SupervisorId,
+        //     userDto.PoBox);
 
         var result = await _sender.Send(command);
         return Ok(result.Value);
@@ -56,14 +62,15 @@ public class UsersController : ApiBaseController
     public async Task<IActionResult> ChangeRole(Guid userId, [FromBody] UpdateRoleRequest updateRoleDto)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
-        var command = new ChangeRoleCommand(
-            accountId,
-            userId,
-            updateRoleDto.PreviousRole,
-            updateRoleDto.NewRole,
-            updateRoleDto.SupervisorId,
-            updateRoleDto.PoBox);
-
+        ChangeRoleCommand command = _mapper.Map<ChangeRoleCommand>((accountId, userId, updateRoleDto));
+        // var command = new ChangeRoleCommand(
+        //     accountId,
+        //     userId,
+        //     updateRoleDto.PreviousRole,
+        //     updateRoleDto.NewRole,
+        //     updateRoleDto.SupervisorId,
+        //     updateRoleDto.PoBox);
+        
         var result = await _sender.Send(command);
         if(result.IsFailed)
             return BadRequest();

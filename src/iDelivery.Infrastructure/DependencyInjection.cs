@@ -1,6 +1,7 @@
 ﻿using iDelivery.Application.Authentication.Services;
 using iDelivery.Application.Repositories;
 using iDelivery.Application.Utilities;
+using iDelivery.Domain.AccountAggregate;
 using iDelivery.Domain.CommandAggregate;
 using iDelivery.Domain.CommandAggregate.Entities;
 using iDelivery.Domain.CommandAggregate.Enums;
@@ -32,12 +33,18 @@ public static class DependencyInjection
     {
         using var scope = app.Services.CreateScope();
         ICommandRepository commandRepository = scope.ServiceProvider.GetRequiredService<ICommandRepository>();
+        AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         if(await commandRepository.AnyAsync())
+            return;
+
+        Account? account = dbContext.Accounts.FirstOrDefault();
+        if(account is null)
             return;
 
         var commands = new []
         {
             Command.Create(
+                account.Id,
                 "command1",
                 "command",
                 "douala",
@@ -49,6 +56,7 @@ public static class DependencyInjection
                 new DateTime(2011, 04, 06)
             ),
             Command.Create(
+                account.Id,
                 "print2",
                 "impression",
                 "yaounde",
@@ -60,6 +68,7 @@ public static class DependencyInjection
                 new DateTime(2006, 04, 06)
             ),
             Command.Create(
+                account.Id,
                 "formatA4",
                 "format",
                 "Bafoussam",
@@ -72,9 +81,6 @@ public static class DependencyInjection
             ),
         };
 
-        foreach (var command in commands)
-        {
-            await commandRepository.AddAsync(command);
-        }
+        await commandRepository.AddRangeAsync(commands);
     }
 }

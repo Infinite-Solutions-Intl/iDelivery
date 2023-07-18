@@ -1,7 +1,7 @@
 namespace iDelivery.Application.Commands;
 
 public sealed record CommandResponse(
-    Guid CommandId,
+    Guid Id,
     string RefNum,
     string Intitule,
     string City,

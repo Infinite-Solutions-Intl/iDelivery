@@ -18,8 +18,14 @@ public class GetSingleCommandQueryHandler : IRequestHandler<GetSingleCommandQuer
 
     public async Task<Result<CommandResponse>> Handle(GetSingleCommandQuery request, CancellationToken cancellationToken)
     {
+        AccountId accountId = AccountId.Create(request.AccountId);
         CommandId commandId = CommandId.Create(request.CommandId);
-        Command? command = await _commandRepository.GetByIdAsync(commandId, cancellationToken);
+
+        Command? command = await _commandRepository.GetByIdAsync(
+            accountId,
+            commandId,
+            cancellationToken);
+
         if(command is null)
             return Result.Fail("Command not found!");
 
