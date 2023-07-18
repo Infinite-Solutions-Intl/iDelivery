@@ -1,4 +1,4 @@
-namespace iDelivery.Application.Couriers.Add;
+namespace iDelivery.Application.Couriers.Assign;
 public sealed record AssignCommand(
     Guid AccountId,
     Guid CourierId,

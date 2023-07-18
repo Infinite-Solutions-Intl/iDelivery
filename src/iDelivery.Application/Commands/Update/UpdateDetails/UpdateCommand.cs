@@ -2,6 +2,7 @@ namespace iDelivery.Application.Commands.Update.UpdateDetails;
 
 public sealed record UpdateCommand(
     Guid Id,
+    Guid AccountId,
     string RefNum,
     string? City,
     string? Quarter,

@@ -11,4 +11,7 @@ public interface ICommandRepository : IRepository<Command, CommandId>
     Task<Command> UpdateCommandAsync(Command command, CancellationToken cancellationToken = default);
     IQueryable<Command> CommandsQuery();
     Task<bool> AnyAsync();
+    Task AddRangeAsync(params Command[] commands);
+    Task<IReadOnlyList<Command>> GetAllAsync(AccountId accountId, CancellationToken cancellationToken = default);
+    Task<Command?> GetByIdAsync(AccountId accountId, CommandId id, CancellationToken cancellationToken = default);
 }

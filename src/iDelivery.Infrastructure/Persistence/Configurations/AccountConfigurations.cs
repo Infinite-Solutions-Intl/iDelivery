@@ -12,6 +12,7 @@ internal class AccountConfigurations : IEntityTypeConfiguration<Account>
         ConfigureAccountTable(builder);
         ConfigureUsersTable(builder);
         ConfigureAccountSubscriptionsTable(builder);
+        ConfigureAccountCommandsTable(builder);
     }
 
     private static void ConfigureAccountTable(EntityTypeBuilder<Account> builder)
@@ -65,4 +66,16 @@ internal class AccountConfigurations : IEntityTypeConfiguration<Account>
         builder.Metadata.FindNavigation(nameof(Account.Subscriptions))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
+
+    private static void ConfigureAccountCommandsTable(EntityTypeBuilder<Account> builder)
+    {
+        builder
+            .HasMany(a => a.Commands)
+            .WithOne(s => s.Account)
+            .HasForeignKey(s => s.AccountId);
+        builder.Navigation(a => a.Commands).Metadata.SetField("_commands");
+        builder.Metadata.FindNavigation(nameof(Account.Commands))!
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+    }
+
 }

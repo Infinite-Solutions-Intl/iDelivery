@@ -1,7 +1,7 @@
 using iDelivery.Api.Controllers.Common;
 using iDelivery.Api.Utilities;
-using iDelivery.Application.Couriers.Add;
-using iDelivery.Application.Couriers.Delete;
+using iDelivery.Application.Couriers.Assign;
+using iDelivery.Application.Couriers.UnAssign;
 using iDelivery.Contracts.Couriers;
 using iDelivery.Domain.Common.Utilities;
 using MediatR;
@@ -35,7 +35,7 @@ public class CouriersController : ApiBaseController
     public async Task<IActionResult> DeleteDeliveryAsync(Guid courierId, Guid deliveryId)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
-        DeleteCourier courier = new (accountId, courierId, deliveryId);
+        UnAssignCourierCommand courier = new (accountId, courierId, deliveryId);
         var response = await _sender.Send(courier);
         if(response.IsFailed)
             return BadRequest(response.Errors[0].Message);

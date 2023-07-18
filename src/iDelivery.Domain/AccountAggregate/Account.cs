@@ -1,6 +1,7 @@
 ﻿using iDelivery.Domain.AccountAggregate.Entities;
 using iDelivery.Domain.AccountAggregate.Enums;
 using iDelivery.Domain.AccountAggregate.ValueObjects;
+using iDelivery.Domain.CommandAggregate;
 
 namespace iDelivery.Domain.AccountAggregate;
 
@@ -8,6 +9,7 @@ public sealed class Account : AggregateRoot<AccountId>
 {
     private readonly List<User> _users = new();
     private readonly List<Subscription> _subscriptions = new();
+    private readonly List<Command> _commands = new();
     public Email Email { get; set; }
     public Password Password { get; set; }
     public AccountType Type { get; set; }
@@ -16,6 +18,7 @@ public sealed class Account : AggregateRoot<AccountId>
     public string ApiKey { get; set; }
     public IReadOnlyList<User> Users => _users.AsReadOnly();
     public IReadOnlyList<Subscription> Subscriptions => _subscriptions.AsReadOnly();
+    public IReadOnlyList<Command> Commands => _commands.AsReadOnly();
 
     #pragma warning disable CS8618
     private Account()

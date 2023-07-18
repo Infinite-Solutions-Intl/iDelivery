@@ -16,7 +16,8 @@ internal static class DependencyInjection
         bool isDevelopment)
     {
         if(isDevelopment)
-            services.AddDbContext<AppDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SqliteDb")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));
+            // services.AddDbContext<AppDbContext>(options => options.UseSqlite(configuration.GetConnectionString("SqliteDb")));
             // services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Database"));
         else
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlServerDb")));

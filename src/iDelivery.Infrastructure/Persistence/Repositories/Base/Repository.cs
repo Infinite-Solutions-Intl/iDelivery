@@ -1,4 +1,5 @@
 using iDelivery.Application.Repositories.Common;
+using iDelivery.Domain.AccountAggregate.ValueObjects;
 using iDelivery.Domain.Common.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,19 +23,19 @@ public abstract class Repository<TEntity, TId> : IRepository<TEntity, TId>
         return entity;
     }
 
-    public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
-    {
-        var entities = await _dbContext
-            .Set<TEntity>()
-            .ToArrayAsync(cancellationToken);
-        return entities;
-    }
+    // public async Task<IReadOnlyList<TEntity>> GetAllAsync(AccountId accountId, CancellationToken cancellationToken = default)
+    // {
+    //     var entities = await _dbContext
+    //         .Set<TEntity>()
+    //         .ToArrayAsync(cancellationToken);
+    //     return entities;
+    // }
 
-    public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
-    {
-        var entity = await _dbContext
-            .Set<TEntity>()
-            .FirstOrDefaultAsync(e => e.Id.Equals(id), cancellationToken);
-        return entity;
-    }
+    // public async Task<TEntity?> GetByIdAsync(AccountId accountId, TId id, CancellationToken cancellationToken = default)
+    // {
+    //     var entity = await _dbContext
+    //         .Set<TEntity>()
+    //         .FirstOrDefaultAsync(e => e.Id.Equals(id), cancellationToken);
+    //     return entity;
+    // }
 }

@@ -14,12 +14,11 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
         AccountId accountId = AccountId.Create(request.AccountId);
         UserId userId = UserId.Create(request.UserId);
 
-        Account? account = await _accountRepository.GetByIdAsync(accountId, cancellationToken);
         User? user = await _accountRepository.FindUserAsync(accountId, userId, cancellationToken);
-        if(account is null || user is null)
+        if(user is null)
             return Result.Fail(new BaseError(""));
 
-        int records = await _accountRepository.DeleteUserAsync(account, user, cancellationToken);
+        int records = await _accountRepository.DeleteUserAsync(accountId, user, cancellationToken);
         return new DeleteUserCommandResponse(records > 0, records);
     }
 }

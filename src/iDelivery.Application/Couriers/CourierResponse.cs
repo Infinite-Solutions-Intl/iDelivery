@@ -1,5 +1,7 @@
 namespace iDelivery.Application.Couriers;
 public sealed record CourierResponse(
-    Guid CommandId,
-    Guid CourierId
+    Guid Id,
+    Guid SupervisorId,
+    Guid[] Deliveries,
+    Guid[] CommandIds
 );

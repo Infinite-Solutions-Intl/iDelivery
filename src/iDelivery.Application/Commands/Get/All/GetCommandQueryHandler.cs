@@ -5,10 +5,14 @@ namespace iDelivery.Application.Commands.Get.All;
 public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Result<PageList<CommandResponse>>>
 {
     private readonly ICommandRepository _commandRepository;
+    private readonly IMapper _mapper;
 
-    public GetCommandQueryHandler(ICommandRepository commandRepository)
+    public GetCommandQueryHandler(
+        ICommandRepository commandRepository,
+        IMapper mapper)
     {
         _commandRepository = commandRepository;
+        _mapper = mapper;
     }
 
     public Task<Result<PageList<CommandResponse>>> Handle(GetCommandQuery request, CancellationToken cancellationToken)
@@ -38,24 +42,27 @@ public sealed class GetCommandQueryHandler : IRequestHandler<GetCommandQuery, Re
             query = query.OrderBy(GetSortProperty(request.SortColumn ?? string.Empty));
         }
 
-        IQueryable<CommandResponse> queryResp = query.Select(c => new CommandResponse(
-            c.Id.Value,
-            c.RefNum,
-            c.Intitule,
-            c.City,
-            c.Quarter,
-            c.Longitude,
-            c.Latitude,
-            c.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
-                ds.Id.Value,
-                ds.CommandId.Value,
-                (int)ds.Status,
-                ds.Date,
-                ds.Message
-            )).ToArray(),
-            c.PreferredDate,
-            c.PreferredTime
-        ));
+        IQueryable<CommandResponse> queryResp = query.Select(
+            c => _mapper.Map<CommandResponse>(c));
+
+        //IQueryable<CommandResponse> queryResp = query.Select(c => new CommandResponse(
+        //    c.Id.Value,
+        //    c.RefNum,
+        //    c.Intitule,
+        //    c.City,
+        //    c.Quarter,
+        //    c.Longitude,
+        //    c.Latitude,
+        //    c.DeliveryStatuses.Select(ds => new DeliveryStatusResponse(
+        //        ds.Id.Value,
+        //        ds.CommandId.Value,
+        //        (int)ds.Status,
+        //        ds.Date,
+        //        ds.Message
+        //    )).ToArray(),
+        //    c.PreferredDate,
+        //    c.PreferredTime
+        //));
 
         int page = request.Page ?? 1;
         int pageSize = request.PageSize ?? queryResp.Count();

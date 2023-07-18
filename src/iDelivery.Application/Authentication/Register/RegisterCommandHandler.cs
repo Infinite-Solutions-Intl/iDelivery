@@ -62,11 +62,10 @@ internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<
         );
 
         // Save the new Account
-        _ = await _accountRepository.AddAsync(account, cancellationToken);
+        _ = await _accountRepository.CreateAsync(account, cancellationToken);
         _ = await _accountRepository.AddUserAsync(account, user, cancellationToken);
 
         // TODO: Raise the AccountCreatedEvent
-
         return new RegisterCommandResponse(apiKey);
     }
 }

@@ -24,6 +24,7 @@ internal class CommandConfigurations : IEntityTypeConfiguration<Command>
                 id => id.Value,
                 value => CommandId.Create(value)
             );
+        builder.HasIndex(c => c.AccountId);
         builder.HasIndex(c => c.RefNum);
         builder.HasIndex(c => c.City);
         builder.HasIndex(c => c.Latitude);
