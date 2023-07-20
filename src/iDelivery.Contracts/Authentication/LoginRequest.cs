@@ -3,10 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace iDelivery.Contracts.Authentication;
 
-public sealed record RegisterRequestDto(
+public sealed record LoginRequest(
     [EmailAddress] string Email,
-    [PasswordPropertyText] string Password,
-    string Name,
-    int PhoneNumber,
-    int CountryIdentifier
+    [PasswordPropertyText] string Password
 );

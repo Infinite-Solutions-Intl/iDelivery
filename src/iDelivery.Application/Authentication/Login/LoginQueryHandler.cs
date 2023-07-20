@@ -27,7 +27,7 @@ internal class LoginQueryHandler : IRequestHandler<LoginQuery, Result<LoginQuery
             cancellationToken);
 
         if(user is null)
-            return Result.Fail<LoginQueryResponse>(new UserNotFoundError());
+            return Result.Fail<LoginQueryResponse>(new BadCredentialsError());
 
         // Generate the JWT Token
         var claims = new []

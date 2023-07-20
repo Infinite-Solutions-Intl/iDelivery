@@ -27,7 +27,7 @@ public class UpdateDeliveryStatusCommandHandler : IRequestHandler<UpdateDelivery
             cancellationToken);
 
         if (command is null)
-            return Result.Fail(new BaseError("The command does not exist"));
+            return Result.Fail<CommandResponse>(new CommandNorFoundError());
 
         await _commandRepository.UpdateStatusAsync(command, request.Status, cancellationToken);
 

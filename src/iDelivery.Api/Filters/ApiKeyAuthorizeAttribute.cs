@@ -11,14 +11,29 @@ public class ApiKeyAuthorizeAttribute : ActionFilterAttribute
     {
         if(!context.HttpContext.Request.Headers.TryGetValue(HeaderKeys.ApiKeyHeaderKey, out var apiKey))
         {
-            context.Result = new UnauthorizedResult();
+            var problemDetail = new ProblemDetails()
+            {
+                Title = "Authentication required - User authentication is needed to proceed with the request",
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = "User authentication is needed to proceed with the request"
+            };
+            problemDetail.Extensions.Add("reasons", new[] { $"{HeaderKeys.ApiKeyHeaderKey} header key is missing"});
+            problemDetail.Extensions.Add("hints", new[] { $"Add {HeaderKeys.ApiKeyHeaderKey} key to the headers is required to proceed with the request", "This header should contain the value of the API key provided at registration" });
+            context.Result = new ObjectResult(problemDetail);
             return;
         }
 
         (bool isValid, Guid accountId) = await IsValidKeyAsync(apiKey!, context);
         if(!isValid)
         {
-            context.Result = new UnauthorizedResult();
+            var problemDetail = new ProblemDetails()
+            {
+                Title = "Authentication required - User authentication is needed to proceed with the request",
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = "The provided API key is not valid",
+            };
+            problemDetail.Extensions.Add("reasons", new string[] { "The provided API key may either be expired or corrupted"});
+            context.Result = new ObjectResult(problemDetail);
             return;
         }
 

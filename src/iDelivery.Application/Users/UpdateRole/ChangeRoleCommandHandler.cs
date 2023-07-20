@@ -3,10 +3,14 @@ namespace iDelivery.Application.Users.UpdateRole;
 public sealed class ChangeRoleCommandHandler : IRequestHandler<ChangeRoleCommand, Result<UserResponse>>
 {
     private readonly IAccountRepository _accountRepository;
+    private readonly IMapper _mapper;
 
-    public ChangeRoleCommandHandler(IAccountRepository accountRepository)
+    public ChangeRoleCommandHandler(
+        IAccountRepository accountRepository,
+        IMapper mapper)
     {
         _accountRepository = accountRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<UserResponse>> Handle(ChangeRoleCommand request, CancellationToken cancellationToken)
@@ -24,18 +28,7 @@ public sealed class ChangeRoleCommandHandler : IRequestHandler<ChangeRoleCommand
             cancellationToken);
 
         if(user is null)
-            return Result.Fail(new BaseError(""));
-
-        return new UserResponse(
-            user.Id.Value,
-            user.AccountId.Value,
-            user.Email.Value,
-            user.Password.Value,
-            user.Name,
-            user.PhoneNumber.Value,
-            user.Role,
-            null,
-            null
-        );
+            return Result.Fail<UserResponse>(new UserNotFoundError(userId.Value.ToString()));
+        return _mapper.Map<UserResponse>(user);
     }
 }

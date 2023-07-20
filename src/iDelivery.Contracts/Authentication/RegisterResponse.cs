@@ -1,5 +1,5 @@
 namespace iDelivery.Contracts.Authentication;
 
-public sealed record RegisterResponseDto(
+public sealed record RegisterResponse(
     string ApiKey
 );

@@ -1,4 +1,6 @@
 using iDelivery.Api;
+using iDelivery.Api.Middlewares;
+using iDelivery.Api.Services;
 using iDelivery.Application;
 using iDelivery.Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -35,6 +37,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler("/error");
+
+// app.Map("/error", ErrorHandler.Handle);
 
 app.UseHttpsRedirection();
 
