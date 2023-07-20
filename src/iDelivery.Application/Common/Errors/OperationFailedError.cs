@@ -1,15 +1,14 @@
 namespace iDelivery.Application.Common.Errors;
 
-public class UserNotFoundError : IError
+public class OperationFailedError : IError
 {
     public List<IError> Reasons => new();
 
     public string Message { get; }
 
     public Dictionary<string, object> Metadata => new();
-
-    public UserNotFoundError(string id)
+    public OperationFailedError(string message = "The operation failed unexpectedly")
     {
-        Message = $"The user with Id: `{id}` does not or no longer exist";
+        Message = message;
     }
 }

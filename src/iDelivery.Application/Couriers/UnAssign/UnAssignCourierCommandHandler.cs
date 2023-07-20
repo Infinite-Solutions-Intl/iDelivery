@@ -26,17 +26,15 @@ public class UnAssignCourierCommandHandler : IRequestHandler<UnAssignCourierComm
             accountId,
             courierId,
             cancellationToken);
-        if (courier is null)
-            return Result.Fail<CourierResponse>(new BaseError(""));
 
-        if (courier.AccountId != accountId)
-            return Result.Fail<CourierResponse>(new BaseError(""));
+        if (courier is null || courier.AccountId != accountId)
+            return Result.Fail<CourierResponse>(new UserNotFoundError(courierId.Value.ToString()));
 
         CommandId commandId = CommandId.Create(request.CommandId);
         bool success = await _courierRepository.UnAssignAsync(courier, commandId, cancellationToken);
 
         if (!success)
-            return Result.Fail<CourierResponse>(new BaseError(""));
+            return Result.Fail<CourierResponse>(new OperationFailedError());
         return _mapper.Map<CourierResponse>(courier);
     }
 }

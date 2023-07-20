@@ -28,7 +28,7 @@ public sealed class ChangeRoleCommandHandler : IRequestHandler<ChangeRoleCommand
             cancellationToken);
 
         if(user is null)
-            return Result.Fail<UserResponse>(new BaseError(""));
+            return Result.Fail<UserResponse>(new UserNotFoundError(userId.Value.ToString()));
         return _mapper.Map<UserResponse>(user);
     }
 }

@@ -21,13 +21,13 @@ public class AssignCommandHandler : IRequestHandler<AssignCommand, Result<Courie
         CourierId courierId = CourierId.Create(request.CourierId);
         Courier? courier = await _courierRepository.GetByIdAsync(accountId, courierId, cancellationToken);
         if (courier is null)
-            return Result.Fail<CourierResponse>(new BaseError(""));
+            return Result.Fail<CourierResponse>(new UserNotFoundError(courierId.Value.ToString()));
 
         CommandId commandId = CommandId.Create(request.CommandId);
         bool success = await _courierRepository.AssignAsync(courier, commandId, cancellationToken);
 
         if (!success)
-            return Result.Fail<CourierResponse>(new BaseError(""));
+            return Result.Fail<CourierResponse>(new OperationFailedError());
 
         return _mapper.Map<CourierResponse>(courier);
     }

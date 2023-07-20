@@ -24,10 +24,8 @@ public sealed class UpdateCommandHandler : IRequestHandler<UpdateCommand, Result
             id,
             cancellationToken);
 
-        if (command is null)
-            return Result.Fail<CommandResponse>(new BaseError("The command does not exist"));
-        if (command.RefNum != request.RefNum)
-            return Result.Fail<CommandResponse>(new BaseError("The command does not exist"));
+        if (command is null || command.RefNum != request.RefNum)
+            return Result.Fail<CommandResponse>(new CommandNorFoundError());
 
         command.Update(request.City, request.Quarter, request.Latitude, request.Longitude, request.PreferredDate, request.PreferredTime);
         await _commandRepository.UpdateCommandAsync(command, cancellationToken);
