@@ -1,5 +1,5 @@
 namespace iDelivery.Contracts.Authentication;
 
-public sealed record LoginResponseDto(
+public sealed record LoginResponse(
     string Token
 );

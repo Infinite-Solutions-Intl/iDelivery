@@ -12,10 +12,4 @@ public class BaseError : IError
     {
         Message = message;
     }
-
-    //public BaseError(string message, params string[] reasons)
-    //{
-    //    Message = message;
-    //    Reasons = reasons?.Select(r => new BaseError(r)).ToList();
-    //}
 }

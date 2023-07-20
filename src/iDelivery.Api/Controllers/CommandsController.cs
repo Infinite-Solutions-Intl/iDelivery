@@ -1,5 +1,6 @@
 using iDelivery.Api.Controllers.Common;
 using iDelivery.Api.Utilities;
+using iDelivery.Api.Utilities.Extensions;
 using iDelivery.Application.Commands.Add;
 using iDelivery.Application.Commands.Get.All;
 using iDelivery.Application.Commands.Get.Single;
@@ -36,7 +37,9 @@ public class CommandsController : ApiBaseController
         int? page,
         int? pageSize)
     {
+        Guid accountId = Auth.GetAccountId(Request.Headers);
         GetCommandQuery query = new(
+            accountId,
             searchTerm,
             sortColumn,
             sortOrder,
@@ -50,12 +53,15 @@ public class CommandsController : ApiBaseController
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSingleCommands(Guid id)
+    public async Task<IResult> GetSingleCommands(Guid id)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
         GetSingleCommandQuery query = new(id, accountId);
         var result = await _sender.Send(query);
-        return Ok(result.Value);
+        if(result.IsSuccess)
+            return Results.Ok(result.Value);
+
+        return Results.Problem(result.Errors.ToProblemDetails());
     }
 
     [HttpPost]
@@ -64,10 +70,10 @@ public class CommandsController : ApiBaseController
         Guid accountId = Auth.GetAccountId(Request.Headers);
         AddCommand command = _mapper.Map<AddCommand>((accountId, request));
         var response = await _sender.Send(command);
-        if(response.IsFailed)
-            return BadRequest(response.Errors[0].Message);
+        if(response.IsSuccess)
+            return Ok(response.Value);
 
-        return Ok(response.Value);
+        return new ObjectResult(response.Errors.ToProblemDetails());
     }
 
     [HttpPut("{id}/{refNum}")]
@@ -76,9 +82,10 @@ public class CommandsController : ApiBaseController
         Guid accountId = Auth.GetAccountId(Request.Headers);
         UpdateCommand command = _mapper.Map<UpdateCommand>((id, accountId, refNum, request));
         var response = await _sender.Send(command);
-        if (response.IsFailed)
-            return BadRequest(response.Errors[0].Message);
-        return Ok(response.Value);
+        if(response.IsSuccess)
+            return Ok(response.Value);
+
+        return new ObjectResult(response.Errors.ToProblemDetails());
     }
 
     [HttpPut("{id}")]
@@ -88,8 +95,9 @@ public class CommandsController : ApiBaseController
         Guid accountId = Auth.GetAccountId(Request.Headers);
         var command = new UpdateDeliveryStatusCommand(id, accountId, (Status)request.Status);
         var response = await _sender.Send(command);
-        if(response.IsFailed)
-            return BadRequest(response.Errors[0].Message);
-        return Ok(response.Value);
+        if(response.IsSuccess)
+            return Ok(response.Value);
+
+        return new ObjectResult(response.Errors.ToProblemDetails());
     }
 }

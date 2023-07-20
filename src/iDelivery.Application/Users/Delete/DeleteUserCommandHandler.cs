@@ -16,7 +16,7 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
 
         User? user = await _accountRepository.FindUserAsync(accountId, userId, cancellationToken);
         if(user is null)
-            return Result.Fail(new BaseError(""));
+            return Result.Fail<DeleteUserCommandResponse>(new BaseError(""));
 
         int records = await _accountRepository.DeleteUserAsync(accountId, user, cancellationToken);
         return new DeleteUserCommandResponse(records > 0, records);

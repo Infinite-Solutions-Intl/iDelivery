@@ -27,7 +27,7 @@ public class GetSingleCommandQueryHandler : IRequestHandler<GetSingleCommandQuer
             cancellationToken);
 
         if(command is null)
-            return Result.Fail("Command not found!");
+            return Result.Fail<CommandResponse>("Command not found!");
 
         return _mapper.Map<CommandResponse>(command);
     }

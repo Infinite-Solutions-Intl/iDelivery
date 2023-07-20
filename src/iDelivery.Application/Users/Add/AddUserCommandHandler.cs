@@ -27,7 +27,7 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         Email email = Email.Create(request.Email);
         bool exists = await _accountRepository.ExistsUserAsync(accountId, email, cancellationToken);
         if(exists)
-            return Result.Fail(new BaseError("This email is already used by another user"));
+            return Result.Fail<UserResponse>(new BaseError("This email is already used by another user"));
 
         User? user = request.Role.ToLower() switch
         {
@@ -40,11 +40,11 @@ public sealed class AddUserCommandHandler : IRequestHandler<AddUserCommand, Resu
         };
 
         if(user is null)
-            return Result.Fail(new BaseError("The user could not be created"));
+            return Result.Fail<UserResponse>(new BaseError("The user could not be created"));
 
         var success = await _accountRepository.AddUserAsync(accountId, user, cancellationToken);
         if (!success)
-            return Result.Fail(new BaseError("An error occurred while attempting to save the user to the database"));
+            return Result.Fail<UserResponse>(new BaseError("An error occurred while attempting to save the user to the database"));
 
         return _mapper.Map<UserResponse>(user);
     }

@@ -1,6 +1,7 @@
 using FluentResults;
 using iDelivery.Api.Filters;
 using iDelivery.Api.Utilities;
+using iDelivery.Api.Utilities.Extensions;
 using iDelivery.Application.Authentication.Login;
 using iDelivery.Application.Authentication.Register;
 using iDelivery.Contracts.Authentication;
@@ -26,28 +27,28 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")] 
-    public async Task<IActionResult> Register(RegisterRequestDto request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
         RegisterCommand command = _mapper.Map<RegisterCommand>(request);
         Result<RegisterCommandResponse> result = await _sender.Send(command);
+        
+        if(result.IsSuccess)
+            return Ok(result.Value);
 
-        if(result.IsFailed)
-            return Problem();
-
-        return Ok(result.Value);
+        return new ObjectResult(result.Errors.ToProblemDetails());
     }
 
     [HttpPost("login")]
     [ApiKeyAuthorize]
-    public async Task<IActionResult> Login(LoginRequestDto request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
         Guid accountId = Auth.GetAccountId(Request.Headers);
         LoginQuery command = _mapper.Map<LoginQuery>((accountId, request));
         Result<LoginQueryResponse> result = await _sender.Send(command);
 
-        if(result.IsFailed)
-            return Problem();
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return new ObjectResult(result.Errors.ToProblemDetails());
     }
 }
